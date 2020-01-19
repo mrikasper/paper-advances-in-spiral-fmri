@@ -28,7 +28,7 @@ The preferred installation method is to clone this repository with the
 *recursive* option, in order to also checkout the required third-party tools as
 submodules. On Unix/Mac command line, this
 
-`git clone --recursive https://tnrurepository.ethz.ch/spiral_fmri_7t_paper.git`
+`git clone --recursive https://github.com/mrikasper/paper-advances-in-spiral-fmri.git`
 
 If you download the `.zip` file instead, please make sure to also download the
 packages mentioned in the Requirements section below, and place them in the
