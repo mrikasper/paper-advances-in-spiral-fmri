@@ -78,9 +78,12 @@ Timeline
 
 -   First Complete Figure Drafts: October 04, 2019
 
--   First Full Draft:
+-   First Full Draft: November 10, 2019
 
--   First Submission (Neuroimage):
+-   First Preprint ([BiorXiv]
+(https://www.biorxiv.org/content/10.1101/842179v1)): November 15, 2019 
+
+-   First Submission (Neuroimage): January 18, 2020
 
 -   Starting Revision:
 
@@ -98,11 +101,8 @@ Requirements
 This code is written in Matlab, R2018b. It further relies on the following
 open-source Matlab toolboxes
 
--   Statistical Parametric Mapping [SPM12.4]
-    (https://github.com/spm-central/spm12)
+-   Statistical Parametric Mapping [SPM12.4](https://github.com/spm-central/spm12)
 
--   Unified NeuroImaging Quality Control Toolbox [UniQC]
-    (https://gitlab.ethz.ch/uniqc/uniqc-code)
+-   Unified NeuroImaging Quality Control Toolbox [UniQC](https://gitlab.ethz.ch/uniqc/uniqc-code)
 
--   PhysIO Toolbox for Physiological Noise Modeling, part of [TAPAS]
-    (https://translationalneuromodeling.github.io/tapas)
+-   PhysIO Toolbox for Physiological Noise Modeling, part of [TAPAS](https://translationalneuromodeling.github.io/tapas)
