@@ -4,14 +4,22 @@ Spiral Fmri 7T Paper
 Summary
 -------
 
-This repository contains the analysis code and manuscript for the Spiral
-Functional Imaging (SPIFI) project.
+This repository contains the analysis code and [manuscript](Manuscript.md) 
+(including representation code for all figures) for the paper 
+"[Advances in Spiral fMRI - a High-resolution Study with Single-shot Acquisition](https://www.biorxiv.org/content/10.1101/842179v1)".
 
-This paper gives the first account of combining concurrent magnetic field
-monitoring at 7 Tesla with fMRI in the context of high-resolution (\<1mm) 2D
-spiral single-shot acquisition.
+This work is part of the Spiral Functional Imaging (SPIFI) project at the
+Institute for Biomedical Engineering conducted at the ETH Zurich and University
+of Zurich.
 
-The task used is a simple visual quarterfield stimulation paradigm.
+This paper gives the first account of spiral fMRI at ultra-high field (7 Tesla)
+and with sub-millimeter (0.8 mm) spatial resolution. This progress was enabled
+by expanded signal modeling of the MRI signal, including static and dynamic
+magnetic fields, their accurate concurrent measurement utilizing NMR field
+probes, and the corresponding iterative model inversion using conjugate-gradient
+SENSE.
+
+The employed task is a simple visual quarter-field stimulation paradigm.
 
 Installation
 ------------
@@ -80,8 +88,7 @@ Timeline
 
 -   First Full Draft: November 10, 2019
 
--   First Preprint ([BiorXiv]
-(https://www.biorxiv.org/content/10.1101/842179v1)): November 15, 2019 
+-   First Preprint ([BiorXiv](https://www.biorxiv.org/content/10.1101/842179v1)): November 15, 2019 
 
 -   First Submission (Neuroimage): January 18, 2020
 
