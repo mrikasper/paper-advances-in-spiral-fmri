@@ -1,0 +1,15 @@
+[submodule "Code/Toolboxes/UniQC"]
+	path = Code/Toolboxes/UniQC
+	url = git@gitlab.ethz.ch:uniqc/uniqc-code.git
+[submodule "Code/Toolboxes/UniQC-Tasks"]
+	path = Code/Toolboxes/UniQC-Tasks
+	url = git@gitlab.ethz.ch:uniqc/uniqc-tasks.git
+[submodule "Code/Toolboxes/export_fig"]
+	path = Code/Toolboxes/export_fig
+	url = https://github.com/altmany/export_fig.git
+[submodule "Code/Toolboxes/spm12"]
+	path = Code/Toolboxes/spm12
+	url = git@tnurepository.ethz.ch:SPM/spm12.git
+[submodule "Code/Toolboxes/TAPAS"]
+	path = Code/Toolboxes/TAPAS
+	url = https://github.com/translationalneuromodeling/tapas.git
