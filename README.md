@@ -6,7 +6,7 @@ Summary
 
 This repository contains the analysis code and [manuscript](Manuscript.md) 
 (including representation code for all figures) for the paper 
-"[Advances in Spiral fMRI - a High-resolution Study with Single-shot Acquisition](https://www.biorxiv.org/content/10.1101/842179v1)".
+"[Advances in Spiral fMRI - a High-resolution Study with Single-shot Acquisition](https://www.biorxiv.org/content/10.1101/842179v2)".
 
 This work is part of the Spiral Functional Imaging (SPIFI) project at the
 Institute for Biomedical Engineering conducted at the ETH Zurich and University
@@ -48,6 +48,11 @@ To reproduce the fMRI analysis, run `Code/main.m` in Matlab. This should perform
 3.  The generation of all figure content for the accompanying 
     [manuscript](Manuscript.md). This can also be run separately in
     `Code/Representation/main_create_figures.m`.
+
+**Note**: You will also have to update the paths in
+`Code/spifi_get_analysis_options.m` to reflect where you put the code and raw
+image and logfile data. This will be automatized once the data is available in a
+FAIR repository.
 
 Timeline
 --------
@@ -113,3 +118,6 @@ open-source Matlab toolboxes
 -   Unified NeuroImaging Quality Control Toolbox [UniQC](https://gitlab.ethz.ch/uniqc/uniqc-code)
 
 -   PhysIO Toolbox for Physiological Noise Modeling, part of [TAPAS](https://translationalneuromodeling.github.io/tapas)
+
+-   [export_fig](https://github.com/altmany/export_fig.git) by Yair Altman, for
+exporting the paper figure elements to high-resolution PNGs

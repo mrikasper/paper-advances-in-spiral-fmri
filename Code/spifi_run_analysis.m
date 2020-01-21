@@ -1,19 +1,20 @@
-function main(idxSubj, idxSess, idxRecon, idxProcessingStepsArray, options)
-% Function main
-% fMRI preproc and statistical analysis for a given subject
+function spifi_run_analysis(idxSubj, idxSess, idxRecon, idxProcessingStepsArray, options)
+% Function spifi_run_analysis
+% fMRI preproc and statistical analysis for a single subject, run and recon
+% choice. Different preprocessing and statistical analysis steps may be
+% defined
 %
-%  main(idxSubj, idxSess, idxRecon, idxProcessingStepsArray, options)
+% USE
+%  spifi_run_analysis(idxSubj, idxSess, idxRecon, idxProcessingStepsArray, options)
 %
 % IN
-%   options     See also spifi_get_analysis_options, subject-independent
-%               settings
-%   iSubj       subject ID (1-7)
-%   iSess       session to be extracted (e.g. fMRIOut of fMRIInOut)
+%   idxSubj     subject ID (1-7)
+%   idxSess     session to be extracted (e.g. fMRIOut of fMRIInOut)
 %               1   fMRIOut_1   (in paper high-res spiral out 0.8 mm)
 %               2   fMRIInOut_1 (in papaer spiral in/out 1.5 mm)
 %               3   fMRIOut_2
 %               4   fMRIInOut_2
-%   iRecon      reconstruction used (e.g. PartIn or PartOut of In/Out
+%   idxRecon    reconstruction used (e.g. PartIn or PartOut of In/Out
 %               spiral)
 %               fmriOut
 %               1 = magnitude
@@ -41,6 +42,8 @@ function main(idxSubj, idxSess, idxRecon, idxProcessingStepsArray, options)
 %                doReportPhysioContrasts 	11
 %                doComputeSummary           12
 %                doCreateFigures            13
+%   options     See also spifi_get_analysis_options, subject-independent
+%               settings
 
 % Author:   Lars Kasper
 % Created:  2019-06-07
