@@ -7,11 +7,22 @@ if nargin < 1
     idxPipeline = 2;
 end
 
+
+%% #MOD# Change the following two paths to match your configuration.
+% Note: All other paths are set automatically relative to those ones, or
+% are irrelevant for the analysis/figure creation part
+
+% raw fmri data, also behav/physlog, as transferred from FAIR repository
+paths.data.root = 'Z:/kasperla_ibtnas03/SpiralFmri';      
+
+% root folder where results, intermediate data and figures will be written to
+paths.results.root =  'Z:/kasperla_ibtnas01/SPIFI/Results'; 
+
+
+%% Start automatic configurations
+
 if ispc % LarsPC
-    
-    %     paths.data.root = 'Z:/kasperla_ibtnas03/SpiralFmri';  % raw coil/monitoring data, also behav/physlog, as transfered from scanner
-    %     paths.results.root =  'Z:/kasperla_ibtnas01/SPIFI/Results';
-    projectRoot = 'C:\Users\kasperla\Documents\Projects\SPIFI\';
+        projectRoot = 'C:\Users\kasperla\Documents\Projects\SPIFI\';
     paths.data.root = fullfile(projectRoot, 'Data'); % raw coil/monitoring data, also behav/physlog, as transfered from scanner
     paths.results.root = fullfile(projectRoot, 'Results');
     paths.code.recon.root = 'C:\Users\kasperla\Documents\Code\Recon';

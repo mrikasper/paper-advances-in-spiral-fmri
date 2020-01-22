@@ -50,9 +50,15 @@ To reproduce the fMRI analysis, run `Code/main.m` in Matlab. This should perform
     `Code/Representation/main_create_figures.m`.
 
 **Note**: You will also have to update the paths in
-`Code/spifi_get_analysis_options.m` to reflect where you put the code and raw
-image and logfile data. This will be automatized once the data is available in a
-FAIR repository.
+`Code/spifi_get_analysis_options.m` to reflect where you put the raw image and
+logfile data, and where you would like the results to be written out.
+Specifically, you have to set
+
+- `paths.data.root`: study folder of raw data
+- `paths.results.root`: root folder for results and figures
+
+Once the data is available in a FAIR repository, we will also automatize the download to the
+specified data folder accordingly.
 
 Timeline
 --------
