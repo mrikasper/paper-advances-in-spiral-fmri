@@ -11,14 +11,14 @@ function spifi_compute_summary(details)
 %   spifi_compute_summary
 %
 %   See also
- 
+
 % Author:   Lars Kasper
 % Created:  2019-06-19
 % Copyright (C) 2019 Institute for Biomedical Engineering
 %                    University of Zurich and ETH Zurich
 %
 % This file is part of the TAPAS UniQC Toolbox, which is released
-% under the terms of the GNU General Public License (GPL), version 3. 
+% under the terms of the GNU General Public License (GPL), version 3.
 % You can redistribute it and/or modify it under the terms of the GPL
 % (either version 3 or, at your option, any later version).
 % For further details, see the file COPYING or
@@ -51,9 +51,11 @@ end
 copyfile(details.glm.tcon, details.summary.tcon);
 
 
-% copy warped and unbiased stuff
-copyfile(details.preproc.anat.warp2mni, details.summary.anat.warp2mni);
-copyfile(details.preproc.func.biascorrected, details.summary.func.biascorrected);
-copyfile(details.preproc.func.warp2mni, details.summary.func.warp2mni);
-copyfile(details.glm.warp2mni.tcon_differential1, ...
-    details.summary.glm.warp2mni.tcon_differential1);
+% copy warped and unbiased stuff, don't mind, if it does not exist
+try
+    copyfile(details.preproc.anat.warp2mni, details.summary.anat.warp2mni);
+    copyfile(details.preproc.func.biascorrected, details.summary.func.biascorrected);
+    copyfile(details.preproc.func.warp2mni, details.summary.func.warp2mni);
+    copyfile(details.glm.warp2mni.tcon_differential1, ...
+        details.summary.glm.warp2mni.tcon_differential1);
+end

@@ -19,7 +19,7 @@ function [meanX, coregX] = spifi_coreg_anat_to_func(coregOpts)
 %                    University of Zurich and ETH Zurich
 
 X = MrImageSpm4D(coregOpts.source);
-meanX = mean(X);
+meanX = mean(X, 't');
 meanX.save('fileName', coregOpts.mean);
 
 Y = MrImageSpm4D(coregOpts.ref);

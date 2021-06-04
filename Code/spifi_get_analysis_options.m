@@ -53,7 +53,7 @@ options.preproc.biascorrect.source = 'mean_realigned'; % mean_realigned, coreg, 
 
 options.glm.maskThreshold = 0.05; % very liberal do have no false negatives through masking
 options.glm.doUsePhysio = true;
-options.glm.doUseSmoothed = true;
+options.glm.doUseSmoothed = false;
 
 % reported contrasts:
 % 1 = ULLR, URLL, Vis FX, 
@@ -166,7 +166,8 @@ cropYVisualCortex = {
 fig_spm_subject.iSubj = 2;
 fig_spm_subject.iSess = 1;
 fig_spm_subject.iRecon = 1;
-fig_spm_subject.selectedSlice = [10 17 24 31];%[10 17 24 31 6 15 18 22]; %same slices as 4 and some more
+fig_spm_subject.selectedSlice = [13:32];
+%[10 17 24 31];%[10 17 24 31 6 15 18 22]; %same slices as 4 and some more
 
 % best slices
 % [6 9 10 14 15 18 22 24];
@@ -181,14 +182,14 @@ fig_spm_subject.displayRangeFunctional = displayRange;
 fig_spm_subject.displayRangeStructural = [0.1 1.3];
 % thresholds: p = [0.05 0.01 0.001 0.05(FWE)] 
 %             t = [1.66 2.38 3.21  5.96]
-fig_spm_subject.thresholdRange = [3.2 8];%[3 10];
+fig_spm_subject.thresholdRange = [2 8];[3.2 8];%[3 10];
 fig_spm_subject.cropY = cropY; %cropYVisualCortex;
 fig_spm_subject.cropX = cropX;
 % choose either block wise or differential contrast ULRR vs URLL
 % 'differential'    ULRR - URLL and URLL - ULLR contrasts ([1 -1], [-1 1])
 % 'condition'       ULLR and URLL individual contrasts ([1 0], [0 1])
-fig_spm_subject.contrastType = 'condition'; %'differential'; 'condition'
-fig_spm_subject.views = {'tra_zoom'};%{'tra', 'tra_zoom', 'sag', 'sag_zoom', 'cor_zoom'};
+fig_spm_subject.contrastType = 'differential'; %'differential'; 'condition'
+fig_spm_subject.views = {'tra_zoom', 'sag', 'cor_zoom'};%{'tra', 'tra_zoom', 'sag', 'sag_zoom', 'cor_zoom'};
 
 options.representation.fig_spm_subject = fig_spm_subject;
 
@@ -230,12 +231,54 @@ options.representation.fig_spm_inout.views = {'tra', 'tra_zoom'};%{'tra', 'tra_z
 % k-filter (raised cosine) for spiral-in underlay against ringing?
 options.representation.fig_spm_inout.doKfilter = false;
 
-%% Activation spatial specificity
+%% Spatial Specificity: Functional Activation
 options.representation.fig_specificity.selectionBlock = {'x', 0:100, 'y', 25:120, 'z', 18};
 options.representation.fig_specificity.displayRange = [0 .8];
 options.representation.fig_specificity.thresholdRange = [3.2 8];
 
-%% Table with tSNR and dufferential t-statistics (SPM) summary for whole group
+%% Spatial Specificity: Contour Distance
+fig_specificity_contours.doThresholdTPM = true;
+fig_specificity_contours.doPlotInitContours = false;% plot classical sobel-contours as in other paper figures;
+fig_specificity_contours.thresholdTPM = 0.9;
+fig_specificity_contours.doRecalcTPMs = false;
+fig_specificity_contours.displayRangeStruct = [0 1.2];
+fig_specificity_contours.displayRangeFunc = [0 0.8];
+% Use certain tissue for comparison
+% 1=GM, 2=WM, 3=CSF
+fig_specificity_contours.idxTissue = 1;
+fig_specificity_contours.selectedSlice = [3    11    19    27]; % [ 3    13    23    33] % %[3 15 27 31];%3:4:34;
+fig_specificity_contours.iSubj = 3;
+fig_specificity_contours.verbosity_level = 1; % 1 = plots for Figure 5(9), 2 = diagnostic plots
+% select 'mean' of multi-echo or specific echo (digit 1...6), or use 't1'
+% for other structural
+fig_specificity_contours.struct_select = 6;%'mean'; %'meanME', 't1' or 1...6 (for multi-echo echo)
+
+options.representation.fig_specificity_contours = fig_specificity_contours;
+
+%% Spatial Specificity: Activation tissue overlap
+fig_specificity_activation_tissue_overlap.doUseSmoothedMaps = false;
+
+% if true, threshold is used to consider only voxels above a certain tissue probability before edge detection
+fig_specificity_activation_tissue_overlap.thresholdTPM = 0.6; %0.9;
+% individual probability thresholds for boundaries between 2 tissue
+% classes, indicating uncertainty about the class by having individual
+% probabilities above this threshold
+fig_specificity_activation_tissue_overlap.thresholdTPMBoundary = 0.3; 
+fig_specificity_activation_tissue_overlap.thresholdRange = [3.22 6];%[3.2,8]; % T or F value
+fig_specificity_activation_tissue_overlap.FWEcorrection = 'cluster'; % 'none'; 'cluster', 'peak'; %TODO: peak!
+fig_specificity_activation_tissue_overlap.doRecalcTPMs = false;
+fig_specificity_activation_tissue_overlap.sourceTPMs = 'meanME'; % 'meanME' or 'T1' or echo number (1-6)
+fig_specificity_activation_tissue_overlap.displayRangeStruct = [];
+fig_specificity_activation_tissue_overlap.displayRangeFunc = [0 0.8];
+fig_specificity_activation_tissue_overlap.selectedSlice = 3:4:34; %27
+fig_specificity_activation_tissue_overlap.doUseSmoothedMaps = true;
+fig_specificity_activation_tissue_overlap.iSubj = 3;
+fig_specificity_activation_tissue_overlap.iSess = 1;
+fig_specificity_activation_tissue_overlap.iRecon = 1;
+fig_specificity_activation_tissue_overlap.verbosity_level = 1;
+options.representation.fig_specificity_activation_tissue_overlap = fig_specificity_activation_tissue_overlap;
+
+%% Table with tSNR and differential t-statistics (SPM) summary for whole group
 % 1 = high res spiral out;          2 = in-part spiral in/out
 % 3 = out-part spiral in/out;       4 = combined images spiral in/out
 tab_tsnr_spm_group.idxPairs         = 1:4; 

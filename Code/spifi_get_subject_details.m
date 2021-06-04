@@ -25,7 +25,7 @@ if nargin < 4
 end
 
 if nargin < 3
-    iSess = 2;
+    iSess = 1;
 end
 
 if nargin < 2 || isempty(options)
@@ -37,6 +37,8 @@ if nargin < 1
 end
 
 subjectId = sprintf('SPIFI_%04d', iSubj);
+% subject 10+x or 20+x are different recons of same subject with same image properties
+iSubjMod = mod(iSubj,10); 
 
 details.subjectId = subjectId;
 details.reconId = options.session.recons{iSess}{iRecon};
@@ -48,7 +50,8 @@ else
     details.recon = sprintf('%s_%s', details.session, details.reconId);
 end
 details.files.func = [details.recon '.nii'];
-details.files.anat = 'me1.nii';
+details.files.anat = 'me1.nii'; % standard anatomy, multi-echo GRE
+details.files.t1 = 't1.nii'; % MPRAGE, scanner-reconstructed
 details.files.physlog = [details.session '_phys.log'];
 details.files.behav = [details.session '_behav.log'];
 
@@ -140,7 +143,7 @@ details.preproc.coreg.out = spm_file(details.preproc.anat.mean, ...
 details.preproc.anat.coreg = details.preproc.coreg.out;
 
 %% echo combination
-% run details for sessions to be combine!
+% run details for sessions to be combined!
 switch iRecon
     case 3 % echo combination
         detailsEcho1 = spifi_get_subject_details(iSubj, options, iSess,1);
@@ -243,6 +246,7 @@ for iState = 1:numel(preprocStateArray)
         ['snr_' details.recon '_' preprocState '.nii']);
 end
 
+
 %% representation/subject-specific
 
 %% fig_mean
@@ -250,9 +254,9 @@ fig_mean = options.representation.fig_mean;
 details.representation.fig_mean.displayRange = ...
     fig_mean.displayRange{iSess}(iRecon,:);
 details.representation.fig_mean.cropY = ...
-    fig_mean.cropY{iSubj}(iSess,:);
+    fig_mean.cropY{iSubjMod}(iSess,:);
 details.representation.fig_mean.cropX = ...
-    fig_mean.cropX{iSubj}(iSess,:);
+    fig_mean.cropX{iSubjMod}(iSess,:);
 details.representation.fig_mean.fileSaveArray = {
     [details.subjectId '_' details.recon '_' fig_mean.source '_vol0001']
     [details.subjectId '_' details.recon '_' fig_mean.source '_mean']
@@ -263,9 +267,9 @@ details.representation.fig_mean.pathSave = fullfile(options.paths.figures, ...
 %% fig_snr
 fig_snr = options.representation.fig_snr;
 details.representation.fig_snr.cropY = ...
-    fig_snr.cropY{iSubj}(iSess,:);
+    fig_snr.cropY{iSubjMod}(iSess,:);
 details.representation.fig_snr.cropX = ...
-    fig_snr.cropX{iSubj}(iSess,:);
+    fig_snr.cropX{iSubjMod}(iSess,:);
 details.representation.fig_snr.fileSaveArray = {
     [details.subjectId '_' details.recon '_' fig_snr.source '_snr']
     [details.subjectId '_' details.recon '_' fig_snr.source '_sd']
@@ -278,15 +282,14 @@ details.representation.fig_mean.pathSave = fullfile(options.paths.figures, ...
 details.representation.fig_congruency.displayRangeFunctional = ...
     options.representation.fig_congruency.displayRangeFunctional{iSess}(iRecon,:);
 details.representation.fig_congruency.cropY = ...
-    options.representation.fig_congruency.cropY{iSubj}(iSess,:);
+    options.representation.fig_congruency.cropY{iSubjMod}(iSess,:);
 details.representation.fig_congruency.cropX = ...
-    options.representation.fig_congruency.cropX{iSubj}(iSess,:);
+    options.representation.fig_congruency.cropX{iSubjMod}(iSess,:);
 details.representation.fig_congruency.fileSaveArray = {
     [details.subjectId '_' details.recon '_func']
     [details.subjectId '_' details.recon '_anat']
     [details.subjectId '_' details.recon '_overlay']
     };
-
 
 %% fig_spm_subject
 fig_spm_subject = options.representation.fig_spm_subject;
@@ -294,9 +297,9 @@ fig_spm_subject = options.representation.fig_spm_subject;
 details.representation.fig_spm_subject.displayRangeFunctional = ...
     options.representation.fig_spm_subject.displayRangeFunctional{iSess}(iRecon,:);
 details.representation.fig_spm_subject.cropY = ...
-    fig_spm_subject.cropY{iSubj}(iSess,:);
+    fig_spm_subject.cropY{iSubjMod}(iSess,:);
 details.representation.fig_spm_subject.cropX = ...
-    fig_spm_subject.cropX{iSubj}(iSess,:);
+    fig_spm_subject.cropX{iSubjMod}(iSess,:);
 
 details.representation.fig_spm_subject.pathSave = fullfile(options.paths.figures, ...
     'Figure5');
@@ -313,12 +316,81 @@ details.representation.fig_spm_group.fileSaveArray = {
 
 %% fig_spm_inout
 details.representation.fig_spm_inout.crop_tra = ...
-     options.representation.fig_spm_group.crop_tra{iSubj};
+     options.representation.fig_spm_group.crop_tra{iSubjMod};
 details.representation.fig_spm_inout.fileSaveArray = {
     [details.subjectId '_' details.recon '_meanfunc']
     [details.subjectId '_' details.recon '_anat']
     };
 
+%% fig_specificity_contours
+fig_specificity_contours = ...
+    options.representation.fig_specificity_contours;
+
+switch fig_specificity_contours.struct_select
+    case 't1'
+        fig_specificity_contours.struct = fullfile(details.paths.scandata, ...
+            details.files.t1);
+        pfxStruct = '';
+    case {'mean', 'meanME'}
+        fig_specificity_contours.struct = fullfile(details.paths.scandata, ...
+            details.files.anat);
+        pfxStruct = 'mean';
+    case {1,2,3,4,5,6}
+        fig_specificity_contours.struct = fullfile(details.paths.scandata, ...
+            details.files.anat);
+        pfxStruct = sprintf('echo%d', fig_specificity_contours.struct_select);
+end
+
+fig_specificity_contours.func = details.preproc.func.mean_realigned;
+
+% structural is coregistered before using it!
+fig_specificity_contours.coreg.ref = fig_specificity_contours.func;
+fig_specificity_contours.coreg.source = fig_specificity_contours.struct;
+[~, refName] = fileparts(fig_specificity_contours.coreg.ref);
+pfxCoregOut = sprintf('cor2%s_%s', refName, pfxStruct);
+fig_specificity_contours.coreg.out = spm_file(fig_specificity_contours.coreg.source, ...
+    'prefix', pfxCoregOut);
+
+
+fig_specificity_contours.struct_biascorrected = spm_file(fig_specificity_contours.coreg.out, 'prefix', 'm');
+fig_specificity_contours.func_biascorrected = spm_file(fig_specificity_contours.func, 'prefix', 'm');
+
+% tissue probability maps (TPMs) of structural image
+fig_specificity_contours.structTPMs = {
+     spm_file(fig_specificity_contours.coreg.out, 'prefix', 'c1');
+     spm_file(fig_specificity_contours.coreg.out, 'prefix', 'c2');
+     spm_file(fig_specificity_contours.coreg.out, 'prefix', 'c3');
+}; 
+
+% TPM of functional image
+fig_specificity_contours.funcTPMs = {
+     spm_file(fig_specificity_contours.func, 'prefix', 'c1');
+     spm_file(fig_specificity_contours.func, 'prefix', 'c2');
+     spm_file(fig_specificity_contours.func, 'prefix', 'c3');
+};
+
+% save as mat for the ROIs
+fig_specificity_contours.output_edge_distance_map = regexprep(spm_file(...
+    fig_specificity_contours.struct_biascorrected, 'prefix', 'edge_distance_map'), ...
+    '\.nii', '\.mat');
+details.representation.fig_specificity_contours = fig_specificity_contours;
+
+%% fig_specificity_activation_tissue_overlap
+fig_specificity_activation_tissue_overlap = ...
+    options.representation.fig_specificity_activation_tissue_overlap;
+
+if fig_specificity_activation_tissue_overlap.doUseSmoothedMaps
+    pfxOutput = 'smoothed_';
+else
+    pfxOutput = 'unsmoothed_';
+end
+
+fig_specificity_activation_tissue_overlap.output_spm_with_tissue_rois = ...
+    fullfile(details.glm.root, sprintf('%sspm_with_tissue_rois.mat',pfxOutput'));
+
+details.representation.fig_specificity_activation_tissue_overlap = fig_specificity_activation_tissue_overlap;
+
+%% Create directories
 [~,~] = mkdir(details.behav.root);
 [~,~] = mkdir(details.glm.session);
 [~,~] = mkdir(details.preproc.root);

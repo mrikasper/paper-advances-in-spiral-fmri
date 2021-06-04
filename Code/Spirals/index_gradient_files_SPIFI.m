@@ -42,3 +42,10 @@
 57, 0.23, 0.230, 0.00, 0.7e-3, 0.7e-3, 0, 4, 1, 1, 200e-3, 600, 0, out, minTime, stack, 1
 58, 0.23, 0.230, 0.00, 0.5e-3, 0.5e-3, 0, 4, 1, 1, 200e-3, 600, 0, out, minTime, stack, 1
 59, 0.23, 0.230, 0.00, 0.5e-3, 0.5e-3, 0, 1, 1, 1, 200e-3, 600, 0, out, minTime, stack, 1
+
+%% AUTOMAP spirals
+60, 0.23, 0.23, 0.00, 1e-3, 1e-3, 0, 10, 1, 1, 31e-3, 200, 0, out, minTime, stack, 1
+
+%% spirals for Deep learning demo
+61, 0.23, 0.23, 0.00, 2e-3, 2e-3, 0, 1, 1, 2, 31e-3, 200, 0, out, minTime, stack, 1
+62, 0.23, 0.23, 0.00, 2e-3, 2e-3, 0, 2, 1, 1, 31e-3, 200, 0, out, minTime, stack, 1

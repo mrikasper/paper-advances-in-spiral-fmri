@@ -41,15 +41,13 @@ To reproduce the fMRI analysis, run `Code/main.m` in Matlab. This should perform
 
 1.  The preprocessing, including slice timing correction, realignment and
     smoothing
-
 2.  The first level GLM analysis of the visual quarterfield task, including
     physiological noise modeling (RETROICOR).
-
 3.  The generation of all figure content for the accompanying 
     [manuscript](Manuscript.md). This can also be run separately in
     `Code/Representation/main_create_figures.m`.
 
-**Note**: You will also have to update the paths in
+**Note**: You will also have to download the single subject example data (`ReconstructedImages/SPIFI_0007`) from ETH Research Collection (https://dx.doi.org/10.3929/ethz-b-000487412) and update the paths in
 `Code/spifi_get_analysis_options.m` to reflect where you put the raw image and
 logfile data, and where you would like the results to be written out.
 Specifically, you have to set
@@ -64,51 +62,29 @@ Timeline
 --------
 
 -   Project started in September 2016
-
 -   First successful imaging results November 2016
-
 -   Started Paper in October 2017
-
     -   General structure repo: October 2017
-
     -   Introduction: February 2018
-
 -   Paper Data
-
     -   Started Acquisition in October 2017
-
     -   Started Analysis (maps) in December 2017
-
-    -   Started pipeline recon on Euler in February 2018
-
+    -   Started pipeline recon on Euler (CPU Cluster) in February 2018
     -   Started Analysis Code in February 2018
-
     -   Improved B0 map processing for LAYMM and SPIFI: October - December 2018
-
     -   Rerun Analysis of all subjects: March 2019
-
         -   with LAYMM map improvements
-
     -   2nd Rerun Analysis of all subjects: June 2019
-
         -   with LAYMM recon phase 2 map improvements
-
 -   First Full Story Bullets: September 06, 2019
-
 -   First Complete Figure Drafts: October 04, 2019
-
 -   First Full Draft: November 10, 2019
-
 -   First Preprint ([BiorXiv](https://www.biorxiv.org/content/10.1101/842179v1)): November 15, 2019 
-
 -   First Submission (Neuroimage): January 18, 2020
-
--   Starting Revision:
-
--   Submitted Revision:
-
+-   Starting Revision: February 22, 2020 
+    - **... Covid-19 Pandemic...**
+-   Submitted Revision: June 01, 2021
 -   Accepted:
-
 -   Proofs Accepted:
 
 First Author: Lars Kasper
@@ -116,14 +92,12 @@ First Author: Lars Kasper
 Requirements
 ------------
 
-This code is written in Matlab, R2018b. It further relies on the following
+This code is written in Matlab, and tested with version R2019b on PC. It further relies on the following
 open-source Matlab toolboxes
 
 -   Statistical Parametric Mapping [SPM12.4](https://github.com/spm-central/spm12)
-
--   Unified NeuroImaging Quality Control Toolbox [UniQC](https://gitlab.ethz.ch/uniqc/uniqc-code)
-
--   PhysIO Toolbox for Physiological Noise Modeling, part of [TAPAS](https://translationalneuromodeling.github.io/tapas)
-
+-   [UniQC](https://github.com/translationalneuromodeling/tapas/tree/master/UniQC): Unified NeuroImaging Quality Control Toolbox for computing all quality control metrics (SFNR, SD, Mean), ROI analysis and reproducible figure generation (crops, slices, windowing, colormaps), part of [TAPAS](https://translationalneuromodeling.github.io/tapas)
+-   [PhysIO Toolbox](https://github.com/translationalneuromodeling/tapas/tree/master/PhysIO): for Physiological Noise Modeling in fMRI, part of [TAPAS](https://translationalneuromodeling.github.io/tapas)
 -   [export_fig](https://github.com/altmany/export_fig.git) by Yair Altman, for
 exporting the paper figure elements to high-resolution PNGs
+-    [ISMRMRD](https://github.com/ismrmrd/ismrmrd) Toolbox for converting raw coil data and magnetic field dynamics to the vendor-independent ISMRM raw data format (ISMRMRD)

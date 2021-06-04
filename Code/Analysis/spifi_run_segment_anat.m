@@ -1,8 +1,8 @@
-function matlabbatch = spifi_run_segment_anat(fileAnat, templateBatch, savedBatch)
+function matlabbatch = spifi_run_segment_anat(fileAnat, templateBatch, savedBatch, biasFwhm)
 % Segments anatomical image and saves bias-corrected version, as well as
 % bias field and tissue probability maps
 %
-%   matlabbatch = spifi_run_segment_anat(fileAnat, templateBatch, savedBatch)
+%   matlabbatch = spifi_run_segment_anat(fileAnat, templateBatch, savedBatch, biasFwhm)
 %
 % IN
 %
@@ -25,8 +25,14 @@ function matlabbatch = spifi_run_segment_anat(fileAnat, templateBatch, savedBatc
 % For further details, see the file COPYING or
 %  <http://www.gnu.org/licenses/>.
 %
+
+if nargin < 4
+    biasFwhm = 60;
+end
+
 run(templateBatch);
 matlabbatch{1}.spm.spatial.preproc.channel.vols{1} = fileAnat;
+matlabbatch{1}.spm.spatial.preproc.channel.biasfwhm = biasFwhm;
 tnufmri_convert_batch_mat_to_m(matlabbatch, savedBatch);
 spm_jobman('interactive', matlabbatch);
 spm_jobman('run', matlabbatch);

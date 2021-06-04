@@ -28,14 +28,14 @@
  
 % idxSubj     subject ID (1-7)
 % numeric index array referring to subjects SPIFI_0001 to SPIFI_0007
-idxSubjectArray = 2:7
+idxSubjectArray = 12;%2:7
 
 %   idxSess     session to be extracted (e.g. fMRIOut of fMRIInOut)
 %               1   fMRIOut_1   (in paper high-res spiral out 0.8 mm)
 %               2   fMRIInOut_1 (in papaer spiral in/out 1.5 mm)
 %               3   fMRIOut_2
 %               4   fMRIInOut_2
-idxSessArray = 1:2;
+idxSessArray = 1;%1:2;
 
 %   idxRecon    reconstruction used (e.g. PartIn or PartOut of In/Out
 %               spiral)
@@ -74,7 +74,7 @@ idxReconPerSessArray = {
 %                doReportPhysioContrasts 	11
 %                doComputeSummary           12
 %                doCreateFigures            13
-idxProcessingStepsArray = 0:13;
+idxProcessingStepsArray = 9:12;%0:13;
 
 %   options     See also spifi_get_analysis_options, subject-independent
 %               settings, e.g. smoothing kernel, selected slices for

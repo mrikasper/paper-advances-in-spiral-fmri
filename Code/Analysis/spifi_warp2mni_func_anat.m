@@ -23,7 +23,7 @@ run(opts.templateBatch);
 matlabbatch{1}.spm.spatial.normalise.write.subj.def{1} = ...
     opts.forwardDeformationField;
 matlabbatch{1}.spm.spatial.normalise.write.subj.resample = ...
-    opts.source;
+    opts.source(isfile(opts.source)); % only warp existing files
 tnufmri_convert_batch_mat_to_m(matlabbatch, opts.saveBatch)
 spm_jobman('interactive', matlabbatch);
 spm_jobman('run', matlabbatch);
