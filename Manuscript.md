@@ -1,6 +1,5 @@
----
-title: "Advances in Spiral fMRI: A High-resolution Study with Single-shot Acquisition"
----
+Advances in Spiral fMRI: A High-resolution Study with Single-shot Acquisition
+=============================================================================
 
 Lars Kasper1,2,†, Maria Engel1, Jakob Heinzle2, Matthias Mueller-Schrader2,
 Nadine N. Graedel1,3, Jonas Reber1, Thomas Schmid1, Christoph Barmet1, Bertram
@@ -24,6 +23,7 @@ J. Wilm1, Klaas Enno Stephan2,4,5, Klaas P. Pruessmann1
 †Current Address: Techna Institute, University Health Network Toronto, Canada
 
 Highlights
+----------
 
 -   This work reports the first fMRI study at 7T with high-resolution spiral
     readout gradient waveforms.
@@ -41,6 +41,7 @@ Highlights
     providing two images per shot (1.5 mm resolution).
 
 Abstract
+--------
 
 Spiral fMRI has been put forward as a viable alternative to rectilinear
 echo-planar imaging, in particular due to its enhanced average k-space speed and
@@ -1139,8 +1140,6 @@ Figures
 [Figure 1](Figures/Figure1.png)
 -------------------------------
 
-![](media/7bd18961ee4c4ca63ab8a36adad83f5e.tif)
-
 Utilized 2D single-shot spiral acquisitions (R=4 undersampling): High-resolution
 single-shot spiral-out (nominal resolution 0.8 mm, black) and spiral in/out
 trajectory (1.5 mm resolution, blue). Depicted are the gradient waveforms
@@ -1152,8 +1151,6 @@ start a few milliseconds before the spiral readout gradient waveforms.
 [Figure 2](Figures/Figure2.png)
 -------------------------------
 
-![](media/d6bffbfb0d818bde29b2b7157c36e82d.tif)
-
 Overview of image quality for high-resolution (0.8 mm) single-shot spiral-out
 acquisition. (A) 8 oblique-transverse slices (of 36) depicting the time-series
 magnitude mean of one functional run (subject S7, 100 volumes). (B)
@@ -1163,8 +1160,6 @@ corresponding to lower row of (A).
 
 [Figure 3](Figures/Figure3.png)
 -------------------------------
-
-![](media/083043f4a1ebb3c5caaf35238a6e2c47.tif)
 
 Characterization of image time series fluctuations over 1 spiral-out run (95
 volumes, discarding first five). (A) Signal-to-Noise Fluctuation Ratio (SFNR)
@@ -1178,8 +1173,6 @@ internal capsule, due to its reduced average signal level.
 
 [Figure 4](Figures/Figure4.png)
 -------------------------------
-
-![](media/cbe4a3f5c6deb69ae1fb8ba529a2fccb.tif)
 
 Image quality and geometric accuracy of spiral images, reconstructed with the
 expanded signal model. (A) Anatomical Reference: Mean multi-echo (ME) spin-warp
@@ -1195,10 +1188,8 @@ geometric incongruence by through-plane dephasing (white) or incomplete B0
 mapping and correction (yellow) in the spiral-out, which are reduced in the
 out-part and absent in the in-part of the spiral-in/out sequence.
 
-Figure 5
---------
-
-![C:\\Users\\kasperla\\polybox\\Papers\\SpiralFmri7T\\Submission\\Revision1\\Figure5_HighRes.tif](media/d0c81df5d13f62cdec3cd985751b3f79.tiff)
+[Figure 5](Figures/Figure5.png) 
+--------------------------------
 
 Quantification of spatial specificity in spiral images via contour distance
 mapping.  
@@ -1218,10 +1209,8 @@ contour voxels in all subjects were strictly overlapping, with $$76 \pm 7\ \%$$
 at most 1 voxel apart and only $$11 \pm 5\ \%$$ exceeding a distance of 2 voxels
 (1.6 mm).
 
-[Figure 6](Figures/Figure5.png) 
+[Figure 6](Figures/Figure6.png) 
 --------------------------------
-
-![](media/7aa19932ca25ab701710314e846fd9d1.tif)
 
 Visual Activation Maps of high-resolution (0.8 mm) spiral-out fMRI for a single
 subject (S2). Representative stimuli of both conditions (ULLR and URLL) are
@@ -1234,10 +1223,8 @@ maps in different orientations: transverse (top), coronal (middle) and sagittal
 conditions (blue: ULLR, yellow: URLL), showing more widespread activation and
 high spatial specificity, i.e., little spatial overlap (green).
 
-[Figure 7](Figures/Figure5.png)
+[Figure 7](Figures/Figure7.png)
 -------------------------------
-
-![](media/628728a19dad854bd7fe6f1f1dacd22d.tif)
 
 Mean spiral images and activation maps over subjects (S2-S7) for high-resolution
 spiral-out fMRI. For each subject, the following 4 sections are displayed, with
@@ -1248,10 +1235,8 @@ uncorrected). To assess raw spiral data quality, the corresponding mean
 functional image is displayed side-by-side to the anatomical transverse slice as
 an alternative underlay.
 
-Figure 8
---------
-
-![C:\\Users\\kasperla\\Documents\\Projects\\SPIFI\\Results\\Summary\\Pipeline02\\Figures\\Figure22\\smoothed_tissue_threshold_60_percent_clusterFWE\\Histogram_Stacked_Barplot_Activation_Tissue_Overlap_per_Subject_legendbelow.png](media/8668a18de46f1a9c68f6a4088eafb32f.png)
+[Figure 8](Figures/Figure8.png) 
+--------------------------------
 
 Spatial specificity of functional activation for high-resolution spiral-out
 fMRI. Percentage of significant voxels over both differential t-contrasts (+/-
@@ -1264,10 +1249,8 @@ Surface). On average, the majority (75 %) of activation was contained in gray
 matter or adjacent surfaces, with 6 % and 13 % residing in majority white matter
 and CSF voxels, respectively.
 
-Figure 9
---------
-
-![](media/19f8ce80da864227d69809c762bac2dd.tif)
+[Figure 9](Figures/Figure9.png) 
+--------------------------------
 
 Visual Activation Maps of spiral in/out (1.5mm) fMRI run for a single subject
 (S2, as in Fig. 6). (A-C) Displayed are the differential t-contrast maps
@@ -1296,7 +1279,7 @@ i.e., the one reported in the sub-table directly above. Since resolutions differ
 between spiral-out (0.8 mm) and spiral in/out (1.5 mm), we compare activated
 volume instead of voxel count.
 
-|                                | **Subjects** | **Gain vs** |       |       |       |       |         |      |                   |                       |
+|                                | **Subjects** |             |       |       |       |       |         |      | **Gain vs**       |                       |
 |--------------------------------|--------------|-------------|-------|-------|-------|-------|---------|------|-------------------|-----------------------|
 | *Measure*                      | *S2*         | *S3*        | *S4*  | *S5*  | *S6*  | *S7*  | *Mean*  | *SD* | *previous spiral* | *high-res spiral out* |
 | **high-resolution spiral out** |              |             |       |       |       |       |         |      |                   |                       |
@@ -1327,7 +1310,7 @@ volume instead of voxel count.
 Supplementary Material
 ======================
 
-Figure SM 1
+Figure SM 1
 -----------
 
 Figure collection of high-resolution (0.8 mm) spiral fMRI data. For every
@@ -1346,7 +1329,7 @@ Magnitude-mean spiral fMRI image, overlaid with edges of anatomical reference
 (p\<0.001 uncorrected) on transverse slices of mean spiral image (hot colormap:
 URLL-ULLR, cool colormap: ULLR-URLL, display range t=3.2-8).
 
-Figure SM 2
+Figure SM 2
 -----------
 
 Figure collection of spiral in/out fMRI data (1.5 mm resolution). For every
@@ -1366,7 +1349,7 @@ Magnitude-mean spiral fMRI image, overlaid with edges of anatomical reference
 (p\<0.001 uncorrected) on transverse slices of mean spiral image (hot colormap:
 URLL-ULLR, cool colormap: ULLR-URLL, display range t=3.2-8).
 
-Table SM 3
+Table SM 3
 ----------
 
 Comparison of acquisition efficiency in published 2D spiral fMRI studies.
@@ -1393,7 +1376,7 @@ efficiency.
 | (Singh et al., 2018)                                                  | 1.2               | 1.2        | 192           | 14             | 160              | 12          | 3                        | 1.0   | 3     | 102               |
 | *This study*                                                          | 0.8               | 0.9        | 230           | 32             | 288              | 36          | 1                        | 3.3   | 3.3   | 902               |
 
-Figure SM 4
+Figure SM 4
 -----------
 
 Impact of readout duration and spatial smoothing on activation maps in

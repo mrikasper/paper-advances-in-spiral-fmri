@@ -1,5 +1,5 @@
-Spiral Fmri 7T Paper
-====================
+Paper Advances in Spiral fMRI
+=============================
 
 Summary
 -------
