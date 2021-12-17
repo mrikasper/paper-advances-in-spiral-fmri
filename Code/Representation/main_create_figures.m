@@ -30,10 +30,14 @@ paths = options.paths();
 %% loop to create all paper figures
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% 0 = Table 1; 11 = Figure S1; 12 = Figure S2; 21 = Figure R1 for Reviewer
-idxFiguresToPlot    = 5 % [0:12];
+% 0 = Table 1;
+% Supplementary Figures: 
+%   11 = Figure S1 (all reported means and maps for high-res spiral Out)
+%   12 = Figure S2; (all reported means and maps for spiral in/out/combined)
+%   14 =  Figure S4 (supplementary video smoothed/unsmoothed/cropped recon)
+idxFiguresToPlot    = 17; % [0:12];
 % false or true; true saves them to Results\Summary\PipelineXX\Figures\FigureYY
-doSaveFigures       = true;
+doSaveFigures       = false;
 
 % configurations of subjects, session (high-res out or in/out) and recon
 % (magnitude/phase and in/out/combined (for in/out)) taken for display
@@ -45,7 +49,11 @@ idxSubjSessReconArray = [
     ];
 
 nConfigs = size(idxSubjSessReconArray,1);
-idxSubjectArray = 12; % change to subset of [2:7] to create same plots for other subjects
+% change to subset of [2:7] to create same plots for other subjects
+% include 12 for cropped-to-1mm reconstruction of SPIFI_0002
+% NOTE: for Fig. 21 and 22, all subjects have to be included in order to
+% update the output figure with newly computed values
+idxSubjectArray = 2%2:7%[2:7];
 for idxSubj = idxSubjectArray
     isFirstRun = idxSubj == idxSubjectArray(1);
     isLastRun = idxSubj == idxSubjectArray(end);
@@ -67,6 +75,9 @@ for idxSubj = idxSubjectArray
             iSubj = idxSubjSessReconArray(iConfig,1);
             iSess = idxSubjSessReconArray(iConfig,2);
             iRecon = idxSubjSessReconArray(iConfig,3);
+            details = ...
+                spifi_get_subject_details(iSubj, options, iSess, iRecon);
+            
             switch idxFigure
                 case 0
                     ft{1} = create_table_tsnr_spm_group(options.representation.tab_tsnr_spm_group);
@@ -90,28 +101,54 @@ for idxSubj = idxSubjectArray
                     figOpts.iSess = iSess;
                     figOpts.iRecon = iRecon;
                     fh{4} = create_figure_congruency(figOpts);
-                case 5
+                case 5 % New Fig. 5, contour congruency, for reviewer 1
+                    figOpts = details.representation.fig_specificity_contours;
+                    figOpts.idxTissue = 1;
+                    figOpts.iSubj = idxSubj;
+                    [fh{5}, distMapX, figOpts] = compute_spatial_specificity_contour_congruency(figOpts);
+                    
+                    if isLastRun % need stats of all subjects from plot above to compute this
+                        [fhTmp, roiArray, outputStats5] = create_figure_contour_congruency_summary_all_subjects();
+                        fh{5} = [fh{5};fhTmp];
+                    end
+                case 6
                     figOpts = options.representation.fig_spm_subject;
                     figOpts.iSubj = idxSubjSessReconArray(iConfig,1);
                     figOpts.iSess = iSess;
                     figOpts.iRecon = iRecon;
-                    details = ...
-                        spifi_get_subject_details(iSubj, options, iSess, iRecon);
                     if ~isfile(details.summary.mean.raw) % rerun creation of summary
-                        main(figOpts.iSubj, figOpts.iSess, figOpts.iRecon, 8)
+                        spifi_run_analysis(figOpts.iSubj, figOpts.iSess, figOpts.iRecon, 12, options)
                     end
-                    fh{5} = create_figure_spm_subject(figOpts);
-                case 6
+                    fh{6} = create_figure_spm_subject(figOpts);
+                case 7
                     figOpts = options.representation.fig_spm_group;
+                    figOpts.iSubjects = idxSubjectArray;
                     figOpts.iSess = iSess;
                     figOpts.iRecon = iRecon;
-                    fh{6} = create_figure_spm_group(figOpts);
-                case 7
+                    % since those are anyway plotted for for all subjects, do for first run of
+                    % this loop only
+                    if isFirstRun
+                        fh{7} = create_figure_spm_group(figOpts);
+                    end
+                case 8 % New Fig. 8, activation overlap, for reviewer 1
+                    figOpts = options.representation.fig_specificity_activation_tissue_overlap;
+                    figOpts.iSubj = idxSubj;
+                    figOpts.doUseSmoothedMaps = true;
+                    figOpts.doUseVisualCortexMask = false;
+
+                    [fh{8}, Y, figOpts] = compute_spatial_specificity_activation_tissue_overlap(figOpts);
+                    
+                    if isLastRun % need stats of all subjects from plot above to compute this
+                        options.representation.fig_specificity_activation_tissue_overlap = figOpts;
+                        [fhTmp, outputStats8] = create_figure_activation_tissue_overlap_summary_all_subjects(options);
+                        fh{8} = [fh{8};fhTmp];
+                    end
+                case 9
                     figOpts = options.representation.fig_spm_inout;
                     figOpts.iSubj = iSubj;
                     %figOpts.iSess = iSess;
                     %figOpts.iRecon = iRecon;
-                    fh{7} = create_figure_spm_inout(figOpts);
+                    fh{9} = create_figure_spm_inout(figOpts);
                 case 11 % Figure S1 (supplementary)
                     % since those are anyway plotted for for all subjects, do for first run of
                     % this loop only
@@ -131,48 +168,35 @@ for idxSubj = idxSubjectArray
                             fh{12} = [fh{12};fhTmp];
                         end
                     end
-                case 21 % Figure R1 for reviewer
-                    %figOpts = []; % TODO: include into options!
-                    %figOpts.structTPMs = options.structTPMs; % TODO to not re-compute!
-                    %figOpts.funcTPMs = options.funcTPMs;
-                    figOpts = options.representation.fig_specificity_contours;
-                    figOpts.idxTissue = 1;
-                    figOpts.iSubj = idxSubj;
-                    [fh{21}, distMapX, figOpts] = compute_spatial_specificity_contour_congruency(figOpts);
-                    
-                    if isLastRun % need stats of all subjects from plot above to compute this
-                        [fhTmp, roiArray, outputStats21] = create_figure_contour_congruency_summary_all_subjects();
-                        fh{21} = [fh{21};fhTmp];
+                case 14 % Figure S4 (supplementary video smoothed/unsmoothed/cropped recon)
+                    if isFirstRun
+                        fh{14} = create_figure_activation_smoothed_unsmoothed_cropped();
+                    end
+                case 17 % Figure S7 (supplementary figure zoomed activation overlay smoothed/unsmoothed)
+                        % also for figure 8A (smoothed/unsmoothed overlay
+                        % mask)
+                    if isFirstRun
+                        fh{17} = create_figure_activation_overlay_smoothed_unsmoothed();
                     end
                     
-                case 22 % Figure R2 for reviewer, activation overlap
-                    figOpts = options.representation.fig_specificity_activation_tissue_overlap;
-                    figOpts.iSubj = idxSubj;
-     
-                    [fh{22}, Y, figOpts] = compute_spatial_specificity_activation_tissue_overlap(figOpts);
-                    
-                     if isLastRun % need stats of all subjects from plot above to compute this
-                        [fhTmp, outputStats22] = create_figure_activation_tissue_overlap_summary_all_subjects();
-                        fh{22} = [fh{22};fhTmp];
-                    end
             end
-            
         end
         
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %% Save Figures
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    end
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %% Save Figures
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    if doSaveFigures
+        iFormatArray = 4; % 3 = highres, 4 = ultra-high res (slow)
         
-        if doSaveFigures
-            iFormatArray = 3;
-            
-            nFigures = numel(fh);
-            for iFigure = 1:nFigures
-                % save Figure-related plots in specific figure folders
-                pathFigs = fullfile(paths.figures, sprintf('Figure%d', iFigure));
-                % also works for vector of figure handles in fh{iFigure}!
-                save_plots_abstract(fh{iFigure}, pathFigs, iFormatArray)
-            end
+        nFigures = numel(fh);
+        for iFigure = 1:nFigures
+            % save Figure-related plots in specific figure folders
+            pathFigs = fullfile(paths.figures, sprintf('Figure%d', iFigure));
+            % also works for vector of figure handles in fh{iFigure}!
+            save_plots_abstract(fh{iFigure}, pathFigs, iFormatArray)
         end
     end
 end

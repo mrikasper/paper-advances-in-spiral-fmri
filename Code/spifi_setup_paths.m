@@ -13,13 +13,8 @@ paths = spifi_get_paths();
 fprintf('\tRestoring default paths, adding new paths for SPIFI...');
 
 restoredefaultpath;
-hasTnufmriToolbox = isfield(paths.code, 'tnufmri') && exist(paths.code.tnufmri, 'dir');
-if hasTnufmriToolbox
-    addpath(paths.code.tnufmri);
-    tnufmri_setup_paths();
-else
-    addpath(paths.code.spm);
-end
+
+addpath(paths.code.spm);
 addpath(genpath(paths.code.analysis.root));
 addpath(genpath(paths.code.physio));
 addpath(genpath(paths.code.uniqc));

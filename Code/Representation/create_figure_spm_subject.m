@@ -27,13 +27,14 @@ function [fh, figOptions] = create_figure_spm_subject(figOptions)
 % For further details, see the file COPYING or
 %  <http://www.gnu.org/licenses/>.
 
+options = spifi_get_analysis_options();
 if nargin < 1
-    options = spifi_get_analysis_options();
     figOptions = options.representation.fig_spm_subject;
 end
 
+options.glm.doUseSmoothed = figOptions.doUseSmoothedMaps;
 details = spifi_get_subject_details(figOptions.iSubj, ...
-    [], figOptions.iSess, figOptions.iRecon);
+    options, figOptions.iSess, figOptions.iRecon);
 
 files = {
     details.preproc.func.biascorrected
@@ -42,15 +43,6 @@ files = {
     ''
     };
 
-% funcColorMaps = {
-%     @(x) split_brewermap(x, 'RdYlBu', 'pos')
-%     @(x) split_brewermap(x, 'RdYlBu', 'neg')
-%     };
-% funcColorMaps = {
-%     @(x) split_brewermap(x, 'parula', 'neg')
-%     @(x) split_brewermap(x, 'parula', 'pos')
-%     };
-%
 
 switch figOptions.contrastType
     case 'differential'
@@ -64,11 +56,6 @@ switch figOptions.contrastType
     case 'condition'
         files{3} = details.glm.tcon_condition1;
         files{4} = details.glm.tcon_condition2;
-        %         funcColorMaps = {
-        %             'winter'
-        %             'autumn'
-        %             };
-        %         overlayAlpha = 1;
         funcColorMaps = {
             @(nColors) get_colormap_gradient(9/10*[0 1 1], [0 1 1], nColors)
             @(nColors) get_colormap_gradient(9/10*[1 1 0], [1 1 0], nColors)
@@ -78,11 +65,36 @@ end
 
 nFiles = numel(files);
 
-sharedParameters = {'plotLabels', false, 'plotTitle', false, ...
-    'colorBar', 'off', 'overlayAlpha', overlayAlpha, ...
-    'overlayThreshold', figOptions.thresholdRange, ...
-    'overlayMode', 'map', ...
-    'overlayColorMaps', funcColorMaps};
+
+if figOptions.doPlotMask
+    
+    % different mask colors for smoothed (red/blue) and unsmoothed
+    % (yellow/cyan)
+    if figOptions.doUseSmoothedMaps
+        funcColorMaps = {
+            @(nColors) get_colormap_gradient(9/10*[0 0 1], [0 0 1], nColors)
+            @(nColors) get_colormap_gradient(9/10*[1 0 0], [1 0 0], nColors)
+            };
+    else
+        funcColorMaps = {
+            @(nColors) get_colormap_gradient(9/10*[0 1 0.5], [0 1 0.5], nColors)
+            @(nColors) get_colormap_gradient(9/10*[1 1 0], [1 1 0], nColors)
+            };
+    end
+    overlayAlpha = 0.6;
+    % dummy image with all zeros but same size as original anat image
+    sharedParameters = {'plotLabels', false, 'plotTitle', false, ...
+        'colorBar', 'off', 'overlayAlpha', overlayAlpha, ...
+        'overlayMode', 'map', ...
+        'overlayColorMaps', funcColorMaps
+        };
+else
+    sharedParameters = {'plotLabels', false, 'plotTitle', false, ...
+        'colorBar', 'off', 'overlayAlpha', overlayAlpha, ...
+        'overlayThreshold', figOptions.thresholdRange, ...
+        'overlayMode', 'map', ...
+        'overlayColorMaps', funcColorMaps};
+end
 
 sharedParameters_tra = {sharedParameters{:}, ...
     'rotate90', 1};
@@ -100,7 +112,7 @@ refCropY = details.representation.fig_spm_subject.cropY;
 for f = 1:nFiles
     Y{f} = MrImage(files{f});
     % remove negative values (grey background) from anatomy
-    if f==2, Y{f}.apply_threshold(0.1, 'exclude'); end
+    if f==2, Y{f}.threshold(0.1, 'exclude'); end
     % adapt crop to number of samples in array
     if f == 1, Yref = Y{1}.copyobj(); end % to not crop twice
     [cropX, cropY] = adjust_crop(refCropX, refCropY, ...
@@ -116,68 +128,127 @@ displayRanges = [
 
 
 
+% perform multiple comparison correction on activation maps
+% remove small clusters (multiple comparison correction)
+absY = abs(Y{nFiles});
+idxContrast = 1;
+maskActivation = absY.binarize(figOptions.thresholdRange(1));
+switch figOptions.FWEcorrection
+    case 'cluster'
+        % remove small clusters following SPM's FWE-cluster correction
+        nMinVoxels = get_fwe_clustersize(details.glm.spm_mat, idxContrast);
+        maskActivation = maskActivation.remove_clusters(...
+            'nPixelRange', [1 nMinVoxels-1]);
+    case 'peak'
+        % TODO
+    case 'none'
+        % nothing to remove
+end
+
+
+for f = 3:nFiles
+    Y{f} = Y{f}.*maskActivation
+end
+
 views = figOptions.views;
 nViews = numel(views);
 
-fh = zeros((nFiles-2)*nViews,1); % last 2 images are contrasts
+sliceString = sprintf('_%s_doUseSmoothedMaps%d_thresholdMin%3.1f_FWEcorrection-%s', figOptions.contrastType, ...
+    figOptions.doUseSmoothedMaps, figOptions.thresholdRange(1), ...
+    figOptions.FWEcorrection);
 
-sliceString = sprintf('_%s', figOptions.contrastType);
-
-for f = 1:nFiles-2
+if figOptions.doPlotMask
+    sliceString = [sliceString '_mask'];
     
+    % binarize into masks for edges
+    for f = 3:nFiles
+        Y{f} = Y{f}.binarize(figOptions.thresholdRange(1));
+    end
+    
+end
+
+switch figOptions.underlays
+    case 'functional'
+        idxUnderlayArray = 1;
+    case 'structural'
+        idxUnderlayArray = 2;
+    case 'both'
+        idxUnderlayArray = 1:nFiles-2; % last 2 images are contrasts
+    case 'none'
+        % e.g., for edges;
+        idxUnderlayArray = 1;
+end
+
+nUnderlays = numel(idxUnderlayArray);
+fh = zeros(nUnderlays*nViews,1); 
+for f = 1:nUnderlays
+    
+    idxUnderlay = idxUnderlayArray(f);
     % resize underlay to actual resolution of activation map
     % otherwise, voxel shifts may occur
-    resizedUnderlay = Y{f}.resize(Y{nFiles}.dimInfo);
+    resizedUnderlay = Y{idxUnderlay}.resize(Y{nFiles}.dimInfo);
+    
+    % black background
+    if contains(figOptions.underlays, 'none')
+        resizedUnderlay.data(:) = 0;
+        sliceString = [sliceString '_noUnderlay'];
+    end
     
     centerX = round(resizedUnderlay.dimInfo.x.nSamples/2);
     
     for iView = 1:nViews
+        nRows = figOptions.nRows(iView);
         switch lower(views{iView})
             case 'tra'
                 %% transverse plot
-                fh((f-1)*nViews+iView) = resizedUnderlay.apply_threshold(displayRanges(f,:)).plot_overlays(...
+                fh((f-1)*nViews+iView) = resizedUnderlay.threshold(...
+                    displayRanges(idxUnderlay,:)).plot_overlays(...
                     {Y{nFiles-1}, Y{nFiles}}, ...
                     'selectedSlices', figOptions.selectedSlice, ...
                     sharedParameters_tra{:}, ...
-                    'nRows', 1);
+                    'nRows', nRows);
                 
             case 'tra_zoom'
                 %% zoomed transversal plot
                 zI = resizedUnderlay.crop_all({'y', [10 70]}, Y(nFiles+[-1 0]));
                 
-                fh((f-1)*nViews+iView) = zI{1}.apply_threshold(displayRanges(f,:)).plot_overlays(...
+                fh((f-1)*nViews+iView) = zI{1}.threshold(...
+                    displayRanges(idxUnderlay,:)).plot_overlays(...
                     zI(end-1:end), ...
                     'selectedSlices', figOptions.selectedSlice, ...
                     sharedParameters_tra{:}, ...
-                    'nRows', 4);
+                    'nRows', nRows);
             case 'sag'
                 %%  sagittal plot
                 zI = resizedUnderlay.crop_all({'x', [100 100]}, Y(nFiles+[-1 0]));
-                fh((f-1)*nViews+iView) = zI{1}.apply_threshold(displayRanges(f,:)).plot_overlays(...
+                fh((f-1)*nViews+iView) = zI{1}.threshold(...
+                    displayRanges(idxUnderlay,:)).plot_overlays(...
                     zI(end-1:end), ...
                     sharedParameters_sag{:}, ...
-                    'nRows', NaN);
+                    'nRows', nRows);
             case 'sag_zoom'
                 %% zoom sagittal
                 zI = resizedUnderlay.crop_all({'y', [10 70]}, Y(nFiles + [-1 0]));
-                fh((f-1)*nViews+iView) = zI{1}.apply_threshold(displayRanges(f,:)).plot_overlays(...
+                fh((f-1)*nViews+iView) = zI{1}.threshold(...
+                    displayRanges(idxUnderlay,:)).plot_overlays(...
                     zI(end-1:end), ...
                     'selectedSlices', 100, ...
                     sharedParameters_sag{:}, ...
-                    'nRows',NaN);
+                    'nRows', nRows);
             case 'cor_zoom'
                 %% zoomed coronal view
                 % zI = Y{f}.crop_all({'x', centerX+[-60 59], 'y', [12 43]}, Y(nFiles + [-1 0]));
                 zI = resizedUnderlay.crop_all({'x', centerX+[-60 59], 'y', [37 37]}, Y(nFiles + [-1 0]));
-                fh((f-1)*nViews+iView) = zI{1}.apply_threshold(displayRanges(f,:)).plot_overlays(...
+                fh((f-1)*nViews+iView) = zI{1}.threshold(...
+                    displayRanges(idxUnderlay,:)).plot_overlays(...
                     zI(end-1:end), ...
                     sharedParameters_cor{:}, ...
-                    'nRows', NaN);
+                    'nRows', nRows);
         end
         % final cosmetics and figure labelling
         axis off;
         set(gcf, 'Name', spm_file(...
-            details.representation.fig_spm_subject.fileSaveArray{f}, ...
+            details.representation.fig_spm_subject.fileSaveArray{idxUnderlay}, ...
             'suffix', sprintf('_%s%s', views{iView},sliceString)));
     end
 end

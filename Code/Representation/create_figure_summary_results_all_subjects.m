@@ -126,12 +126,12 @@ for iSubj = 1:nSubjects
     doMaskPlot(6) = 1;
     
     displayRanges = [
-      details.representation.fig_mean.displayRange
-      details.representation.fig_mean.displayRange
-      details.representation.fig_mean.displayRange
-      0 30
-      0 0.05
-      0 0.2
+        details.representation.fig_mean.displayRange
+        details.representation.fig_mean.displayRange
+        details.representation.fig_mean.displayRange
+        0 30
+        0 0.05
+        0 0.2
         ];
     
     %% Plot images derived from realigned functional timeseries
@@ -158,16 +158,16 @@ for iSubj = 1:nSubjects
             'z', selectedSlices, 'displayRange', ...
             displayRanges(iImage,:), sharedParameters{:});
         axis off
-    set(gcf, 'Name', sprintf('%s %s: %d %s', details.subjectId, ...
-        details.recon, iImage, nameArray{iImage}));
+        set(gcf, 'Name', sprintf('%s %s: %d %s', details.subjectId, ...
+            details.recon, iImage, nameArray{iImage}));
     end
     
     %% Plot overlay edges of structural onto functional
     figOptions = options.representation.fig_congruency;
     idxImageUnderlay = 3;
     idxFileOverlay = nFiles - 1;
-    underlayImage = X{idxImageUnderlay}.select.apply_threshold(displayRanges(idxImageUnderlay,:));
-    overlayImage = Y{idxFileOverlay}.apply_threshold(figOptions.thresholdEdgeOutliers);
+    underlayImage = X{idxImageUnderlay}.select.threshold(displayRanges(idxImageUnderlay,:));
+    overlayImage = Y{idxFileOverlay}.threshold(figOptions.thresholdEdgeOutliers);
     
     % crop different resolutions to same zoom
     zI = underlayImage.crop_all({'y', cropY, 'x', cropX}, overlayImage);
@@ -185,7 +185,7 @@ for iSubj = 1:nSubjects
     idxImageUnderlay = 3;
     idxFileOverlay = nFiles;
     
-    underlayImage = X{idxImageUnderlay}.apply_threshold(...
+    underlayImage = X{idxImageUnderlay}.threshold(...
         displayRanges(idxImageUnderlay,:));
     overlayImage = Y{idxFileOverlay};
     zI = underlayImage.crop_all({'y', cropY, 'x', cropX}, overlayImage);

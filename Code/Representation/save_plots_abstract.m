@@ -41,12 +41,13 @@ end
 saveAsFig = ismember(2, iFormatArray);
 saveAsPng = ismember(1, iFormatArray);
 saveAsHighResPng = ismember(3, iFormatArray);
+saveAsHighestResPng = ismember(4, iFormatArray);
 
-if ~exist(pathFigs, 'dir')
+nFigs = numel(fh);
+if nFigs>0 && ~exist(pathFigs, 'dir')
     mkdir(pathFigs);
 end
 
-nFigs = numel(fh);
 for iFig = 1:nFigs
     currentFig = fh(iFig);
     stringTitle = str2fn(get(currentFig, 'Name'));
@@ -77,6 +78,16 @@ for iFig = 1:nFigs
         toc
     end
     
-
-
+    if saveAsHighestResPng
+        tic
+        windowStyle = get(currentFig, 'WindowStyle');
+        set(currentFig, 'WindowStyle', 'normal');
+        export_fig(fullfile(pathFigs, stringTitle), ...
+            '-png',  '-transparent', '-a4', '-q101', '-r600', ...
+            currentFig);
+        set(currentFig, 'WindowStyle', windowStyle);
+        toc
+    end
+    
+    
 end

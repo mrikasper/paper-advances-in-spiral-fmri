@@ -28,6 +28,8 @@
  
 % idxSubj     subject ID (1-7)
 % numeric index array referring to subjects SPIFI_0001 to SPIFI_0007
+% Note: SPIFI_0012 is SPIFI_0002, but with a reconstruction cropping
+% fMRIOut_1 to 1mm resolution+zerofilling
 idxSubjectArray = 12;%2:7
 
 %   idxSess     session to be extracted (e.g. fMRIOut of fMRIInOut)
@@ -90,8 +92,8 @@ options = spifi_get_analysis_options();
 for idxSubj = idxSubjectArray
     for idxSess = idxSessArray
         for idxRecon = idxReconPerSessArray{idxSess}
-        spifi_run_analysis(idxSubj, idxSess, idxRecon, ...
-            idxProcessingStepsArray, options);
+            spifi_run_analysis(idxSubj, idxSess, idxRecon, ...
+                idxProcessingStepsArray, options);
         end
     end
 end

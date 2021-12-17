@@ -1,25 +1,65 @@
+function save_rawdata_ismrmrd(saveCase, trajType, idxDynSingleVolume)
 %% Generating a spiral ISMRMRD data set
 % Based on test_create_undersampled_dataset from ISMRMRD/examples/matlab
 %
 % Data from 32 coils from 36 slice object with 100 repetitions.
 %
 
-clear all;
+%clear all;
 
 %% input parameters
-pathRecon = 'D:\SPIFI\Results';%C:\Users\kasperla\Documents\Projects\SPIFI\Results';
-pathOutput = 'C:\Users\kasperla\Documents\Projects\SPIFI\Results\ISMRMRD';
-saveCase = 'startMiddleEndVolume';
+%saveCase = 'singleVolume'; 'startMiddleEndVolume'; 'dyn_001-033'; 'dyn_034-066';'dyn_067-100'
+if nargin < 1
+    saveCase = 'singleVolume';
+end
+% 'Moni(tored)'
+% 'GIRF';
+% 'Nomi(nal)';
+if nargin < 2
+    trajType = 'girf'; %'monitored'; 'girf'; 'nominal';
+end
+if nargin < 3
+    idxDynSingleVolume = 1;
+end
 doDeleteExistingISMRMRDFile = true;
+doRotateToSliceGeometry = false; % true for gridding recon, false for higher order or GIRF
+
 
 %% derived parameters
+if ispc
+    pathRecon = 'D:\SPIFI\Results';%C:\Users\kasperla\Documents\Projects\SPIFI\Results';
+    pathInput = pathRecon;
+    pathOutput = 'C:\Users\kasperla\Documents\Projects\SPIFI\Results\ISMRMRD';
+else
+    pathRecon = '/cluster/work/tnu/kasperla/SPIFI/Results/SPIFI_0007';
+    pathInput = fullfile(pathRecon, 'ExportDataForPublication');
+    pathOutput = '/cluster/work/tnu/kasperla/SPIFI/Results/SPIFI_0007/exportRecon';
+    
+end
+
+
 % for geometry of dataset, use test data:
 switch(saveCase)
     case 'testSpiral'
         rwIn.dataId = 'testSpiral4il1mmSENSE_m400b424m400s1';
     otherwise
-        rwIn.dataId = 'spiral0p8mm_m400b424m400s1';
+        %  rwIn.dataId = 'spiral0p8mm_m400b424m400s1'; % old, w/ actual
+        %  reconstruction
+        % new, created only for data export rotated geometry cropped to
+        % reconstructable portion of readout (spiral waveform)
+        switch lower(trajType(1:4))
+            case 'moni'
+                rwIn.dataId = 'spiral0p8mmNoIterations_m400b424m400s1';
+            case 'girf'
+                rwIn.dataId = 'spiral0p8mmNoIterationsGirf_m400b424m400s1';
+            case 'nomi'
+                rwIn.dataId = 'spiral0p8mmNoIterationsNomi_m400b424m400s1';
+        end
 end
+
+% note that noIteration recons for data export did not do the demodulation!
+isB0CorrectedAndDemodulated = ~(contains(rwIn.dataId, 'NoIterations') ...
+    || contains(rwIn.dataId, 'ExportK'));
 
 dataType = '';
 interleaves = 1;
@@ -36,7 +76,8 @@ switch saveCase
         dyn = 1;
     case 'singleVolume'
         sli = 1:36;
-        dyn = 1;
+        dyn = idxDynSingleVolume;
+        saveCase = sprintf('%s%03d', saveCase, dyn);
     case 'startMiddleEndVolume'
         sli = 1:36;
         dyn = [1 50 100];
@@ -44,37 +85,85 @@ switch saveCase
     case 'completeRun'
         sli = 1:36;
         dyn = 1:100;
+    case 'dyn_001-033'
+        sli = 1:36;
+        dyn = 1:33;
+    case 'dyn_034-066'
+        sli = 1:36;
+        dyn = 34:66;
+    case 'dyn_067-100'
+        sli = 1:36;
+        dyn = 67:100;
 end
 
 % data from recon6, right before iterativeReconstruction
-fileRecon = sprintf('SPIFI_0007_ExportDataForPublication_%s_%s%s.mat', ...
+pfxRecon = sprintf('SPIFI_0007_Split_ExportDataForPublication_%s_%s%s', ...
     saveCase, rwIn.dataId, dataType);
 
-fileGeom = fullfile(pathRecon, ...
-    'SPIFI_0007_ExportDataForPublication_testSpiral_testSpiral4il1mmSENSE_m400b424m400s1.mat');
+fileGeom = fullfile(pathInput, [pfxRecon '_geometry.mat']);
+load(fileGeom, 'geometry');
 
 
-% Output file Name
-filename = fullfile(pathOutput, ...
-    regexprep(fileRecon, '\.mat', '\.h5'));
+% Output file Name, load what can be loaded
+if doRotateToSliceGeometry
+    fileOutIsmrmrd = fullfile(pathOutput, ...
+        sprintf('SPIFI_0007_RawData_RotatedToSliceGeometry3D_spiralOut_%s_%s.h5', trajType, saveCase));
+    fileTraj = fullfile(pathInput, [pfxRecon, '_k3D.mat']);
+    load(fileTraj, 'k3D');
+    k = k3D;
+    clear k3D
+    
+    if isB0CorrectedAndDemodulated
+        fileCoil = fullfile(pathInput, [pfxRecon, '_coildata_w0shift_remodulated_single.mat']);
+    else
+        fileCoil = fullfile(pathInput, [pfxRecon, '_coildata_single.mat']);
+    end
+    
+else
+    fileOutIsmrmrd = fullfile(pathOutput, ...
+        sprintf('SPIFI_0007_RawData_ScannerGeometryHigherOrderFields_spiralOut_%s_%s.h5', ...
+        trajType, saveCase));
+    fileCoil = fullfile(pathInput, [pfxRecon, '_coildataraw_single.mat']);
+    
+    kSets = {'kxyz', 'kCoco', 'k0', 'kHigherOrder'};
+    
+    for iSet = 1:numel(kSets)
+        fileTraj = fullfile(pathInput, sprintf('%s_%s.mat', pfxRecon, kSets{iSet}));
+        load(fileTraj, kSets{iSet});
+    end
+    k = [permute(k0,[1 3 2]), kxyz, kHigherOrder, kCoco];
+    
+    
+end
 if doDeleteExistingISMRMRDFile
-    delete(filename);
+    delete(fileOutIsmrmrd);
 end
 
-fileRecon = fullfile(pathRecon, fileRecon);
+%%
+
+if isB0CorrectedAndDemodulated
+    load(fileCoil, 'coildata_w0shift_remodulated');
+    coildata = coildata_w0shift_remodulated;
+    clear coildata_w0shift_remodulated;
+else
+    if doRotateToSliceGeometry
+        load(fileCoil, 'coildata');
+    else
+        load(fileCoil, 'coildataraw');
+        coildata = coildataraw;
+        clear coildataraw;
+    end
+end
+
 
 %%
-load(fileGeom, 'geometry');
-load(fileRecon, 'rawdata', 'trajectory');
-
-%%
-dset = ismrmrd.Dataset(filename);
+dset = ismrmrd.Dataset(fileOutIsmrmrd);
 
 nInterleaves = numel(interleaves);
 nSlices = numel(sli);
 nReps = numel(dyn);
 nCoils = 32;
-nSamples = size(rawdata,1);
+nSamples = size(coildata,1);
 
 %%
 % It is very slow to append one acquisition at a time, so we're going
@@ -89,7 +178,12 @@ acqblock.head.version(:) = 1;
 acqblock.head.number_of_samples(:) = nSamples;
 acqblock.head.center_sample(:) = 0; % center of k-space
 acqblock.head.active_channels(:) = nCoils;
-acqblock.head.trajectory_dimensions(:) = 3; % rotated mps
+
+if doRotateToSliceGeometry
+    acqblock.head.trajectory_dimensions(:) = 3; % rotated mps
+else
+    acqblock.head.trajectory_dimensions(:) = size(k,2);
+end
 acqblock.head.sample_time_us(:) = 1.8;
 
 
@@ -99,7 +193,7 @@ rotationPhilipsXYZToPatient = geometry.rot_traj_xyz_to_mps';
 acqblock.head.read_dir  = repmat(rotationPhilipsXYZToPatient(:,1),[1 nSlices*nInterleaves]);
 acqblock.head.phase_dir = repmat(rotationPhilipsXYZToPatient(:,2),[1 nSlices*nInterleaves]);
 acqblock.head.slice_dir = repmat(rotationPhilipsXYZToPatient(:,3),[1 nSlices*nInterleaves]);
-
+acqblock.head.position = repmat(geometry.offcentre_xyz_slice.', [1 nInterleaves]);
 
 % Loop over the acquisitions, set the header, set the data and append
 for rep = 1:nReps
@@ -145,8 +239,8 @@ for rep = 1:nReps
             %               size(acqRead.data{1})
             %               ans =
             %                   1284          36
-            acqblock.data{iSlice} = rawdata(:,:, scan_counter+1);
-            acqblock.traj{iSlice} = (trajectory.k_xyz(:,:,scan_counter+1)).';
+            acqblock.data{iSlice} = coildata(:,:, scan_counter+1);
+            acqblock.traj{iSlice} = (k(:,:,scan_counter+1)).';
         end % interleaf loop
         
     end % slice loop
@@ -196,7 +290,7 @@ header.measurementInformation.seriesDescription = 'Spiral_0p8mm_R4_TE20_Run1';
 % Acquisition System Information (Optional)
 header.acquisitionSystemInformation.systemVendor = 'Philips';
 header.acquisitionSystemInformation.systemModel = 'Achieva';
-header.acquisitionSystemInformation.institutionName = 'Insitute for Biomedical Engineering, ETH Zurich and University of Zurich, University Hospital Zurich';
+header.acquisitionSystemInformation.institutionName = 'Institute for Biomedical Engineering, ETH Zurich and University of Zurich, University Hospital Zurich';
 header.acquisitionSystemInformation.receiverChannels = nCoils;
 header.acquisitionSystemInformation.systemFieldStrength_T = 7;
 header.acquisitionSystemInformation.stationName = 'Radiology';
@@ -258,18 +352,27 @@ header.encoding.trajectoryDescription.userParameterString(1).value = 'IBT Protot
 header.encoding.trajectoryDescription.userParameterString(2).name = 'Monitoring software version';
 header.encoding.trajectoryDescription.userParameterString(2).value = '2017.1.0000';
 
-header.encoding.trajectoryDescription.userParameterString(3).name = 'kBasisType';
-header.encoding.trajectoryDescription.userParameterString(3).value = 'RotatedToSubjectSliceGeometry';
-header.encoding.trajectoryDescription.userParameterString(4).name = 'kBasisLabels';
-header.encoding.trajectoryDescription.userParameterString(4).value = 'Measurement, Phase, Slice';
-% header.encoding.trajectoryDescription.userParameterString(3).name = 'kBasisType';
-% header.encoding.trajectoryDescription.userParameterString(3).value = 'sphericalHarmonicsAndSecondOrderSymmetricGradientConcomitant';
-% header.encoding.trajectoryDescription.userParameterString(4).name = 'kBasisLabels';
-% header.encoding.trajectoryDescription.userParameterString(4).value = 'B0, X, Y, Z, XY, ZY, 3Z^2-R^2, XZ, X^2-Y^2, 3YX^2-Y^3, XYZ, 5Z^2-R^2, 5Z^3-3ZR^2, 5Z^2-XR^2, X^2Z-YR^2, X^3-3XY^2, Z^2, X^2+Y^2, XZ, YZ';
-% header.encoding.trajectoryDescription.userParameterString(5).name = 'kBasisMask';
-% header.encoding.trajectoryDescription.userParameterString(5).value = '1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1';
-% header.encoding.trajectoryDescription.userParameterString(6).name = 'kBasisUnits';
-% header.encoding.trajectoryDescription.userParameterString(6).value = 'rad, rad/m, rad/m, rad/m, rad/m^2, rad/m^2, rad/m^2, rad/m^2, rad/m^2, rad/m^3, rad/m^3, rad/m^3, rad/m^3, rad/m^3, rad/m^3, rad/m^3, rad/m^2, rad/m^2, rad/m^2, rad/m^2';
+if doRotateToSliceGeometry
+    header.encoding.trajectoryDescription.userParameterString(3).name = 'kBasisType';
+    header.encoding.trajectoryDescription.userParameterString(3).value = 'RotatedToSubjectSliceGeometry';
+    header.encoding.trajectoryDescription.userParameterString(4).name = 'kBasisLabels';
+    header.encoding.trajectoryDescription.userParameterString(4).value = 'Measurement, Phase, Slice';
+else
+    header.encoding.trajectoryDescription.userParameterString(3).name = 'kBasisType';
+    header.encoding.trajectoryDescription.userParameterString(3).value = 'sphericalHarmonicsAndSecondOrderSymmetricGradientConcomitant';
+    header.encoding.trajectoryDescription.userParameterString(4).name = 'kBasisLabels';
+    header.encoding.trajectoryDescription.userParameterString(4).value = 'B0, X, Y, Z, XY, ZY, 3Z^2-R^2, XZ, X^2-Y^2, 3YX^2-Y^3, XYZ, 5Z^2-R^2, 5Z^3-3ZR^2, 5Z^2-XR^2, X^2Z-YR^2, X^3-3XY^2, Z^2, X^2+Y^2, XZ, YZ';
+    header.encoding.trajectoryDescription.userParameterString(5).name = 'kBasisMask';
+    switch lower(trajType(1:4))
+        case 'moni'
+            header.encoding.trajectoryDescription.userParameterString(5).value = '1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1';
+        case {'girf', 'nomi'} % no higher order GIRF prediction or nominal fields
+            header.encoding.trajectoryDescription.userParameterString(5).value = '1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1';
+    end
+    header.encoding.trajectoryDescription.userParameterString(6).name = 'kBasisUnits';
+    header.encoding.trajectoryDescription.userParameterString(6).value = 'rad, rad/m, rad/m, rad/m, rad/m^2, rad/m^2, rad/m^2, rad/m^2, rad/m^2, rad/m^3, rad/m^3, rad/m^3, rad/m^3, rad/m^3, rad/m^3, rad/m^3, rad/m^2, rad/m^2, rad/m^2, rad/m^2';
+end
+
 
 % IBT-code specific flags
 % header.userParameters.userParameterLong(1).syncPreScansAvailable = 0;
@@ -283,3 +386,5 @@ dset.writexml(xmlstring);
 
 %% Write the dataset
 dset.close();
+
+fprintf('Finished Exporting file\n');

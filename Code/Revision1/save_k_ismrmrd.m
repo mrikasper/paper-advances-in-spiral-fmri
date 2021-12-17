@@ -1,13 +1,13 @@
+function save_k_ismrmrd(idSubject)
 %% Generating a spiral ISMRMRD data set
 % Based on test_create_undersampled_dataset from ISMRMRD/examples/matlab
 %
 % Data from 32 coils from 36 slice object with 100 repetitions.
 %
 
-clear all;
-
-
-idSubject       = 4;
+if nargin < 1
+    idSubject       = 2;
+end
 pfxSubject      = sprintf('SPIFI_%04d', idSubject);
 
 
@@ -15,7 +15,7 @@ pfxSubject      = sprintf('SPIFI_%04d', idSubject);
 pathSubject = fullfile('/cluster/work/tnu/kasperla/SPIFI/Results', pfxSubject);
 saveCase = 'completeK';
 rwIn.dataId = 'spiral0p8mmFit9BFExportK_m400b424m400s1';
-doDeleteExistingISMRMRDFile = false;
+doDeleteExistingISMRMRDFile = true; %NOTE: if false, data will be appended, NOT replaced!
 interleaves = 1;
 R = 4; % accelerationFactor
 
@@ -39,6 +39,10 @@ for iSet = 1:numel(kSets)
     load(fullfile(pathSubject, regexprep(fileLoad,'\.mat', ...
         ['_' kSets{iSet} '\.mat'])));
 end
+
+fileGeom = fullfile(pathRecon, [pfxRecon '_geometry.mat']);
+load(fileGeom, 'geometry');
+
 
 %% concatenate into k
 k = [permute(k0,[1 3 2]), kxyz, kHigherOrder, kCoco];
@@ -77,15 +81,21 @@ acqblock.head.center_sample(:) = 0; % center of k-space
 acqblock.head.active_channels(:) = nCoils;
 acqblock.head.trajectory_dimensions(:) = nBasisFunctions;
 acqblock.head.sample_time_us(:) = dt*1e6;
-
+% data acquired before readout start is kept in this file, because field
+% dynamics (f0) might be interesting to see before spiral waveform, but for
+% image reconstruction, these samples have to be discarded
+% for all ISMRMRD files with coil data (supposed to be for reconstruction),
+% this data is already cropped in the file.
+acqblock.head.discard_pre(:) = 444; 
 
 % measurement, phase and slice dir in x,y,z coordinates
 % use dummy here
-rotationPhilipsXYZToPatient = eye(3);
+rotationPhilipsXYZToPatient = geometry.rot_traj_xyz_to_mps';
 
 acqblock.head.read_dir  = repmat(rotationPhilipsXYZToPatient(:,1),[1 nSlices*nInterleaves]);
 acqblock.head.phase_dir = repmat(rotationPhilipsXYZToPatient(:,2),[1 nSlices*nInterleaves]);
 acqblock.head.slice_dir = repmat(rotationPhilipsXYZToPatient(:,3),[1 nSlices*nInterleaves]);
+acqblock.head.position = repmat(geometry.offcentre_xyz_slice.', [1 nInterleaves]);
 
 
 %% Loop over the acquisitions, set the header, set the data and append
@@ -183,7 +193,7 @@ header.measurementInformation.seriesDescription = 'Spiral_0p8mm_R4_TE20_Run1';
 % Acquisition System Information (Optional)
 header.acquisitionSystemInformation.systemVendor = 'Philips';
 header.acquisitionSystemInformation.systemModel = 'Achieva';
-header.acquisitionSystemInformation.institutionName = 'Insitute for Biomedical Engineering, ETH Zurich and University of Zurich, University Hospital Zurich';
+header.acquisitionSystemInformation.institutionName = 'Institute for Biomedical Engineering, ETH Zurich and University of Zurich, University Hospital Zurich';
 header.acquisitionSystemInformation.receiverChannels = nCoils; % dummy
 header.acquisitionSystemInformation.systemFieldStrength_T = 7;
 header.acquisitionSystemInformation.stationName = 'Radiology';

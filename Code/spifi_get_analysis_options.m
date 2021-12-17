@@ -182,15 +182,25 @@ fig_spm_subject.displayRangeFunctional = displayRange;
 fig_spm_subject.displayRangeStructural = [0.1 1.3];
 % thresholds: p = [0.05 0.01 0.001 0.05(FWE)] 
 %             t = [1.66 2.38 3.21  5.96]
-fig_spm_subject.thresholdRange = [2 8];[3.2 8];%[3 10];
+fig_spm_subject.thresholdRange = [3.2 8];%[2.38 8]%[3 10];
 fig_spm_subject.cropY = cropY; %cropYVisualCortex;
 fig_spm_subject.cropX = cropX;
 % choose either block wise or differential contrast ULRR vs URLL
 % 'differential'    ULRR - URLL and URLL - ULLR contrasts ([1 -1], [-1 1])
 % 'condition'       ULLR and URLL individual contrasts ([1 0], [0 1])
 fig_spm_subject.contrastType = 'differential'; %'differential'; 'condition'
+fig_spm_subject.FWEcorrection = 'cluster'; % 'none'; 'cluster', 'peak'; %TODO: peak!
 fig_spm_subject.views = {'tra_zoom', 'sag', 'cor_zoom'};%{'tra', 'tra_zoom', 'sag', 'sag_zoom', 'cor_zoom'};
-
+fig_spm_subject.doUseSmoothedMaps = options.glm.doUseSmoothed;
+fig_spm_subject.underlays = 'both';% 'functional', 'structural', 'both', 'none';
+% number of rows in plot, same order as in views: {'tra', 'tra_zoom', 'sag', 'sag_zoom', 'cor_zoom'};
+fig_spm_subject.nRows = [1 4 NaN NaN NaN];
+% if true, instead of activation maps, an activation extent is plotted as a
+% mask
+fig_spm_subject.doPlotMask = false;
+% recon with cropped k-space (1mm disk) is saved as new subject with id + 10
+% and is used for the "unsmoothed" comparison in create_figure_spm_subject_smoothed_unsmoothed
+fig_spm_subject.doCompareToCropped1mm = false;
 options.representation.fig_spm_subject = fig_spm_subject;
 
 %% SPM group results
@@ -202,8 +212,17 @@ options.representation.fig_spm_group.selectionBlock = {'x', 0:100, 'y', 25:120};
 % 'maxextent' - three cross-sections with most activated voxels
 % 'maxextent_L' - maximum activation left hemisphere
 % 'maxextent_R' - maximum activation right hemisphere
-options.representation.fig_spm_group.selectedSlice = 'maxextent_R';
-options.representation.fig_spm_group.views = {'sag'};%{'tra', 'tra_zoom', 'cor', 'sag'};
+
+% to make smoothed/unsmoothed plots comparable, use same slices for
+% plotting in unsmoothed data as well
+options.representation.fig_spm_group.doUseSmoothedForMaxDetermination = true;
+% standard option for figure: maxextent, only switch for sag to maxextent_L/R
+options.representation.fig_spm_group.selectedSlice = 'maxextent';
+options.representation.fig_spm_group.views = {'tra', 'cor'};%{'sag'} %%{'tra', 'cor', 'sag'};%{'tra', 'cor', 'sag'};%{'tra', 'tra_zoom', 'cor', 'sag'};
+
+% for sagittal Left plot only
+% options.representation.fig_spm_group.selectedSlice = 'maxextent_L';
+% options.representation.fig_spm_group.views = {'sag'};%{'tra', 'tra_zoom', 'cor', 'sag'};
 options.representation.fig_spm_group.crop_tra = {
     [1 240 1 292] 
     [30 220 20 255] 
@@ -216,7 +235,7 @@ options.representation.fig_spm_group.crop_tra = {
 
 options.representation.fig_spm_group.displayRangeFunctional = [0 0.8];
 options.representation.fig_spm_group.displayRangeStructural = [0.1 1.3];
-options.representation.fig_spm_group.thresholdRange = [3.2 8]; %[2 6];%[3 10];
+options.representation.fig_spm_group.thresholdRange = [3.2 8];%[2.38 8]; %[2 6];%[3 10];
 
 %% comparison in/out/combined activation?
 options.representation.fig_spm_inout.iSubj = 2;
@@ -257,7 +276,7 @@ options.representation.fig_specificity_contours = fig_specificity_contours;
 
 %% Spatial Specificity: Activation tissue overlap
 fig_specificity_activation_tissue_overlap.doUseSmoothedMaps = false;
-
+fig_specificity_activation_tissue_overlap.doUseVisualCortexMask = true;
 % if true, threshold is used to consider only voxels above a certain tissue probability before edge detection
 fig_specificity_activation_tissue_overlap.thresholdTPM = 0.6; %0.9;
 % individual probability thresholds for boundaries between 2 tissue
@@ -271,7 +290,6 @@ fig_specificity_activation_tissue_overlap.sourceTPMs = 'meanME'; % 'meanME' or '
 fig_specificity_activation_tissue_overlap.displayRangeStruct = [];
 fig_specificity_activation_tissue_overlap.displayRangeFunc = [0 0.8];
 fig_specificity_activation_tissue_overlap.selectedSlice = 3:4:34; %27
-fig_specificity_activation_tissue_overlap.doUseSmoothedMaps = true;
 fig_specificity_activation_tissue_overlap.iSubj = 3;
 fig_specificity_activation_tissue_overlap.iSess = 1;
 fig_specificity_activation_tissue_overlap.iRecon = 1;

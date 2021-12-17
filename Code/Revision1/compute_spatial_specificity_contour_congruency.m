@@ -54,6 +54,7 @@ defaults.doThresholdTPM = true;
 defaults.doPlotInitContours = false;% plot classical sobel-contours as in other paper figures;
 defaults.thresholdTPM = 0.9;
 defaults.doRecalcTPMs = true;
+defaults.doRecalcVisualCortexMask = true;
 defaults.displayRangeStruct = [0 1.2];
 defaults.displayRangeFunc = [0 0.8];
 % Use certain tissue for comparison
@@ -69,24 +70,35 @@ defaults.iRecon = 1;
 defaults.struct_select = 'meanME';
 defaults.verbosity_level = 1; % 1 = plots for figure 5(9), 2 = diagnostic plots
 defaults.doUseFiguresForSaving = true;
+defaults.mask_visual = '';
+defaults.struct = '';
+defaults.struct_biascorrected = '';
+defaults.func_biascorrected = '';
+defaults.output_edge_distance_map = 'EdgeDistanceMap.nii';
+defaults.func = '';
+defaults.coreg = '';
 % merge with input fields
 figOptions = propval(figOptions, defaults);
 strip_fields(figOptions);
 
-sharedParameters = {'z', selectedSlice, 'rotate90', 1, 'colorBar', 'off', ...
-    'plotLabels', false, 'nRows', 1};
-sharedParametersOverlays = {'selectedSlices', selectedSlice, 'rotate90', 1, ...
-    'colorBar', 'off', 'plotLabels', false, 'nRows', 1};
-
+if numel(selectedSlice) <= 4
+    sharedParameters = {'z', selectedSlice, 'rotate90', 1, 'colorBar', 'off', ...
+        'plotLabels', false, 'nRows', 1};
+    sharedParametersOverlays = {'selectedSlices', selectedSlice, 'rotate90', 1, ...
+        'colorBar', 'off', 'plotLabels', false, 'nRows', 1};
+else
+    sharedParameters = {'z', selectedSlice, 'rotate90', 1, 'colorBar', 'off', ...
+        'plotLabels', false};
+    sharedParametersOverlays = {'selectedSlices', selectedSlice, 'rotate90', 1, ...
+        'colorBar', 'off', 'plotLabels', false};
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Setup data
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-options = spifi_get_analysis_options();
-details = spifi_get_subject_details(figOptions.iSubj, options, ...
-    figOptions.iSess, figOptions.iRecon);
-
-figOptions = details.representation.fig_specificity_contours;
+if doRecalcVisualCortexMask
+    warp_visual_cortex_mask_to_subject(figOptions.iSubj);
+end
 
 % options:
 %   structural:     mean of ME
@@ -95,6 +107,7 @@ figOptions = details.representation.fig_specificity_contours;
 %   functional:      mean realigned (without bias correction for segmentation, but with for edge detection?)
 %                   ...definitely as underlay!
 
+fileMaskVisual = figOptions.mask_visual;
 fileStruct = figOptions.struct;
 fileFunc = figOptions.func;
 fileStructTPMs = figOptions.structTPMs;
@@ -119,7 +132,7 @@ if doRecalcTPMs || ~isfile(fileStructTPMs{idxTissue}) || ~isfile(fileFuncTPMs{id
         case {'mean', 'meanME'}
             X = mean(X,'t');
         case {1,2,3,4,5,6}
-            X = X.select('t', struct_select);
+            X = X.select('t', figOptions.struct_select);
         case 't1'
             % all good, already 3D
     end
@@ -133,8 +146,8 @@ if doRecalcTPMs || ~isfile(fileStructTPMs{idxTissue}) || ~isfile(fileFuncTPMs{id
     coregX.save('fileName', figOptions.coreg.out);
     
     % segment both structural and functional and save!
-    [structTPMs, ~, xBiasField] = coregX.segment();
-    [funcTPMs, ~, yBiasField] = Y.segment();
+    [~, structTPMs, ~, xBiasField] = coregX.segment();
+    [~, funcTPMs, ~, yBiasField] = Y.segment();
     
     for iTissue = 1:3
         structTPMs{iTissue}.save('fileName', figOptions.structTPMs{iTissue});
@@ -154,15 +167,12 @@ end
 inputEdgeReference = MrImageSpm4D(fileStructTPMs{idxTissue});
 inputEdgeComparison = MrImageSpm4D(fileFuncTPMs{idxTissue});
 
-%% Compute contours from (thresholded?) TPMs
-
-%...or just compute DICE coefficients on TPMs?
-% per slice?
+%% Compute contours from (thresholded) TPMs
 
 % Canny uses local intensity gradient maxima, seems to work better than global (Sobel)
 if doThresholdTPM
-    edgeX = inputEdgeReference.apply_threshold(thresholdTPM).edge('Canny'); % consider only voxels that are most likely to be GM
-    edgeY = inputEdgeComparison.apply_threshold(thresholdTPM).edge('Canny'); % consider only voxels that are most likely to be GM
+    edgeX = inputEdgeReference.threshold(thresholdTPM).edge('Canny'); % consider only voxels that are most likely to be GM
+    edgeY = inputEdgeComparison.threshold(thresholdTPM).edge('Canny'); % consider only voxels that are most likely to be GM
 else % maybe less arbitrary to work w/o threshold
     edgeX = inputEdgeReference.edge('Canny');
     edgeY = inputEdgeComparison.edge('Canny');
@@ -180,7 +190,7 @@ Y = MrImage(figOptions.func_biascorrected);
 
 % the classical contours we plot
 if doPlotInitContours
-    Y.apply_threshold(displayRangeFunc).plot_overlays(...
+    Y.threshold(displayRangeFunc).plot_overlays(...
         X, 'overlayMode', 'edge', sharedParametersOverlays{:});
     fhArray(end+1,1) = gcf;
     X.edge('sobel',0.05).plot(sharedParametersOverlays{:});
@@ -191,19 +201,19 @@ end
 
 % plot input images
 if figOptions.verbosity_level > 1
-    X.apply_threshold(displayRangeStruct).plot(sharedParameters{:});
+    X.threshold(displayRangeStruct).plot(sharedParameters{:});
     fhArray(end+1,1) = gcf;
-    Y.apply_threshold(displayRangeFunc).plot(sharedParameters{:});
+    Y.threshold(displayRangeFunc).plot(sharedParameters{:});
     fhArray(end+1,1) = gcf;
 end
 
 % overlay image with contour
-X.apply_threshold(displayRangeStruct).plot_overlays(edgeX, sharedParametersOverlays{:})
+X.threshold(displayRangeStruct).plot_overlays(edgeX, sharedParametersOverlays{:})
 fhArray(end+1,1) = gcf;
 if doUseFiguresForSaving
     axis off; title('');
 end
-Y.apply_threshold(displayRangeFunc).plot_overlays(edgeY, sharedParametersOverlays{:})
+Y.threshold(displayRangeFunc).plot_overlays(edgeY, sharedParametersOverlays{:})
 fhArray(end+1,1) = gcf;
 if doUseFiguresForSaving
     axis off; title('');
@@ -252,7 +262,7 @@ fhArray(end+1,1) = gcf;
 
 if figOptions.verbosity_level > 0
     Y.name = ['distmap_' Y.name];
-    Y.apply_threshold(displayRangeFunc).plot_overlays(distMapX+1, 'overlayMode', 'map', 'overlayColorMaps', {@(x) jet(7)}, ...
+    Y.threshold(displayRangeFunc).plot_overlays(distMapX+1, 'overlayMode', 'map', 'overlayColorMaps', {@(x) jet(7)}, ...
         'overlayThreshold', [-0.1 4], sharedParametersOverlays{:});
     fhArray(end+1,1) = gcf;
     if doUseFiguresForSaving
@@ -266,37 +276,58 @@ end
 %% Histogram creation for quantification
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+maskVisualCortex = MrImageSpm4D(fileMaskVisual);
+
 % only evaluate distances for edge voxels, therefore make edges an ROI
 
 % Focus on slices that were selected / remove first/last slice (partial
 % coverage)
+% also: create same rois, but multiply with visual cortex mask
 idxExcludedSliceRoi{1} = [];
 idxExcludedSliceRoi{2} = setdiff(1:edgeX.dimInfo.nSamples('z'),figOptions.selectedSlice);
 idxExcludedSliceRoi{3} = [1 edgeX.dimInfo.nSamples('z')];
 roiNames = {'all slices', 'all but border slices', 'displayed slices'};
+nExcludedSliceRois = numel(idxExcludedSliceRoi);
 
-for idxRoi = 1:numel(idxExcludedSliceRoi)
+for idxRoi = 1:nExcludedSliceRois
     
     roiX{idxRoi} = edgeX.copyobj;
-    roiX{idxRoi}.name = roiNames{idxRoi};
     for iSlice = idxExcludedSliceRoi{idxRoi}
         roiX{idxRoi}.data(:,:,iSlice) = 0;
     end
+    roiX{idxRoi}.name = roiNames{idxRoi};
+    roiX{idxRoi+nExcludedSliceRois} = roiX{idxRoi}.*maskVisualCortex;
+    roiX{idxRoi+nExcludedSliceRois}.name = [roiX{idxRoi}.name ' - visual cortex'];
     
-    distMapX.extract_rois(roiX{idxRoi});
-    
-    distMapX.compute_roi_stats();
-
 end
 
+% show visual cortex mask
+if figOptions.verbosity_level > 0
+    tmpName = Y.name;
+    Y.name = 'Visual cortex mask on edges';
+    Y.threshold(displayRangeFunc).plot_overlays(roiX([end/2 end]), ...
+        sharedParametersOverlays{:})
+    if doUseFiguresForSaving
+        axis off; title('');
+    else
+        colorbar;
+    end
+    set(gcf, 'Name', Y.name);
+    Y.name = tmpName;
+end
+
+distMapX.extract_rois(roiX);
+distMapX.compute_roi_stats();
 distMapX.save('fileName', figOptions.output_edge_distance_map);
 
 % plot selected ROIs
-for idxRoi = 2
+for idxRoi = 2 + [0 nExcludedSliceRois]
     distMapX.rois{idxRoi}.plot('dataGrouping', 'perSlice', 'axisType', 'relative', 'selectedSlices', selectedSlice)
     fhArray(end+1,1) = gcf;
+    set(gcf, 'Name', sprintf('ROI Histograms (slices): %s',  roiX{idxRoi}.name));
     distMapX.rois{idxRoi}.plot('dataGrouping', 'perVolume', 'axisType', 'relative')
     fhArray(end+1,1) = gcf;
+    set(gcf, 'Name', sprintf('ROI Histograms (volume): %s',  roiX{idxRoi}.name));
     xlabel('Distance to functional contour edge in (voxels)');
     xlim([-1 5])
 end

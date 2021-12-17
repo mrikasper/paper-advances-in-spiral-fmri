@@ -32,8 +32,8 @@ Z1 = MrImage('spmT_0013.nii')
 Z2 = MrImage('spmT_0014.nii')
 
 %% Plot overview
-X.apply_threshold([0.1 1.4]).plot_overlays({Y,Y.*-1}, 'selectedSlices',18:21, 'overlayThreshold', [3 8], 'overlayMode', 'map', 'colorBar', 'off', 'overlayColorMaps', {'autumn','winter'}, 'rotate90',1,'nRows',2)
-X.apply_threshold([0.1 1.4]).plot_overlays({Z1,Z2}, 'selectedSlices',18:21, 'overlayThreshold', [3 8], 'overlayMode', 'map', 'colorBar', 'off', 'overlayColorMaps', {'autumn','winter'}, 'rotate90',1,'nRows',2)
+X.threshold([0.1 1.4]).plot_overlays({Y,Y.*-1}, 'selectedSlices',18:21, 'overlayThreshold', [3 8], 'overlayMode', 'map', 'colorBar', 'off', 'overlayColorMaps', {'autumn','winter'}, 'rotate90',1,'nRows',2)
+X.threshold([0.1 1.4]).plot_overlays({Z1,Z2}, 'selectedSlices',18:21, 'overlayThreshold', [3 8], 'overlayMode', 'map', 'colorBar', 'off', 'overlayColorMaps', {'autumn','winter'}, 'rotate90',1,'nRows',2)
 
 %% Create and apply zoom
 cropSamplesY = X.dimInfo.index2sample([10; 80],2);
@@ -41,5 +41,5 @@ zX = X.select('type', 'samples', 'y', cropSamplesY(1):cropSamplesY(2))
 zY = Y.select('type', 'samples', 'y', cropSamplesY(1):cropSamplesY(2))
 zZ1 = Z1.select('type', 'samples', 'y', cropSamplesY(1):cropSamplesY(2))
 zZ2 = Z2.select('type', 'samples', 'y', cropSamplesY(1):cropSamplesY(2))
-zX.apply_threshold([0.1 1.4]).plot_overlays({zY,zZ.*-1}, 'selectedSlices',1:36, 'overlayThreshold', [3 8], 'overlayMode', 'map', 'colorBar', 'off', 'overlayColorMaps', {'autumn','winter'}, 'rotate90',1, 'nRows',9)
-zX.apply_threshold([0.1 1.4]).plot_overlays({zY,zY.*-1}, 'selectedSlices',1:36, 'overlayThreshold', [3 8], 'overlayMode', 'map', 'colorBar', 'off', 'overlayColorMaps', {'autumn','winter'}, 'rotate90',1, 'nRows',9)
+zX.threshold([0.1 1.4]).plot_overlays({zY,zZ.*-1}, 'selectedSlices',1:36, 'overlayThreshold', [3 8], 'overlayMode', 'map', 'colorBar', 'off', 'overlayColorMaps', {'autumn','winter'}, 'rotate90',1, 'nRows',9)
+zX.threshold([0.1 1.4]).plot_overlays({zY,zY.*-1}, 'selectedSlices',1:36, 'overlayThreshold', [3 8], 'overlayMode', 'map', 'colorBar', 'off', 'overlayColorMaps', {'autumn','winter'}, 'rotate90',1, 'nRows',9)

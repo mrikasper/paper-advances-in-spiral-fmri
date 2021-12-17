@@ -6,7 +6,7 @@ Summary
 
 This repository contains the analysis code and [manuscript](Manuscript.md) 
 (including representation code for all figures) for the paper 
-"[Advances in Spiral fMRI - a High-resolution Study with Single-shot Acquisition](https://www.biorxiv.org/content/10.1101/842179v2)".
+"[Advances in Spiral fMRI - a High-resolution Study with Single-shot Acquisition](https://doi.org/10.1016/j.neuroimage.2021.118738)", now published in NeuroImage 2022, volume 246.
 
 This work is part of the Spiral Functional Imaging (SPIFI) project at the
 Institute for Biomedical Engineering conducted at the ETH Zurich and University
@@ -24,15 +24,33 @@ The employed task is a simple visual quarter-field stimulation paradigm.
 Installation
 ------------
 
-The preferred installation method is to clone this repository with the
+1. The preferred installation method is to clone this repository with the
 *recursive* option, in order to also checkout the required third-party tools as
-submodules. On Unix/Mac command line, this
+submodules. On Unix/Mac or Windows (e.g., Git Bash) command line, type the following:
+    ```
+    git clone --recursive https://github.com/mrikasper/paper-advances-in-spiral-fmri.git
+    ```
+    - If you download the `.zip` file instead, please make sure to also download the
+packages mentioned in the [Requirements](#requirements) section below, and place each 
+of them as individual folders in the `Code/Toolboxes` subfolder of this repository.
 
-`git clone --recursive https://github.com/mrikasper/paper-advances-in-spiral-fmri.git`
-
-If you download the `.zip` file instead, please make sure to also download the
-packages mentioned in the Requirements section below, and place them in the
-`Toolboxes` subfolder of this repository.
+    - Afterwards, your `Code/Toolboxes` folder should contain at least the following folders - 
+    make sure they are not empty:
+    ```
+    export_fig
+    ismrmrd
+    spm12
+    TAPAS/PhysIO
+    TAPAS/UniQC
+    ```
+    
+2. For proper interaction between SPM and PhysIO (see [Requirements](#requirements)), the contents of the `PhysIO/code` subfolder
+   should be copied/linked to a `spm12/toolbox/PhysIO` subfolder. In order to do so, run
+   ```
+   cd Code/Toolboxes/TAPAS/PhysIO
+   tapas_physio_init()
+   ```
+   in Matlab.
 
 Getting Started
 ---------------
@@ -47,7 +65,7 @@ To reproduce the fMRI analysis, run `Code/main.m` in Matlab. This should perform
     [manuscript](Manuscript.md). This can also be run separately in
     `Code/Representation/main_create_figures.m`.
 
-**Note**: You will also have to download the single subject example data (`ReconstructedImages/SPIFI_0007`) from ETH Research Collection (https://dx.doi.org/10.3929/ethz-b-000487412) and update the paths in
+**Note**: You will also have to download the single subject example data (`ReconstructedImages/SPIFI_0007`, direct file [download link](https://www.research-collection.ethz.ch/bitstream/handle/20.500.11850/487412/SPIFI_0007_ReconstructedImagesAndLogfiles.zip?sequence=16&isAllowed=y)) from [ETH Research Collection](https://dx.doi.org/10.3929/ethz-b-000487412) and update the paths in
 `Code/spifi_get_analysis_options.m` to reflect where you put the raw image and
 logfile data, and where you would like the results to be written out.
 Specifically, you have to set
@@ -84,20 +102,24 @@ Timeline
 -   Starting Revision: February 22, 2020 
     - **... Covid-19 Pandemic...**
 -   Submitted Revision: June 01, 2021
--   Accepted:
--   Proofs Accepted:
+-   Starting Second Revision: July 25, 2021
+-   Submitted Second Revision: October 23, 2021
+-   Accepted: November 15, 2021
+-   Proofs Accepted: December 6, 2021
+-   Final Open Access Version in [NeuroImage](https://doi.org/10.1016/j.neuroimage.2021.118738): December 8, 2021
 
 First Author: Lars Kasper
 
 Requirements
 ------------
 
-This code is written in Matlab, and tested with version R2019b on PC. It further relies on the following
+This code is written in Matlab, and tested with version R2019b on a Windows PC. It further relies on the following
 open-source Matlab toolboxes
 
--   Statistical Parametric Mapping [SPM12.4](https://github.com/spm-central/spm12)
--   [UniQC](https://github.com/translationalneuromodeling/tapas/tree/master/UniQC): Unified NeuroImaging Quality Control Toolbox for computing all quality control metrics (SFNR, SD, Mean), ROI analysis and reproducible figure generation (crops, slices, windowing, colormaps), part of [TAPAS](https://translationalneuromodeling.github.io/tapas)
--   [PhysIO Toolbox](https://github.com/translationalneuromodeling/tapas/tree/master/PhysIO): for Physiological Noise Modeling in fMRI, part of [TAPAS](https://translationalneuromodeling.github.io/tapas)
+-   Statistical Parametric Mapping [SPM12 r7771](https://github.com/spm-central/spm12)
+-   The [TAPAS](https://translationalneuromodeling.github.io/tapas) software collection, in particular the following toolboxes:
+    - [UniQC](https://github.com/translationalneuromodeling/tapas/tree/master/UniQC): Unified NeuroImaging Quality Control Toolbox for computing all quality control metrics (SFNR, SD, Mean), ROI analysis and reproducible figure generation (crops, slices, windowing, colormaps)
+    - [PhysIO Toolbox](https://github.com/translationalneuromodeling/tapas/tree/master/PhysIO): for Physiological Noise Modeling in fMRI
 -   [export_fig](https://github.com/altmany/export_fig.git) by Yair Altman, for
 exporting the paper figure elements to high-resolution PNGs
 -    [ISMRMRD](https://github.com/ismrmrd/ismrmrd) Toolbox for converting raw coil data and magnetic field dynamics to the vendor-independent ISMRM raw data format (ISMRMRD)

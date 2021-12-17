@@ -36,6 +36,8 @@ function [fhArray, absY, figOptions] = ...
 %% User Parameters
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+defaults.doUseSmoothedMaps = false;
+defaults.doUseVisualCortexMask = false;
 % if true, threshold is used to consider only voxels above a certain tissue probability before edge detection
 defaults.thresholdTPM = 0.9;
 % individual probability thresholds for boundaries between 2 tissue
@@ -49,9 +51,8 @@ defaults.sourceTPMs = 'meanME'; % 'meanME' or 'T1' or echo number (1-6)
 defaults.displayRangeStruct = [];
 defaults.displayRangeFunc = [0 0.8];
 defaults.selectedSlice = 3:4:34; %27
-defaults.doUseSmoothedMaps = false;
 defaults.idxContrast = 1;
-defaults.verbosity_level = 1;
+defaults.verbosity_level = 0;
 defaults.iSubj = 3;
 defaults.iSess = 1;
 defaults.iRecon = 1;
@@ -70,6 +71,7 @@ sharedParametersOverlays = {'selectedSlices', selectedSlice, 'rotate90', 1, ...
 
 options = spifi_get_analysis_options();
 options.glm.doUseSmoothed = doUseSmoothedMaps;
+options.representation.fig_specificity_contours.doUseVisualCortexMask = doUseVisualCortexMask;
 
 options.representation.fig_specificity_contours.struct_select = sourceTPMs;
 
@@ -85,7 +87,13 @@ end
 details = spifi_get_subject_details(figOptions.iSubj, options, ...
     figOptions.iSess, figOptions.iRecon);
 
+
 figOptionsFromContours = details.representation.fig_specificity_contours;
+
+if doUseVisualCortexMask
+    fileMaskVisual = figOptionsFromContours.mask_visual;
+    maskVisualCortex = MrImageSpm4D(fileMaskVisual);
+end
 
 fileStruct = figOptionsFromContours.struct_biascorrected;
 switch idxContrast
@@ -131,10 +139,19 @@ switch FWEcorrection
     case 'cluster'
         % remove small clusters following SPM's FWE-cluster correction
         nMinVoxels = get_fwe_clustersize(details.glm.spm_mat, idxContrast);
-        maskActivation = maskActivation.remove_clusters([1 nMinVoxels-1]);
+        maskActivation = maskActivation.remove_clusters(...
+            'nPixelRange', [1 nMinVoxels-1]);
     case 'peak'
         % TODO
+    case 'none'
+        % nothing to remove
 end
+
+% remove all voxels outside visual cortex
+if doUseVisualCortexMask
+    maskActivation = maskActivation.*maskVisualCortex;
+end
+
 
 % Canny uses local intensity gradient maxima, seems to work better than global (Sobel)
 maskGM = structTPMs{1}.binarize(thresholdTPM);
@@ -157,17 +174,18 @@ maskUnidentified =  maskUnidentified.*(maskPialSurface.*-1 + 1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if verbosity_level >=2
-    fhArray(end+1,1) = rX.apply_threshold(displayRangeStruct).plot_overlays({Y, Y.*-1}, 'overlayThreshold', thresholdRange, ...
+    fhArray(end+1,1) = rX.threshold(displayRangeStruct).plot_overlays({Y, Y.*-1}, 'overlayThreshold', thresholdRange, ...
         'overlayMode', 'map', sharedParametersOverlays{:});
     set(fhArray(end), 'Name', 'Structural Image with significantly activated voxels');
 end
 
 % FWE-corrected activation on structural overlay
-fhArray(end+1,1) = rX.apply_threshold(displayRangeStruct).plot_overlays(...
-    {Y.*maskActivation, Y.*-1.*maskActivation}, 'overlayThreshold', thresholdRange, ...
-    'overlayMode', 'map', sharedParametersOverlays{:});
-set(fhArray(end), 'Name', 'Structural Image with significantly activated voxels (FWE-corrected)');
-
+if verbosity_level >=1
+    fhArray(end+1,1) = rX.threshold(displayRangeStruct).plot_overlays(...
+        {Y.*maskActivation, Y.*-1.*maskActivation}, 'overlayThreshold', thresholdRange, ...
+        'overlayMode', 'map', sharedParametersOverlays{:});
+    set(fhArray(end), 'Name', 'Structural Image with significantly activated voxels (FWE-corrected)');
+end
 
 maskPlotArray = {maskActivation, maskGM, maskWM, maskCSF, maskUnidentified, ...
     maskPialSurface, maskWMSurface};
@@ -196,22 +214,37 @@ for iRoi = 1:numel(maskPlotArray)
 end
 
 % plot activation map with all ROIs as edges
-if verbosity_level >= 2
-    fhArray(end+1,1) = absY.apply_threshold([0, thresholdRange(2)]).plot_overlays(...
+if verbosity_level >= 3
+    fhArray(end+1,1) = absY.threshold([0, thresholdRange(2)]).plot_overlays(...
         maskPlotArray, 'overlayMode', 'edge', sharedParametersOverlays{:});
     set(fhArray(end), 'Name', 'Activation map with Edges of all tissue ROIs');
 end
-% plot structural image with all ROIs
-fhArray(end+1,1) = rX.apply_threshold(displayRangeStruct).plot_overlays(maskPlotArray, ...
-    'overlayMode', 'mask', sharedParametersOverlays{:}, 'overlayAlpha', 0.5);
-set(fhArray(end), 'Name', 'Structural Image with Overlay of all tissue ROIs');
+
+if verbosity_level >=2
+    % plot structural image with all ROIs
+    fhArray(end+1,1) = rX.threshold(displayRangeStruct).plot_overlays(maskPlotArray, ...
+        'overlayMode', 'mask', sharedParametersOverlays{:}, 'overlayAlpha', 0.5);
+    set(fhArray(end), 'Name', 'Structural Image with Overlay of all tissue ROIs');
+end
 
 absY.extract_rois(maskRois);
 absY.compute_roi_stats();
-for iRoi = 1:numel(maskRois)
-    fhArray(end+1,1) = absY.rois{iRoi}.plot('axisType', 'relative', 'selectedSlices', selectedSlice);
-    % set(gcf, 'Name', sprintf('ROI: %s', roiNameArray{iRoi}));
+
+if verbosity_level >=2
+    for iRoi = 1:numel(maskRois)
+        fhArray(end+1,1) = absY.rois{iRoi}.plot('axisType', 'relative', 'selectedSlices', selectedSlice);
+        % set(gcf, 'Name', sprintf('ROI: %s', roiNameArray{iRoi}));
+    end
 end
 
 absY.save('fileName', ...
     details.representation.fig_specificity_activation_tissue_overlap.output_spm_with_tissue_rois);
+
+% include smoothing status and roi setting in figure names
+for iFig = 1:numel(fhArray)
+    set(fhArray(iFig), 'Name', ...
+        sprintf('%s - doUseSmoothedMaps%d - doUseVisualCortexMask%d', ...
+        get(fhArray(iFig), 'Name'), ...
+        figOptions.doUseSmoothedMaps, ...
+        figOptions.doUseVisualCortexMask));
+end

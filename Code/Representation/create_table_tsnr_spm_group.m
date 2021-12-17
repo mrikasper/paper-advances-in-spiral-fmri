@@ -93,12 +93,12 @@ for iPair = 1:nPairs
         
         if doPlotMasks
             % plot with mean underlay
-            Y{end-1}.apply_threshold([0 0.8]).plot_overlays(M, ...
+            Y{end-1}.threshold([0 0.8]).plot_overlays(M, ...
                 'overlayMode', 'edge', 'rotate90',1, 'selectedSlices', selectedSlices)
             set(gcf, 'Name', [details.subjectId ' - GM mask on Mean realigned fMRI'])
             
             % plot edges with tSNR underlay
-            Y{1}.apply_threshold([0 30]).plot_overlays(M, ...
+            Y{1}.threshold([0 30]).plot_overlays(M, ...
                 'overlayMode', 'edge', 'rotate90',1, 'selectedSlices', selectedSlices)
             set(gcf, 'Name', [details.subjectId ' - GM mask on SFNR of realigned fMRI'])
             

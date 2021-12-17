@@ -1,5 +1,5 @@
 function [fhArray, outputStats] = ...
-    create_figure_activation_tissue_overlap_summary_all_subjects()
+    create_figure_activation_tissue_overlap_summary_all_subjects(options)
 % Reports share of activated voxels in different ROIs/boundaries per
 % subject
 %
@@ -10,6 +10,7 @@ function [fhArray, outputStats] = ...
 % OUT
 %   fhArray         figure handles of created figures
 %   outputStats     data used to generate histograms
+%
 % EXAMPLE
 %   create_figure_activation_tissue_overlap_summary_all_subjects
 %
@@ -28,7 +29,14 @@ function [fhArray, outputStats] = ...
 %  <http://www.gnu.org/licenses/>.
 %
 
-options = spifi_get_analysis_options();
+if nargin < 1
+    options = spifi_get_analysis_options();
+end
+
+% scales to number of voxels w/o ambigous tissue category
+doPlotNonAmbigousRoisOnly = false;
+doPlotLegend = false;
+
 idxSubjectArray = 2:7;
 for iSubj = 1:numel(idxSubjectArray)
     details = spifi_get_subject_details(idxSubjectArray(iSubj), options, 1, 1);
@@ -52,7 +60,10 @@ fhArray = [];
 
 %% Stacked bar plot of share of voxels in different ROIs
 fhArray(end+1,1) = tapas_physio_get_default_fig_params();
-set(fhArray(end), 'Name', 'Histogram Stacked Barplot Activation Tissue Overlap per Subject');
+[~,fileNameInput] = fileparts(details.representation.fig_specificity_activation_tissue_overlap.output_spm_with_tissue_rois);
+set(fhArray(end), 'Name', ...
+    sprintf('Histogram Stacked Barplot Activation Tissue Overlap per Subject - %s', ...
+    fileNameInput));
 
 roiNameArray = {'Activated Voxels', 'GM', 'WM', 'CSF', ...
     'Ambiguous', 'Pial Surface', ...
@@ -73,44 +84,60 @@ end
 stringLegend1 = roiNameArray(idxPlottingOrder1);
 % legend(stringLegend1, 'Location','NorthEastOutside');
 % for paper plotting:
-legend(stringLegend1, 'Location','SouthOutside', 'NumColumns', 6);
+if doPlotLegend
+    legend(stringLegend1, 'Location','SouthOutside', 'NumColumns', 6);
+end
 xlabel('Subjects');
-ylabel('Portion of Activated Voxels');
+ylabel('Activated Voxels');
 ylim([0 100]);
 ha = gca;
-ha.YTick = 0:10:100;
+ha.YTick = 0:20:100;
+grid on
+grid minor
+set(ha, 'LineWidth', 1);
+set(ha, 'XGrid', 'off');
+set(ha, 'XMinorGrid', 'off');
+set(ha, 'GridAlpha', 0.8);
+set(ha, 'MinorGridAlpha', 0.6);
+set(ha, 'MinorGridLineStyle', '--');
+
 set(ha, 'YTickLabel', ...
     cellfun(@(x) sprintf('%2.0f %%', x), num2cell(ha.YTick), 'UniformOutput', false));
 
 
 %% Stacked bar plot of share of voxels in different ROIs, only considering
 % clearly identified ROIs
-fhArray(end+1,1) = tapas_physio_get_default_fig_params();
-set(fhArray(end), 'Name', 'Histogram Stacked Barplot Activation Identified Tissues Overlap per Subject');
 
-roiNameArray = {'Activated Voxels', 'GM', 'WM', 'CSF', ...
-    'Ambiguous', 'Pial Surface', 'WM/GM Surface'};
 idxPlottingOrder = [2 6 7 3 4];
-
-% order - 1. because total voxel number was removed
-hb = bar(idxSubjectArray, percentageSignificantVoxelsInIdentifiedRoi(idxPlottingOrder-1, :)', 'stacked', 'FaceColor', 'flat');
-% colormap trying to match line color in compute_spatial_specificity_activation_tissue_overlap
-% not so simple, because of different color map binning there
-barColorMap = jet(9);
-barColorMap(1:2,:) = [];
-for idxBar = 1:numel(hb)
-    hb(idxBar).FaceColor = barColorMap(idxBar,:);
+if doPlotNonAmbigousRoisOnly
+    fhArray(end+1,1) = tapas_physio_get_default_fig_params();
+    set(fhArray(end), 'Name', 'Histogram Stacked Barplot Activation Identified Tissues Overlap per Subject');
+    
+    roiNameArray = {'Activated Voxels', 'GM', 'WM', 'CSF', ...
+        'Ambiguous', 'Pial Surface', 'WM/GM Surface'};
+    
+    % order - 1. because total voxel number was removed
+    hb = bar(idxSubjectArray, percentageSignificantVoxelsInIdentifiedRoi(idxPlottingOrder-1, :)', 'stacked', 'FaceColor', 'flat');
+    % colormap trying to match line color in compute_spatial_specificity_activation_tissue_overlap
+    % not so simple, because of different color map binning there
+    barColorMap = jet(9);
+    barColorMap(1:2,:) = [];
+    for idxBar = 1:numel(hb)
+        hb(idxBar).FaceColor = barColorMap(idxBar,:);
+    end
+    
+    stringLegend = roiNameArray(idxPlottingOrder);
+    if doPlotLegend
+        legend(stringLegend, 'Location','NorthEastOutside');
+    end
+    xlabel('Subjects');
+    ylabel('Activated Voxels');
+    ylim([0 100]);
+    ha = gca;
+    ha.YTick = 0:10:100;
+    set(ha, 'YTickLabel', ...
+        cellfun(@(x) sprintf('%2.0f %%', x), num2cell(ha.YTick), 'UniformOutput', false));
 end
-
-stringLegend = roiNameArray(idxPlottingOrder);
-legend(stringLegend, 'Location','NorthEastOutside');
-xlabel('Subjects');
-ylabel('Portion of Activated Voxels');
-ylim([0 100]);
-ha = gca;
-ha.YTick = 0:10:100;
-set(ha, 'YTickLabel', ...
-    cellfun(@(x) sprintf('%2.0f %%', x), num2cell(ha.YTick), 'UniformOutput', false));
 
 outputStats = struct('idxSubjectArray', idxSubjectArray, ...
     'nSignificantVoxelsInRoi', nSignificantVoxelsInRoi(idxPlottingOrder1-1,:), ...

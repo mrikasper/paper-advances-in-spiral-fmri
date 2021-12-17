@@ -27,8 +27,8 @@ function [fh, figOptions] = create_figure_spm_group(figOptions)
 % For further details, see the file COPYING or
 %  <http://www.gnu.org/licenses/>.
 
+options = spifi_get_analysis_options();
 if nargin < 1
-    options = spifi_get_analysis_options();
     figOptions = options.representation.fig_spm_group;
 end
 
@@ -38,7 +38,7 @@ for iSubj = 1:nSubjects
     idxSubject = idxSubjects(iSubj);
     
     details = spifi_get_subject_details(idxSubject, ...
-        [], figOptions.iSess, figOptions.iRecon);
+        options, figOptions.iSess, figOptions.iRecon);
     
     files = {
         %details.summary.mean.realigned
@@ -69,7 +69,7 @@ for iSubj = 1:nSubjects
         ];
     
     
-    sharedParameters = {'plotLabels', true, 'plotTitle', false, ...
+    sharedParameters = {'plotLabels', false, 'plotTitle', false, ...
         'overlayColorMaps', {'winter','autumn'}, ...
         'colorBar', 'off', 'overlayAlpha', 1, ...
         'overlayThreshold', figOptions.thresholdRange, ...
@@ -84,36 +84,47 @@ for iSubj = 1:nSubjects
     sharedParameters_cor = {sharedParameters{:}, ...
         'rotate90', 1, 'sliceDimension', 2};
     
+    sliceString = sprintf('_doUseSmoothedMaps%d', options.glm.doUseSmoothed);
     if isnumeric(figOptions.selectedSlice) % slice indices given explicitly
         selectedSlices = figOptions.selectedSlice;
-        sliceString = sprintf('_%d', selectedSlices);
+        sliceString = [sliceString sprintf('_%d', selectedSlices)];
     else
-        sliceString = ['_' figOptions.selectedSlice];
+        if figOptions.doUseSmoothedForMaxDetermination
+            % determine slices with max peak from smoothed data GLM t-con
+            optionsSmoothed = options;
+            optionsSmoothed.glm.doUseSmoothed = true;
+            detailsSmoothed = spifi_get_subject_details(idxSubject, ...
+                optionsSmoothed, figOptions.iSess, figOptions.iRecon);
+            statMap = MrImage(detailsSmoothed.glm.tcon);
+            thresholdForMaxDet = 3.2; % p=0.001
+        else
+            statMap = Y{nFiles};
+            thresholdForMaxDet = figOptions.thresholdRange(1);
+        end
+        
+        sliceString = [sliceString '_' figOptions.selectedSlice];
         switch lower(figOptions.selectedSlice)
             case 'max'
-                [tMax, posMax] = Y{nFiles}.max;
+                [tMax, posMax] = statMap.max;
                 selectedSlices = posMax;
             case 'min'
-                [tMin, posMin] = Y{nFiles}.min;
+                [tMin, posMin] = statMap.min;
                 selectedSlices = posMin;
             case 'maxextent'
                 [selectedSlices, centre] = spifi_find_most_activated_slices(...
-                    files{nFiles}, figOptions.thresholdRange(1));
+                    statMap, thresholdForMaxDet);
             case 'maxextent_l'
-                statMap = MrImage(files{nFiles});
                 % use only one hemisphere to determine max
                 iSliceHemisphereBorder = statMap.dimInfo.sample2index(0,1);
                 statMapL = statMap.select('x', 1:iSliceHemisphereBorder);
                 [selectedSlices, centre] = spifi_find_most_activated_slices(...
-                    statMapL, figOptions.thresholdRange(1));
+                    statMapL, thresholdForMaxDet);
             case 'maxextent_r'
-                statMap = MrImage(files{nFiles});
-                
                 % use only one hemisphere to determine max
                 iSliceHemisphereBorder = statMap.dimInfo.sample2index(0,1);
                 statMapR = statMap.select('x', iSliceHemisphereBorder+1:statMap.dimInfo.nSamples(1));
                 [selectedSlices, centre] = spifi_find_most_activated_slices(...
-                    statMapR, figOptions.thresholdRange(1));
+                    statMapR, thresholdForMaxDet);
                 % add offset from selection of second half of voxels again
                 selectedSlices(1) = selectedSlices(1) + iSliceHemisphereBorder;
         end
@@ -129,6 +140,9 @@ for iSubj = 1:nSubjects
         
         %% loop over all views, creating separate figures
         for iView = 1:nViews
+            
+            idxFig = iView + nViews*(f-1) + nViews*(nFiles-1)*(iSubj-1);
+            
             %% transversal view, whole slice
             switch lower(views{iView})
                 case 'tra'
@@ -136,8 +150,8 @@ for iSubj = 1:nSubjects
                     zI = resizedUnderlay.crop_all({'x',crop_tra(1:2), 'y', crop_tra(3:4)}, ...
                         Y{nFiles});
                     
-                    fh(f+(nFiles-1)*(iSubj-1)) = ...
-                        zI{1}.apply_threshold(displayRanges(f,:)).plot_overlays(...
+                    fh(idxFig) = ...
+                        zI{1}.threshold(displayRanges(f,:)).plot_overlays(...
                         {zI{2}, zI{2}.*-1}, ...
                         sharedParameters_tra{:}, ...
                         'selectedSlices', selectedSlices(3));
@@ -149,8 +163,8 @@ for iSubj = 1:nSubjects
                         crop_tra(3)+[0 70]}, ...
                         Y{nFiles});
                     
-                    fh(f+(nFiles-1)*(iSubj-1)) = ...
-                        zI{1}.apply_threshold(displayRanges(f,:)).plot_overlays(...
+                    fh(idxFig) = ...
+                        zI{1}.threshold(displayRanges(f,:)).plot_overlays(...
                         {zI{2}, zI{2}.*-1}, ...
                         sharedParameters_tra{:}, ...
                         'selectedSlices', selectedSlices(3));
@@ -160,8 +174,8 @@ for iSubj = 1:nSubjects
                         crop_tra(3)+[0 70]}, ...
                         Y{nFiles});
                     
-                    fh(f+(nFiles-1)*(iSubj-1)) = ...
-                        zI{1}.apply_threshold(displayRanges(f,:)).plot_overlays(...
+                    fh(idxFig) = ...
+                        zI{1}.threshold(displayRanges(f,:)).plot_overlays(...
                         {zI{2}, zI{2}.*-1}, ...
                         sharedParameters_sag{:}, ...
                         'selectedSlices', selectedSlices(1));
@@ -171,8 +185,8 @@ for iSubj = 1:nSubjects
                         crop_tra(1:2)+[25 -25]}, ...
                         Y{nFiles});
                     
-                    fh(f+(nFiles-1)*(iSubj-1)) = ...
-                        zI{1}.apply_threshold(displayRanges(f,:)).plot_overlays(...
+                    fh(idxFig) = ...
+                        zI{1}.threshold(displayRanges(f,:)).plot_overlays(...
                         {zI{2}, zI{2}.*-1}, ...
                         sharedParameters_cor{:}, ...
                         'selectedSlices', selectedSlices(2));

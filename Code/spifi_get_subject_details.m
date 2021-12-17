@@ -193,6 +193,15 @@ details.preproc.biascorrect.out = spm_file(details.preproc.biascorrect.source, .
 
 details.preproc.func.biascorrected = details.preproc.biascorrect.out;
 
+%% warp masks to subject space
+% roles of source/out are reversed, prefix input with 'w' for mni-space
+details.preproc.warp2subject.mask_early_visual.out = fullfile(...
+    details.preproc.root, 'mask_early_visual.nii'); 
+details.preproc.warp2subject.mask_early_visual.source = spm_file(...
+    details.preproc.warp2subject.mask_early_visual.out, 'prefix', 'w');
+details.preproc.warp2subject.mask_early_visual.inverseDeformationField = ...
+    details.preproc.anat.inverseDeformationField;
+
 %% warp to standard space (MNI)
 details.preproc.warp2mni.templateBatch = options.batches.warp2mni;
 details.preproc.warp2mni.saveBatch = details.batches.warp2mni;
@@ -326,6 +335,8 @@ details.representation.fig_spm_inout.fileSaveArray = {
 fig_specificity_contours = ...
     options.representation.fig_specificity_contours;
 
+fig_specificity_contours.mask_visual = details.preproc.warp2subject.mask_early_visual.out;
+
 switch fig_specificity_contours.struct_select
     case 't1'
         fig_specificity_contours.struct = fullfile(details.paths.scandata, ...
@@ -384,6 +395,13 @@ if fig_specificity_activation_tissue_overlap.doUseSmoothedMaps
 else
     pfxOutput = 'unsmoothed_';
 end
+
+if fig_specificity_activation_tissue_overlap.doUseVisualCortexMask
+    pfxOutput = [pfxOutput 'visual_cortex_'];
+else
+    pfxOutput = [pfxOutput 'whole_volume_'];
+end
+
 
 fig_specificity_activation_tissue_overlap.output_spm_with_tissue_rois = ...
     fullfile(details.glm.root, sprintf('%sspm_with_tissue_rois.mat',pfxOutput'));

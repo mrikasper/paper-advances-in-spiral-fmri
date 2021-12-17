@@ -27,11 +27,17 @@ function [fh, roiArray, outputStats] = create_figure_contour_congruency_summary_
 %
 
 verbosityLevel = 1; %1,2,3 for ever more plots
+doAdjustFigureSizeForSaving = false;
 
 idxSlices = 2:34;
+yLimitsContourDistanceVoxels = [0 3.5];
 
 options = spifi_get_analysis_options();
-idxRoi = 3;
+% 1 = all slices
+% 2 = all plotted slices in figure
+% 3 = all but border slices (first/last)
+% 4-6 = 1-3, but restricted to early visual cortex (hOc 1-5)
+idxRoi = 6;
 idxSubjectArray = 2:7;
 for iSubj = 1:numel(idxSubjectArray)
     idxSubj = idxSubjectArray(iSubj);
@@ -74,16 +80,24 @@ fh(end+1,1) = tapas_physio_get_default_fig_params();
 %     0.3010    0.7450    0.9330
 %     0.6350    0.0780    0.1840
 %     ]);
-set(fh(end), 'Name', 'Mean Contour Distance over Slices per subject');
+set(fh(end), 'Name', ...
+    sprintf('Mean Contour Distance over Slices per subject - %s', roiArray{1}.name));
 plot(idxSlices, contourDistanceMean(idxSlices,:));
+ylim(yLimitsContourDistanceVoxels)
 legend(stringLegend);
 xlabel('Slices');
 ylabel('Mean Contour Distance (voxels)');
 
+if doAdjustFigureSizeForSaving
+    % for saving the plot
+    set(gcf, 'WindowStyle', 'default');
+    set(gcf, 'Units', 'centimeters');
+    pos = get(gcf, 'Position'); set(gcf, 'Position', [pos(1), pos(2), 14.3, 11]);
+end
+
 if verbosityLevel >=3
     fh(end+1,1) = tapas_physio_get_default_fig_params();
     set(fh(end), 'Name', 'Median Contour Distance over Slices per subject');
-    idxSlices = 2:34;
     plot(idxSlices, contourDistanceMedian(idxSlices,:));
     legend(stringLegend);
     xlabel('Slices');
@@ -101,7 +115,6 @@ end
 if verbosityLevel >=3
     fh(end+1,1) = tapas_physio_get_default_fig_params();
     set(fh(end), 'Name', 'Portion of Contour Distance 0 over Slices per subject');
-    idxSlices = 2:34;
     plot(idxSlices, 100*contourDistanceZeroPortion(idxSlices,:));
     legend(stringLegend);
     xlabel('Slices');
@@ -116,15 +129,15 @@ if verbosityLevel >=2
     legend(stringLegend);
     xlabel('Slices');
     ylabel('Portion of Contour Distance 0 or 1(percent)');
-    
     fh(end+1,1) = tapas_physio_get_default_fig_params();
     set(fh(end), 'Name', 'Portion of Contour Distance 0 or 1 over Slices per subject');
-    idxSlices = 2:34;
 end
 
 %% Stacked bar plot of volume distribution of distances per subject
 fh(end+1,1) = tapas_physio_get_default_fig_params();
-set(fh(end), 'Name', 'Histogram Stacked Barplot Contour Distances per Subject');
+set(fh(end), 'Name', ...
+    sprintf('Histogram Stacked Barplot Contour Distances per Subject - %s', ...
+    roiArray{1}.name));
 hb = bar(idxSubjectArray, histDistanceVolume, 'stacked', 'FaceColor', 'flat');
 % colormap trying to match line color in compute_spatial_specificity_activation_tissue_overlap
 % not so simple, because of different color map binning there
@@ -141,6 +154,13 @@ ha = gca;
 ha.YTick = 0:10:100;
 set(ha, 'YTickLabel', ...
     cellfun(@(x) sprintf('%2.0f %%', x), num2cell(ha.YTick), 'UniformOutput', false));
+
+if doAdjustFigureSizeForSaving
+    % for saving the plot
+    set(gcf, 'WindowStyle', 'default');
+    set(gcf, 'Units', 'centimeters');
+    pos = get(gcf, 'Position'); set(gcf, 'Position', [pos(1), pos(2), 20.6, 11]);
+end
 
 %% report some outputs in command line
 contourDistanceMean_all_subjects = cell2mat(cellfun(@(x) x.perVolume.mean, roiArray, 'UniformOutput', false))

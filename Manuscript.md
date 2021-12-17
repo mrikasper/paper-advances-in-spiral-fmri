@@ -1,9 +1,10 @@
 Advances in Spiral fMRI: A High-resolution Study with Single-shot Acquisition
 =============================================================================
 
-Lars Kasper1,2,†, Maria Engel1, Jakob Heinzle2, Matthias Mueller-Schrader2,
-Nadine N. Graedel1,3, Jonas Reber1, Thomas Schmid1, Christoph Barmet1, Bertram
-J. Wilm1, Klaas Enno Stephan2,4,5, Klaas P. Pruessmann1
+
+Lars Kasper [1,2,†], Maria Engel [1], Jakob Heinzle [2], Matthias Mueller-Schrader [2],
+Nadine N. Graedel [1,3], Jonas Reber [1], Thomas Schmid [1], Christoph Barmet [1], Bertram
+J. Wilm [1], Klaas Enno Stephan [2,4,5], Klaas P. Pruessmann [1]
 
 1.  Institute for Biomedical Engineering, ETH Zurich and University of Zurich,
     Gloriastrasse 35, 8092 Zurich, Switzerland
@@ -29,7 +30,7 @@ Highlights
     readout gradient waveforms.
 
 -   We achieve spiral fMRI with sub-millimeter resolution (0.8 mm, FOV 230 mm),
-    acquired in a single shot (36 slices in 3.3s).
+    acquired in a single shot (36 slices in 3.3 s).
 
 -   Spiral images exhibit intrinsic geometric congruency to anatomical scans,
     and spatially specific activation patterns.
@@ -75,18 +76,24 @@ Functional MRI (fMRI) is presently the most prominent technique to study human
 brain function non-invasively, owing to its favorable spatiotemporal resolution
 regime with appealing functional sensitivity. Within this regime, specific
 research questions require different trade-offs between spatial and temporal
-resolution. On the one hand, ultra-high spatial resolution fMRI at
-sub-millimeter voxel size successfully targets smaller organizational structures
-of the brain, such as cortical laminae (Fracasso et al., 2016; Huber et al.,
-2017a; Kashyap et al., 2018; Kok et al., 2016; Lawrence et al., 2018; Martino et
-al., 2015; Muckli et al., 2015; Siero et al., 2011) and columns (Cheng et al.,
-2001; Feinberg et al., 2018; Yacoub et al., 2008), or subcortical nuclei, but
-requires compromises on coverage (FOV) or temporal bandwidth, i.e., volume
-repetition time (TR). On the other hand, fast sequences with TRs on the order of
-0.5 seconds and below are important for advanced analysis approaches, e.g., to
-adequately sample physiological fluctuations (Lewis et al., 2016; Smith et al.,
-2013; Uğurbil et al., 2013), at the expense of lowering spatial resolution
-(2–4 mm).
+resolution. On the one hand, ultra-high spatial resolution fMRI (with
+sub-millimeter voxel size) successfully targets smaller organizational
+structures of the brain, such as cortical laminae (Fracasso et al., 2016; Huber
+et al., 2017a; Kashyap et al., 2018; Kok et al., 2016; Lawrence et al., 2018;
+Martino et al., 2015; Muckli et al., 2015; Siero et al., 2011) and columns
+(Cheng et al., 2001; Feinberg et al., 2018; Yacoub et al., 2008). For
+subcortical sites, due to the limited signal-to-noise ratio (SNR),
+high-resolution (1-1.5 mm) fMRI is more prevalent (but see (Wang et al., 2020))
+to characterize, for example, the superior (Savjani et al., 2018; Singh et al.,
+2018) and inferior colliculi (De Martino et al., 2013; Sitek et al., 2019), as
+well as the subthalamic nucleus (de Hollander et al., 2017) and midbrain
+(D’Ardenne et al., 2008). However, both high and ultra-high spatial resolution
+fMRI require compromises on field of view (FOV) coverage or temporal bandwidth,
+i.e., volume repetition time (TR). On the other hand, fast sequences with TRs on
+the order of 0.5 seconds and below are important for advanced analysis
+approaches, for example, to adequately sample physiological fluctuations (Lewis
+et al., 2016; Smith et al., 2013; Uğurbil et al., 2013), at the expense of
+lowering spatial resolution (2–4 mm).
 
 One means to simultaneously advance the spatial and temporal resolution
 boundaries of fMRI is to maximize acquisition efficiency, i.e., sampled k-space
@@ -108,7 +115,7 @@ section of the k-space neighborhood covered along the readout trajectory
 However, another key determinant of acquisition efficiency or speed of coverage
 is average velocity along the trajectory, i.e., instantaneous gradient strength.
 On this count, EPI is wasteful because it includes many sharp turns traversed at
-low speed because of limited gradient slew rate.
+low speed due to the limited gradient slew rate.
 
 Substantially higher average k-space speed and thus acquisition efficiency for
 fMRI is achieved with spiral trajectories (Barth et al., 1999; Glover, 2012;
@@ -118,7 +125,7 @@ single-shot variants winding out of k-space center, e.g., on an Archimedean
 spiral, are prevalent (Glover, 1999; Meyer et al., 1992; Weiger et al., 2002),
 but different acquisition schemes, such as spiral-in (Börnert et al., 2000) or
 combined in/out readouts (Glover and Law, 2001; Glover and Thomason, 2004) have
-been proposed. High resolution fMRI studies have occasionally employed spirals
+been proposed. High-resolution fMRI studies have occasionally employed spirals
 as well (Jung et al., 2013; Singh et al., 2018), including first applications of
 laminar fMRI (Ress et al., 2007) and regionally optimized acquisitions, e.g.,
 for the hippocampus (Preston et al., 2010) or superior colliculus (Katyal et
@@ -172,16 +179,16 @@ Setup
 
 All data was acquired on a Philips Achieva 7 Tesla MR System (Philips
 Healthcare, Best, The Netherlands), with a quadrature transmit coil and
-32-channel head receive array (Nova Medical, Wilmington, MA).
+32-channel head receive array (Nova Medical, Wilmington, MA, USA).
 
 Concurrent magnetic field monitoring was performed using 16 fluorine-based NMR
 field probes, which were integrated into the head setup via a laser-sintered
-nylon frame positioned between transmit and receive coil (Engel et al., 2018b,
-Fig. 1). Probe data were recorded and preprocessed (filtering, demodulation) on
-a dedicated acquisition system (Dietrich et al., 2016a). The final extraction of
-probe phase evolution and projection onto a spherical harmonic basis set (Barmet
-et al., 2008) was performed on a PC, yielding readout time courses of global
-phase $$k_{0}$$ and k-space coefficients $$k_{x},k_{y},k_{z}$$ with 1 MHz
+nylon frame positioned between transmit and receive coil (Fig. 1 in Engel et
+al., 2018). Probe data were recorded and preprocessed (filtering, demodulation)
+on a dedicated acquisition system (Dietrich et al., 2016a). The final extraction
+of probe phase evolution and projection onto a spherical harmonic basis set
+(Barmet et al., 2008) was performed on a PC, yielding readout time courses of
+global phase $$k_{0}$$ and k-space coefficients $$k_{x},k_{y},k_{z}$$ with 1 MHz
 bandwidth.
 
 For the fMRI experiments, visual stimulus presentation utilized VisuaStim LCD
@@ -207,7 +214,9 @@ wedges in complementary pairs of the visual quarter-fields. In one block,
 blocks were interleaved with equally long fixation periods. To keep subjects
 engaged, they had to respond to slight contrast changes in the central fixation
 cross via button presses of the right hand. A single run of the paradigm took 5
-min (5 repetitions of the ULLR-Fixation-URLL-Fixation sequence).
+min (5 repetitions of the ULLR-Fixation-URLL-Fixation sequence). For both of the
+spiral sequence designs (high-resolution spiral-out and combined spiral in/out,
+see next section), a single run of the paradigm was performed per subject.
 
 Spiral Trajectories and Sequence Timing
 ---------------------------------------
@@ -220,20 +229,20 @@ being excited a few milliseconds prior to readout gradient onset (Fig. 1, bottom
 row, (Engel et al., 2018)).
 
 For the spiral trajectories, we selected two variants that had previously
-provided high-quality images in individual frames (Engel et al., 2018b, Fig. 2):
-a high-resolution case winding out of k-space center on an Archimedean spiral
-(spiral-out, Fig. 1, black gradient waveform), and a combined dual-image readout
-first spiraling into k-space center, immediately followed by a point-symmetric
-outward spiral (spiral in/out (Glover and Law, 2001)), Fig. 1, blue gradient
-waveform).
+provided high-quality images in individual frames (Fig. 2 in (Engel et al.,
+2018)): a high-resolution case winding out of k-space center on an Archimedean
+spiral (spiral-out, Fig. 1, black gradient waveform), and a combined dual-image
+readout first spiraling into k-space center, immediately followed by a
+point-symmetric outward spiral (spiral in/out (Glover and Law, 2001)), Fig. 1,
+blue gradient waveform).
 
 The spiral-out gradient waveform was designed to deliver the highest spatial
 resolution possible under several constraints. First, targeting maximum
 acquisition efficiency in 2D commands a single-shot 2D readout, because the
 sequence overhead, i.e., time spent without sampling k-space, accrues for each
 new excitation. Second, the parallel imaging capability of our receiver array at
-7 T allowed for an in-plane acceleration factor of R=4 (determining the spacing
-of the spiral revolutions, i.e., FOV). We based this choice on previous
+7 T allowed for an in-plane acceleration factor of R = 4 (determining the
+spacing of the spiral revolutions, i.e., FOV). We based this choice on previous
 experience with spirals of such undersampling using this setup (Engel et al.,
 2018; Kasper et al., 2018), which were free of aliasing artifacts or prohibitive
 g-factor noise amplification. Third, the requirement of concurrent field
@@ -335,7 +344,7 @@ and can be efficiently solved iteratively by a conjugate gradient (CG) algorithm
 (Pruessmann et al., 2001; Shewchuk, 1994). As mentioned above, the restriction
 to first order field dynamics enables acceleration of the ensuing matrix-vector
 multiplications by (reverse) gridding and fast Fourier transform (FFT) (Beatty
-et al., 2005; Jackson et al., 1991). Off-resonance effects can also be
+et al., 2005; Jackson et al., 1991). Off-resonance effects are also efficiently
 approximated by FFT using multi-frequency interpolation (Man et al., 1997).
 
 This image reconstruction algorithm was applied equivalently to the spiral-out
@@ -344,7 +353,7 @@ regularization (e.g., Tikhonov). Note, however, that for the latter both field
 recordings and coil data were split into their in- and out-part and
 reconstructed separately, yielding two images per shot.
 
-Taken together, the in-house Matlab (The Mathworks, Natick, MA, R2018a)
+Taken together, the in-house Matlab R2018a (The MathWorks, Natick, MA, USA)
 implementation of this algorithm led to total reconstruction times on a single
 CPU core of about 10 min per slice for the high-resolution spiral-out image and
 1.5 minutes for the spiral-in or -out image. In order to reconstruct the 3600 2D
@@ -356,11 +365,11 @@ spiral in/out data.
 The auxiliary input data for the expanded signal model, i.e., spatial maps for
 static B0 field inhomogeneity $$\text{Δω}$$ and coil sensitivity $$c_{\gamma}$$,
 were derived from a separate fully sampled multi-echo (ME) Cartesian gradient
-echo reference scan of 1 mm in-plane resolution with 6 echoes, TE1 = 4ms,
-$$\text{ΔTE}$$ = 1ms (Kasper et al., 2018), and slice geometry equivalent to the
-spiral sequences. Image reconstruction proceeded as described above for this
+echo reference scan of 1 mm in-plane resolution with 6 echoes, TE1 = 4 ms,
+$$\text{ΔTE}$$ = 1 ms (Kasper et al., 2018), and slice geometry equivalent to
+the spiral sequences. Image reconstruction proceeded as described above for this
 scan, albeit omitting the sensitivity and static B0 map terms. The latter was
-justified by the high bandwidth of the Cartesian spin-warp scans (1 kHz).
+justified by the high bandwidth of the Cartesian spin-warp scans (1 kHz).
 
 Sensitivity maps were then computed from the first-echo image, normalizing
 single coil images by the root sum of squares over all channels, while the B0
@@ -374,10 +383,12 @@ Data Analysis
 ### Image Quality Assessment
 
 The suitability of the raw imaging data for high-resolution fMRI was assessed in
-terms of both sensitivity and spatial specificity. For sensitivity, we evaluated
-the temporal statistics of the images, i.e., signal-to-fluctuation noise ratio
-(SFNR), standard deviation (SD) and coefficient of variation (CoV) maps
-(Welvaert and Rosseel, 2013), defined as
+terms of both sensitivity and spatial specificity. No smoothing was performed
+for any analysis in this section.
+
+For sensitivity, we evaluated the temporal statistics of the images, i.e.,
+signal-to-fluctuation noise ratio (SFNR), standard deviation (SD) and
+coefficient of variation (CoV) maps (Welvaert and Rosseel, 2013), defined as
 
 |   | \\text{CoV} = \\frac{1}{\\text{SFNR}}\\ , |   |
 |---|-------------------------------------------|---|
@@ -393,13 +404,14 @@ $$\overset{\overline{}}{m\left( \mathbf{r}_{\rho} \right)}$$ to inspect the
 congruency of anatomical boundaries between the scans.
 
 To reduce the impact of subject motion on both assessments, the volumes of the
-fMRI time series were first realigned to each other. Then, the mean ME scan was
-co-registered to the resulting mean realigned fMRI scan, Importantly, both
-operations were limited to six-parameter rigid-body registration, such that
-nonlinear geometric distortions between sequences were not corrected through
-this preprocessing step. Furthermore, to facilitate visual comparison and
-contour edge creation, mean ME and spiral images were bias-field corrected using
-unified segmentation (Ashburner and Friston, 2005).
+fMRI time series were first realigned to each other using a 6-parameter
+rigid-body within-contrast registration, as implemented in SPM (Friston et al.,
+1996). Then, the mean ME scan was co-registered to the resulting mean realigned
+fMRI scan, Importantly, both operations were limited to six-parameter rigid-body
+registration, such that nonlinear geometric distortions between sequences were
+not corrected through this preprocessing step. Furthermore, to facilitate visual
+comparison and contour edge creation, mean ME and spiral images were bias-field
+corrected using unified segmentation (Ashburner and Friston, 2005).
 
 Furthermore, for quantitative assessment, we extracted contour lines from the
 thresholded gray matter tissue probability maps ($$p \geq 90\%)$$ retrieved by
@@ -408,18 +420,30 @@ contrast and resolution congruence, we compared the last echo of the 1 mm ME
 scan (TE 10 ms) to the 0.8 mm spiral-out scan (TE 20 ms). We computed histograms
 and *contour distance maps*, i.e., contours from the structural data whose color
 coding per voxel reflects their distance to the corresponding contour in the
-functional image.
+functional image. For the histograms, we evaluated the contour distance both
+over the whole imaging FOV and within an ROI of early visual cortex, the primary
+site of expected activation for our functional paradigm. Specifically, the ROI
+mask was created using the SPM Anatomy Toolbox Version 2.2b (Eickhoff et al.,
+2007, 2006, 2005) and combined probabilistic maps of human occipital cortex V1,
+V2 (Amunts et al., 2000), V3, V4 (ventral (Rottschy et al., 2007) and dorsal
+(Kujovic et al., 2013)), lateral occipital cortex (Malikovic et al., 2016) and
+V5/MT (Malikovic et al., 2007). The combined mask was warped into the individual
+subject geometry by the inverse deformation field retrieved through the unified
+segmentation mentioned above, and slightly dilated by 3 voxels to account for
+any inter-subject variability in visual cortex.
 
 All computations were performed in Matlab R2019b, using the Unified NeuroImaging
-Quality Control Toolbox (UniQC, (Bollmann et al., 2018)), and SPM12 (Wellcome
-Centre for Human Neuroimaging, London, UK, <http://www.fil.ion.ucl.ac.uk/spm/>).
+Quality Control Toolbox (UniQC, (Bollmann et al., 2018; Frässle et al., 2021)),
+and SPM12 (Wellcome Centre for Human Neuroimaging, London, UK,
+<http://www.fil.ion.ucl.ac.uk/spm/>).
 
 ### BOLD fMRI Analysis
 
-The main goal of this analysis was to establish the functional sensitivity of
-the spiral fMRI sequences at the single-subject level under standard paradigm
-and preprocessing choices. On a qualitative level, we also assessed the spatial
-specificity of functional activation.
+The main goal of this analysis was to assess the functional sensitivity and
+spatial specificity of the spiral fMRI sequences at the single-subject level
+under standard paradigm and preprocessing choices. Note that, unless explicitly
+stated otherwise, all activation maps and their quantification (e.g., cluster
+extent, peak t-values) are therefore reported after smoothing.
 
 Equivalent preprocessing steps were applied to all spiral fMRI runs using SPM12.
 After slice-timing correction, we employed the pipeline described in the
@@ -437,12 +461,12 @@ in (Harvey et al., 2008)), extracted by the PhysIO Toolbox (Kasper et al.,
 
 To characterize functional sensitivity, we evaluated the differential
 t-contrasts +/- (ULLR-URLL) and report results at an individual voxel-level
-threshold of p\<0.001 (t\>3.22). For quantification in the results tables, we
-report activations under whole-brain family-wise error (FWE) correction at the
-cluster level (p\<0.05), given this voxel-level threshold (p\<0.001) for cluster
-definition. For visualization in the results figures, we omitted
-multiple-comparison correction, to study spatial activation extent and
-specificity.
+threshold of p \< 0.001 (t \> 3.22). For quantification in the results tables,
+we report activations under whole-brain family-wise error (FWE) correction at
+the cluster level (p \< 0.05), given this voxel-level threshold (p \< 0.001) for
+cluster definition. If not noted otherwise in the figure, we omitted
+multiple-comparison correction in the visualization of the activation maps, to
+study their spatial extent and specificity.
 
 Spatial specificity of the activation was qualitatively assessed by overlaying
 the thresholded t-contrast maps for both contrasts onto the anatomically
@@ -450,8 +474,8 @@ veridical mean ME image. We checked whether activation patterns were restricted
 to gray matter regions of visual cortex, as well as whether the spatial
 separation and symmetry of activations were linked to distinct quarter-field
 stimulation patterns, as expected by the retinotopic organization of visual
-cortex (Engel et al., 1997; Wandell et al., 2007; Warnking et al., 2002). On
-top, we also evaluated the individual contrasts for the ULLR and URLL
+cortex (Engel et al., 1997; Wandell et al., 2007; Warnking et al., 2002).
+Furthermore, we evaluated the individual contrasts for the ULLR and URLL
 stimulation blocks to assess the spatial overlap of their activation patterns as
 an alternative measure of functional specificity (since the differential
 contrasts cannot overlap by design).
@@ -465,17 +489,22 @@ voxels, those that exceeded 30 % probability for two tissue classes were
 categorized as gray/white matter boundary (GM/WM interface) or pial surface
 (GM/CSF interface). All other voxels were labeled as ambiguous. We then
 evaluated the share of significantly activated voxels for the differential
-t-contrasts +/- (ULLR-URLL) after multiple comparison correction (p\<0.05
-cluster-level FWE corrected with a cluster-forming voxel threshold of p\<0.001).
+t-contrasts +/- (ULLR-URLL) after multiple comparison correction (p \< 0.05
+cluster-level FWE corrected with a cluster-forming voxel threshold of
+p \< 0.001). This analysis was performed for both the whole imaging FOV and
+within the ROI of early visual cortex, as defined at the end of the previous
+section (2.5.1). We repeated this analysis for activation maps derived from
+unsmoothed data to study the impact of smoothing on spatial specificity.
 
 This overall analysis procedure was performed for the spiral-out as well as the
 individual spiral-in and spiral-out image time series reconstructed from the
 spiral in/out data. As spiral in/out sequences are predominantly selected for
 their potential gain in functional sensitivity when combining spiral-in and
 spiral-out images (Glover and Law, 2001), we additionally repeated the BOLD fMRI
-analysis for such a surrogate dataset (“in/out combined”). We chose a
-signal-weighted combination per voxel (Glover and Thomason, 2004), which is
-considered the most practical approach for echo combination (Glover, 2012):
+analysis for such a surrogate dataset (“in/out combined”), but omitted the
+quantitative analysis of spatial specificity. We chose a signal-weighted
+combination per voxel (Glover and Thomason, 2004), which is considered the most
+practical approach for echo combination (Glover, 2012):
 
 |   | w = \\frac{\\overline{m_{1}}}{\\overline{m_{1}} + \\overline{m_{2}}}\\ , |   |
 |---|--------------------------------------------------------------------------|---|
@@ -494,31 +523,37 @@ algorithm is publicly available on GitHub
 capsule for reproducible online re-execution on CodeOcean (Patzig et al., 2019),
 which were created in the context of the ISMRM reproducible research study group
 challenge (Maier et al., 2021; Stikov et al., 2019), albeit without the
-multi-frequency interpolation employed here.
+multi-frequency interpolation employed here. *An example reconstruction pipeline
+including static B0 correction for the spiral data presented here is available
+on GitHub as well
+(*<https://github.com/mrikasper/julia-recon-advances-in-spiral-fmri>*),
+utilizing MRIReco.jl* (Knopp and Grosser, 2021)​*, an MRI reconstruction
+framework written in Julia* ​(Bezanson et al., 2017)​*.*
 
 Image and fMRI analyses were performed using SPM12
-([https://www.fil.ion.ucl.ac.uk/spm](https://www.fil.ion.ucl.ac.uk/spm/)
+([https://www.fil.ion.ucl.ac.uk/spm](https://www.fil.ion.ucl.ac.uk/spm/),
 distributed under GPLv2) and the in-house developed UniQC Toolbox (Bollmann et
 al., 2018), publicly available under a GPLv3 license as a beta release within
-the TAPAS Software Suite (<http://translationalneuromodeling.org/tapas>,
-(Frässle et al., 2021)).
+the TAPAS software collection
+(<https://www.translationalneuromodeling.org/tapas>, (Frässle et al., 2021)).
 
-All custom analysis and data visualization scripts are available on
-<http://github.com/mrikasper/paper-advances-in-spiral-fmri>. This includes both
-a one-click analysis (`main.m`) to rerun all image statistics and fMRI analyses,
-as well as the automatic re-creation of all figure components found in this
-manuscript (`main_create_figures.m`), utilizing the UniQC Toolbox. More details
-on installation and execution of the code can be found in the `README.md` file
-in the main folder of the repository.
+All custom analysis and data visualization scripts for this publication are
+available on <https://github.com/mrikasper/paper-advances-in-spiral-fmri>. This
+includes both a one-click analysis (`main.m`) to rerun all image statistics and
+fMRI analyses, as well as the automatic re-creation of all figure components
+found in this manuscript (`main_create_figures.m`), utilizing the UniQC Toolbox.
+More details on installation and execution of the code can be found in the
+`README.md` file in the main folder of the repository.
 
 Data from this study is publicly available as part of the ETH Research
-Collection (doi:10.3929/ethz-b-000487412), according to the FAIR (Findable,
-Accessible, Interoperable, and Re-usable) data principles (Wilkinson et al.,
-2016). For one subject (`SPIFI_0007`), this includes both the reconstructed
-images in NIFTI format with behavioral and physiological logfiles, to validate
-the analysis scripts, as well as raw coil and trajectory data in ISMRMRD format
-(in the patient coordinate system), together with the corresponding B0 and
-sensitivity maps (NIFTI).
+Collection (doi:10.3929/ethz-b-000487412, (Kasper et al., 2021)) and described
+in more detail in the accompanying Data in Brief Article, according to the FAIR
+(Findable, Accessible, Interoperable, and Re-usable) data principles (Wilkinson
+et al., 2016). For one subject (`SPIFI_0007`), this includes both the
+reconstructed images in NIfTI format with behavioral and physiological logfiles,
+to validate the analysis scripts, as well as raw coil and trajectory data in
+ISMRMRD format (in the patient coordinate system), together with the
+corresponding B0 and sensitivity maps (NIfTI).
 
 For the other datasets, we did not obtain explicit subject consent to share all
 raw data in the public domain. However, we do provide the magnetic field
@@ -541,7 +576,7 @@ Spiral Image Quality, Congruency and Stability
 
 In the following, we mainly present images from individual subjects (S7: Figs.
 2,3, S2: Figs. 4,6,9, S3: Fig. 5). However, as illustrated by Fig. 7, as well as
-supplementary materials SM1 and SM2, results were comparable for all six
+supplementary materials SM 1 and SM 2, results were comparable for all six
 analyzed datasets.
 
 The mean images (one run of subject S7, after realignment) of the
@@ -574,27 +609,28 @@ conditioning of the undersampled reconstruction problem (g-factor penalty) is
 discernible in this area.
 
 The SD images (Fig. 3B) corroborate this impression, showing peak values in
-ventricles (CSF) and highly vascularized areas (insula, ACC). These noise
-clusters presumably stem from fluctuations through cardiac pulsation and are not
-specific to spiral acquisitions. However, for the raised SD values in voxels
-close to the cortex borders, it is unclear whether also CSF fluctuations, the
-BOLD effect itself, or rather time-varying blurring due to unaccounted magnetic
-field fluctuations contribute. This is scrutinized in the GLM analysis below.
-Additionally, for the CoV images (Fig. 3C), the internal capsule appears
-prominently, presumably due to its reduced average signal level.
+CSF-filled (lateral ventricles) and highly vascularized areas (insula, ACC).
+These noise clusters presumably stem from fluctuations through cardiac pulsation
+and are not specific to spiral acquisitions. However, for the raised SD values
+in voxels close to the cortex borders, it is unclear whether also CSF
+fluctuations, the BOLD effect itself, or rather time-varying blurring due to
+unaccounted magnetic field fluctuations contribute. This is scrutinized in the
+GLM analysis below. Additionally, for the CoV images (Fig. 3C), the internal
+capsule appears prominently, presumably due to its reduced average signal level.
 
 In terms of spatial specificity, overlaying contour edges of the anatomical
-reference (mean ME spin-warp image, subject S2) (Fig. 4A,E) onto the mean
+reference (mean ME spin-warp image, subject S2) (Fig. 4A) onto the mean
 spiral-out image suggests a geometrically very faithful depiction of the
 anatomical interfaces (Fig. 4B,F). Boundaries of the ventricles and gray to
 white matter are congruent in general, also for the visual cortex relevant to
 the later fMRI analyses. Some regions of the spiral-out images suffer from
 ringing (yellow arrow) or signal dropout (white arrow), most likely due to
-through-plane dephasing and incomplete in-plane B0 correction.
+through-plane dephasing and incomplete correction of in-plane B0 inhomogeneity(
+Fig. 4E).
 
 Incorporating the mean images of the spiral in/out sequence into the comparison
 confirms the nature of these artifacts (Fig. 4C,D,G,H). The in-part images (Fig.
-4C) are void of these artifacts and match the anatomical reference almost
+4C) are devoid of these artifacts and match the anatomical reference almost
 completely in terms of edge contours (Fig. 4G). Only CSF/skull interfaces, for
 example, in frontal regions, are slightly compromised by a more global ringing,
 presumably from residual fat or high-intensity signal right after slice
@@ -622,16 +658,26 @@ voxels, with generally better congruence for more superior slices (Fig. 5B).
 Prominent outliers (subject 5,6, inferior slices) arose in areas with signal
 dropout for the spiral-out image, which was more susceptible to through-plane
 dephasing than the structural ME scan due to the difference in echo time (TE
-2o ms vs 5-10 ms).
+2o ms vs 5-10 ms). For visual cortex in particular (Fig. 6B), the region of
+interest for our functional analysis, contour congruencies between 0.5 and 1 mm
+were most common, with fewer outliers than in the rest of the brain, driven by
+both contrast differences (S2, slice 10) and signal dropouts close to the
+sagittal sinus (S2, slice 34). Averaged over the whole volume and all subjects,
+the mean gray matter contour distance amounted to $$1.04 \pm 0.26$$ voxels
+($$0.83\  \pm 0.21$$ mm), varying between 0.7 (S3) and 1.4 voxels (S5), i.e.,
+0.6-1.1 mm between subjects. Within visual cortex, congruence was slightly
+higher, with mean gray matter contour distances of $$0.96 \pm 0.14\$$voxels
+($$0.77 \pm 0.11$$ mm), varying between 0.7 (S3) and 1.2 (S2) voxels, i.e.,
+0.6-1.0 mm.
 
-Averaged over the whole volume and all subjects, the mean gray matter contour
-distance amounted to $$1.04 \pm 0.26$$ voxels ($$0.83\  \pm 0.21$$ mm), varying
-between 0.7 (S3) and 1.4 voxels (S5), i.e., 0.6-1.1 mm between subjects.
-Summarizing the distribution of contour distances over voxels (Fig. 5C), $$41
-\pm 7\ \%$$ of gray matter contours in all subjects were strictly overlapping
-(min (S6): 35 %, max (S3): 52 %), and $$76 \pm 7\ \%$$ were at most 1 voxel
-apart (min (S6): 67 %, max (S3): 85 %), with only $$11 \pm 5\ \%$$ of contour
-voxels exceeding a distance of 2 voxels (1.6 mm).
+Summarizing the distribution of contour distances over all voxels in the
+acquisition volume (Fig. 5D), $$41 \pm 7\ \%$$ of gray matter contours in all
+subjects were strictly overlapping (min (S6): 35 %, max (S3): 52 %), and $$76
+\pm 7\ \%$$ were at most 1 voxel apart (min (S6): 67 %, max (S3): 85 %), with
+only $$11 \pm 5\ \%$$ of contour voxels exceeding a distance of 2 voxels
+(1.6 mm). This distribution was near-identical within visual cortex (Fig. 5E),
+with the exception of large outliers (3 voxels, i.e., 2.4 mm or more), which
+were reduced for individual subjects (S5, S6) from about 10 to 5 %.
 
 Functional Sensitivity and Specificity
 --------------------------------------
@@ -677,21 +723,48 @@ specific activation patterns are within the expected range of variability in
 subject anatomy and task engagement. Quantitatively, peak t-values reach 15.1 on
 average for the differential contrasts, with a standard deviation of 2.6, i.e.
 17 %, over subjects (Table 1). Activation clusters comprise 10371 +/- 2480
-voxels (after FWE-multiple comparison correction at the cluster level, p\<0.05),
-i.e., 6467 +/- 1547 mm3.
+voxels (after FWE-multiple comparison correction at the cluster level,
+p \< 0.05), i.e., 6467 +/- 1547 mm3.
+
+Because traditional Gaussian smoothing is frequently omitted in ultra-high
+resolution fMRI studies (e.g., for laminar fMRI), we assessed its impact on our
+results. We repeated the statistical analysis for all subjects to create a
+version of Figure 7 based on unsmoothed data (supplementary material SM 3). For
+one particular subject (S2), we also juxtaposed spatial characteristics of the
+statistical t-maps in an animated slide show by varying significance thresholds
+for smoothed and unsmoothed data, as well as cropping the spiral k-space data to
+1 mm resolution before reconstruction (supplementary material SM 4). Overall,
+spatial smoothing increased overall CNR (higher t-values) and extent of
+activation clusters that were already discernible in the unsmoothed data. The
+activation clusters of the smoothed data resemble those of unsmoothed data at
+lower thresholds, but with fewer single-voxel activation sites. When overlaying
+activation masks of both differential t-contrasts (+/- ULLR-URLL) after
+cluster-level multiple comparison correction (p \< 0.05 cluster-FWE,
+cluster-forming threshold: p \< 0.001) for this subject directly, we observed
+two distinct effects of the employed moderate smoothing (FWHM 0.8 mm) (Fig. 8A):
+on the one hand, cluster extent may increase isotropically by about one voxel
+(left inset), consistent with a loss in spatial specificity. On the other hand,
+clusters can expand by several voxels along the cortical ribbon after smoothing
+(right inset), suggesting that increased sensitivity by averaging of thermal
+noise can lead to functionally more plausible activation patterns.
 
 To quantify functional specificity, we evaluated the tissue type of all
-significantly activated voxels (Fig. 8), with tissue type based on the unified
-segmentation results of the structural data (mean ME): Of all significantly
-activated voxels, $$71 \pm 8\ \%$$ resided in GM (mean and standard deviation
-over subjects and whole volume), $$2.2 \pm 0.5\ \%$$ and  $$1.9 \pm 0.9\ \%$$ at
-pial surface and GM/WM interface, respectively, $$5.7 \pm 2.7\ \%$$ in WM and
-$$13 \pm 3\ \%$$ in CSF, while for the remaining $$5.5 \pm 2.5\ \%$$ of
-significant voxels, tissue type could not be determined unambiguously. Notably,
-the subject with the smallest contour congruence (S5, Fig. 5C) had the
-second-highest gray-matter containment of significant voxels, indicating that
-geometric veracity was preserved close to activation sites relevant for this
-task.
+significantly activated voxels, and assessed the impact of smoothing on this
+measure (Fig. 8B), with tissue type based on the unified segmentation results of
+the structural data (mean ME). For smoothed data and considering the whole
+imaging volume (top left), $$71 \pm 8\ \%$$ of all significantly activated
+voxels resided in GM (mean and standard deviation over subjects and whole
+volume), $$2.2 \pm 0.5\ \%$$ and  $$1.9 \pm 0.9\ \%$$ at pial surface and GM/WM
+interface, respectively, $$5.7 \pm 2.7\ \%$$ in WM and $$13 \pm 3\ \%$$ in CSF,
+while for the remaining $$5.5 \pm 2.5\ \%$$ of significant voxels, tissue type
+could not be determined unambiguously. Gray matter containment dropped by about
+2 % in the unsmoothed data (bottom left), presumably due to randomly distributed
+false positives. This small difference is preserved when restricting the
+analysis to the ROI of early visual cortex (right column), in which gray matter
+containment is about 3 % higher for both smoothed and unsmoothed data. This
+indicates that the impact of smoothing on this quantification of functional
+specificity was small on average, and that the activation containment was
+comparable in early visual cortex and the whole imaging volume.
 
 Spiral In/Out Analysis and Echo Combination
 -------------------------------------------
@@ -711,7 +784,7 @@ In terms of functional sensitivity, the in/out sequence provides higher peak
 t-values and cluster extents in the differential t-contrasts compared to the
 high-resolution spiral-out, as expected due to the larger voxel size and
 consequential higher SFNR (Table 1). For example, the in-part itself provides a
-61 % SFNR increase in gray matter (averaged over subjects), 17% increased
+61 % SFNR increase in gray matter (averaged over subjects), 17 % increased
 maximum peak t-value, and 56 % increase in significantly activated gray matter
 volume (Table 1, rightmost column).
 
@@ -737,11 +810,10 @@ In terms of spatial specificity, all activation patterns exhibit a good
 congruency to the anatomical reference, as evident from a close-up overlaid onto
 the mean ME image (Fig. 9D). In general, this visualization confirms the overall
 impression that the echo combination increases CNR throughout visual cortex,
-rather than just in regions of higher dephasing. One remarkable feature of the
-in-part time series is visible in Fig. 9A: there seem to be more false positive
-clusters than in all other spiral variants (Fig. 9A), in particular close to the
-temporal muscle, presumably due to the ringing mentioned in the first results
-section above.
+rather than just in regions of higher dephasing. Remarkably, there seem to be
+more false positive clusters for the spiral-in than in all other spiral variants
+(Fig. 9A), in particular close to the temporal muscle, presumably due to the
+ringing mentioned above.
 
 Discussion
 ==========
@@ -766,7 +838,7 @@ Calhoun et al., 2002; Menon, 2002).
 
 The functional sensitivity of spiral readouts was confirmed by observing typical
 activation patterns in response to an established visual quarter-field
-stimulation. While a consensus on how to access spatial specificity for fMRI is
+stimulation. While a consensus on how to assess spatial specificity for fMRI is
 lacking, several indicators point to a localization capability in the sub-mm
 range for our data. First, the distance of gray matter contours in spiral and
 structural MRI data were at most one voxel (0.8 mm) apart in the vast majority
@@ -800,7 +872,7 @@ This corresponds to an acquisition efficiency of about 900,000 resolved voxels
 per second.
 
 To our knowledge, this is the highest acquisition efficiency reported for 2D
-spiral fMRI to date (see Table S3 for a comparison of sequence parameters in
+spiral fMRI to date (see Table SM 5 for a comparison of sequence parameters in
 several spiral fMRI studies), as well as the first high-resolution spiral fMRI
 study at ultra-high field. In combination with the presented evidence for
 geometric accuracy, this makes the presented spiral-out sequence an attractive
@@ -827,7 +899,7 @@ as a filter in image domain. For spiral-in images, this emphasizes higher
 spatial frequencies, while the effect on spiral-out images is reversed, leading
 to blurring. Based on typical brain tissue relaxation times at 7T, we adapted
 previous simulations of this effect for a similar high-resolution spiral-out
-protocol (Engel et al., 2018, Fig. 7). There are diminishing returns for
+protocol (Fig. 7 in Engel et al., 2018). There are diminishing returns for
 investing more acquisition time to achieve higher in-plane resolution, but a net
 gain remains at our chosen readout duration of 60 ms. Effectively, the FWHM of
 the PSF due to T2\* blurring corresponds to a voxel size smaller than 1 mm for
@@ -838,55 +910,70 @@ more slices within the given TR might deliver overall higher acquisition
 efficiency in this case. Finally, static B0 inhomogeneity also manifests as
 spatially varying blurring or ringing in spiral imaging, because off-resonance
 induces broadening of the PSF main lobe, as well as amplification of its side
-lobes (Bernstein et al., 2004, Chap. 17; Engel et al., 2018, Fig. 6; Man et al.,
-1997). As long as B0 inhomogeneity is properly mapped and included in the signal
-model, this effect is mitigated by the iterative image reconstruction utilized
-in this work.
+lobes (Bernstein et al., 2004, Chap. 17; Fig. 6 in Engel et al., 2018; Man et
+al., 1997). As long as B0 inhomogeneity is properly mapped and included in the
+signal model, this effect is mitigated by the iterative image reconstruction
+utilized in this work.
 
-On our experimental data, we found that the spatial specificity of spiral fMRI
-is very high in about 75 % of the voxels, as indicated by both contour distance
-mapping (Fig. 5) and gray matter containment of activation (Fig. 8). While these
-quantifications provide rough estimates of functional spatial specificity in
-fMRI, there is no consensus on such quantification in the community, and the
-absolute values reported here are hard to compare to previous work. We hope that
-through our sharing of the code, this methodology may provide future reference
-points. Furthermore, the utilized measures are in themselves imperfect
-assessments of spatial specificity, and might underestimate the achieved spatial
-specificity in our data. First of all, both analyses relied on unified
-segmentation (Ashburner and Friston, 2005) to extract tissue probability maps,
-which in principle should work contrast-independently. However, the employed
-default parameter settings may not be optimal to model bias fields at 7 T or
-voxel intensity distributions of multi-echo GRE scans with only partial brain
-coverage. Additionally, because the contrast in our functional and structural
-scans were not equivalent (e.g., TE 20 vs 10 ms), contour distance mapping
-reflects, to a certain extent, differences in contrast rather than geometry.
+In our experimental data, we found that the spatial specificity of spiral fMRI
+is very high in about 75-80 % of the voxels, as indicated by both contour
+distance mapping (Fig. 5) and gray matter containment of activation (Fig. 8).
+While these quantifications provide rough estimates of functional spatial
+specificity in fMRI, there is no consensus on such quantification in the
+community, and the absolute values reported here are hard to compare to previous
+work. We hope that through our sharing of the code, this methodology may provide
+future reference points. Furthermore, the utilized measures are in themselves
+imperfect assessments of spatial specificity, and might underestimate the
+achieved spatial specificity in our data. First of all, both analyses relied on
+unified segmentation (Ashburner and Friston, 2005) to extract tissue probability
+maps, which in principle should work contrast-independently. However, the
+employed default parameter settings may not be optimal to model bias fields at
+7 T or voxel intensity distributions of multi-echo GRE scans with only partial
+brain coverage. Additionally, because the contrast in our functional and
+structural scans were not equivalent (e.g., TE 20 vs 10 ms), contour distance
+mapping reflects, to a certain extent, differences in contrast rather than
+geometry.
+
+Finally, relying on a perfect retinotopic organization of visual cortex for
+assessing functional spatial specificity has also limitations. For example,
+receptive fields can cross the vertical meridian (especially in higher visual
+areas), such that differential contrasts of quarterfield stimulation may not
+flip between adjacent voxels (Fig. 6C). Similarly, overlapping voxel activation
+or single-voxel “false positives” (Fig. 6D) may indicate imperfections in the
+visual field leading to non-compact retinotopic representations, rather than
+losses in spatial specificity.
 
 Another contentious point concerning spatial specificity is our choice of
 moderately smoothing the data (FWHM 0.8 mm) before statistical parametric
 mapping. While smoothing is a standard preprocessing step in the majority of
 fMRI studies, high-resolution applications, such as retinotopic mapping or
 layered fMRI analyses, frequently abstain from it or use more spatially informed
-averaging methods. The application of smoothing in fMRI rests on matched-filter
-assumptions of the functional activation extent as well as smoothness
-assumptions for the residual noise, in order to apply multiple comparison
-correction using random field theory (Friston, 2007, Chap. 2; Kasper et al.,
-2014). Whether these assumptions hold for high-resolution fMRI has, to our
-knowledge, not been explored to date. For our spiral data, we chose to smooth in
-particular to increase the sensitivity of our short high-resolution runs
-(5.5 min). To assess the impact of smoothing, we repeated the statistical
-analysis on the unsmoothed data, and varied significance thresholds to assess
-spatial characteristics of the statistical t-maps (supplementary material SM 4).
-Overall, spatial smoothing increased overall CNR (higher t-values) and spatial
-extent of activation clusters that were already discernible in the unsmoothed
-data. The activation clusters of the smoothed data resemble those of unsmoothed
-data at lower thresholds, but without the single-voxel false-positives. Thus,
-averaging of thermal noise via smoothing is apparent, as well as an implicit
-cluster size correction. We could not determine whether the additional
-investment in longer readout time for a nominal 0.8 mm resolution scan compared
-to 1 mm acquisitions (achieved by cropping the spiral data for reconstruction)
-translated into more spatially specific activation, because of the noise levels
-in the unsmoothed data and the limited amount of temporal averaging in the short
-runs (supplementary material SM 4).
+averaging methods (Blazejewska et al., 2019). From a conceptual point of view,
+smoothing alters the target PSF of the imaging process in multiple ways that
+affect the effective resolution: On the one hand, a Gaussian filter, as employed
+here, broadens the PSF main lobe (PSF) reducing spatial specificity. On the
+other hand, it suppresses PSF side lobes and thus contamination by remote
+locations, which enhances spatial specificity. The opposite is true for an edge
+or high-pass filter, as implemented, for example, by multiplying the inverse of
+the T2\* decay curve onto the k-space data. Overall, resolution can be
+re-negotiated by appropriate filtering, which has to be adapted to the specific
+application, in order to provide optimal specificity.
+
+For our spiral data in particular, the decision to smooth was governed by
+another goal of filtering, namely, recovering sensitivity. Theoretically,
+sensitivity is maximized by a matched filter resembling the spatial activation
+extent, which is traditionally assumed to be a Gaussian for fMRI (Friston, 2007,
+Chap. 2; Kasper et al., 2014), but has, to our knowledge, not been determined
+for the ultra-high-resolution regime in question here. Our choice of smoothing
+with an FWHM equivalent to the voxel size (instead of 2-3 times the voxel size
+as in standard fMRI) therefore constitutes a compromise between sensitivity and
+specificity, motivated by the noise levels in our raw data, the short run
+duration (5.5 min) and by having only one run acquired per subject and spiral
+sequence. This hampered our ability to quantify whether the investment into
+longer readouts of nominal 0.8 mm resolution, compared to 1 mm, translated into
+more spatially specific activation (supplementary material SM 4). More temporal
+averaging via longer and more numerous functional runs would allow to address
+this important research question in future studies.
 
 General Applicability and Limitations of Spiral Imaging Advances
 ----------------------------------------------------------------
@@ -927,11 +1014,11 @@ al., 2019, 2010). For more flexibility, the gradient impulse response function
 (GIRF) to arbitrary input trajectories can be modelled from such data under
 linear-time invariant system assumptions (Addy et al., 2012; Campbell-Washburn
 et al., 2016; Rahmer et al., 2019; Vannesjo et al., 2014, 2013). The required
-field measurements for these calibrations may either rely on a dedicated
-NMR-probe based field cameras (Barmet et al., 2008; Vannesjo et al., 2014, 2013;
-Zanche et al., 2008) or on off-the-shelf NMR phantoms (Addy et al., 2012; Duyn
-et al., 1998; Rahmer et al., 2019), with certain trade-offs to measurement
-precision and acquisition duration (Graedel et al., 2017).
+field measurements for these calibrations may either rely on dedicated NMR-probe
+based field cameras (Barmet et al., 2008; Vannesjo et al., 2014, 2013; Zanche et
+al., 2008) or on off-the-shelf NMR phantoms (Addy et al., 2012; Duyn et al.,
+1998; Rahmer et al., 2019), with certain trade-offs to measurement precision and
+acquisition duration (Graedel et al., 2017).
 
 For the dynamic field effects, induced by the system (e.g., drifts through
 gradient heating), as well as the subject (e.g., fluctuations with the breathing
@@ -966,26 +1053,29 @@ into the gradient coil (Dietrich et al., 2016b). This actually limited the
 duration of our functional runs. While system fluctuations might thus be
 particularly pronounced in our data, the subject-induced fluctuations will be
 moderate, because all volunteers were young, healthy individuals instructed to
-lie still throughout the session. For a comprehensive assessment, instructed
-limb motion and deep breathing, a range of BMIs and body shapes would have to be
-included in the design of the study, similar to evaluations of field effects on
-structural T2\* imaging (Duerst et al., 2016). Finally, in terms of the chosen
-imaging FOV covering the visual cortex, dynamic field effects will be at an
-intermediate level, with maximum fluctuations expected in inferior regions
-closer to the chest (brainstem, cerebellum) and minimum effects near the top of
-the head (e.g., motor cortex).
+lie still throughout the session. This is reflected in the small mean framewise
+displacement (FD) encountered in all subjects (mean FD and standard deviation
+over subjects $$0.09 \pm 0.04\ \text{mm}$$, see SM 6 for motion and FD traces).
+For a comprehensive assessment, instructed limb motion and deep breathing, a
+range of BMIs and body shapes would have to be included in the design of the
+study, similar to evaluations of field effects on structural T2\* imaging
+(Duerst et al., 2016). Finally, in terms of the chosen imaging FOV covering the
+visual cortex, dynamic field effects will be at an intermediate level, with
+maximum fluctuations expected in inferior regions closer to the chest
+(brainstem, cerebellum) and minimum effects near the top of the head (e.g.,
+motor cortex).
 
 If dynamic field effects constitute a significant artifact and noise source for
 spiral fMRI time series, in lieu of field monitoring, alternative correction
 methods comprise dynamic off-resonance updates or higher-order field navigators
 (Pfeuffer et al., 2002; Splitthoff and Zaitsev, 2009), as well as gradient
 response models that incorporate time-courses of gradient coil temperature
-(Dietrich et al., 2016b; Stich et al., 2019) or current measurements (Nussbaum
+(Dietrich et al., 2016b; Stich et al., 2020) or current measurements (Nussbaum
 et al., 2019; Rahmer et al., 2021).
 
 ### Static B0 Inhomogeneity
 
-To characterize static B0 inhomogeneity, we acquired a Cartesian Multi-echo
+To characterize static B0 inhomogeneity, we acquired a Cartesian multi-echo
 gradient echo scan with rather high resolution (1 mm). Including this
 information in the signal model has previously been crucial to maintain spatial
 specificity in spiral imaging at 7T (Engel et al., 2018, Fig. 6; Kasper et al.,
@@ -994,9 +1084,10 @@ specificity in spiral imaging at 7T (Engel et al., 2018, Fig. 6; Kasper et al.,
 The B0 maps obtained in this work exhibited considerable inhomogeneity, even
 after 3rd order shimming of the targeted 4 cm oblique-transverse slab of the
 brain including the visual cortex. For the B0 map of a single subject
-(SPIFI_0007) provided in the supplementary data, 20 % of brain voxels were more
-than 50 Hz off-resonant, which – if uncorrected for – would incur blurring with
-FWHMs of several voxels.
+(SPIFI_0007) provided in the *accompanying Data In Brief article (see "Code and
+data availability" section)*, 20 % of brain voxels were more than 50 Hz
+off-resonant, which – if uncorrected for – would incur blurring with FWHMs of
+several voxels.
 
 Thus, some form of static B0 inhomogeneity correction seems indispensable for
 providing high spiral image quality, and to correct this at the reconstruction
@@ -1008,7 +1099,7 @@ canals, as well as in more inferior slices, particularly in the brainstem.
 Consequently, such regions might exhibit less sensitive and spatially less
 defined activation patterns than the ones in visual cortex evaluated here.
 
-We did not assess whether our particular choice of B0 map resolution or
+We did not evaluate whether our particular choice of B0 map resolution or
 processing contributed to the accomplished image quality or its limitations.
 Alternative methods to determine B0 may provide similar results at reduced scan
 time, for example, slightly varying TEs during a spiral image time series to
@@ -1020,15 +1111,15 @@ the alignment to the spiral acquisition geometry in case of subject motion.
 
 ### Iterative Parallel Imaging Reconstruction
 
-To enable single-shot imaging for maximum acquisition efficiency, we relied on
-the coil sensitivity profiles for spatial encoding, i.e., parallel imaging.
+To enable single-shot imaging for maximum acquisition efficiency, we also relied
+on the coil sensitivity profiles for spatial encoding, i.e., parallel imaging.
 Spiral trajectories are particularly suited for this form of acceleration,
 because they possess favorable behavior in terms of spatial noise amplification
 by the coil geometry factor, allowing for higher k-space undersampling (Larkman,
 2007; Lee et al., 2021).
 
 For our data with in-plane acceleration factors of 4 using a 32-channel receive
-array at 7 T this was confirmed through the the SD maps of the time series data,
+array at 7 T this was confirmed through the SD maps of the time series data,
 which did not exhibit spatially structured residual aliasing or noise patterns.
 This also points to the robustness of the reconstruction to motion-induced
 mismatch of measured and actual coil sensitivities.
@@ -1137,19 +1228,24 @@ of Gyrotools LLC.
 Figures
 =======
 
-[Figure 1](Figures/Figure1.png)
+[Figure 1](Figures/Figure1.jpg)
 -------------------------------
 
-Utilized 2D single-shot spiral acquisitions (R=4 undersampling): High-resolution
-single-shot spiral-out (nominal resolution 0.8 mm, black) and spiral in/out
-trajectory (1.5 mm resolution, blue). Depicted are the gradient waveforms
-(Gx,Gy,Gz) as well as RF excitation (TX) and ADC sampling intervals (AQ) for
-both the 1H head coil and the 19F field probes used to monitor the trajectories
-and other concurrent encoding fields. Field probe excitation and acquisition
-start a few milliseconds before the spiral readout gradient waveforms.
+![](Figures/Figure1.jpg)
 
-[Figure 2](Figures/Figure2.png)
+Utilized 2D single-shot spiral acquisitions (R = 4 undersampling):
+High-resolution single-shot spiral-out (nominal resolution 0.8 mm, black) and
+spiral in/out trajectory (1.5 mm resolution, blue). Depicted are the gradient
+waveforms (Gx,Gy,Gz) as well as RF excitation (TX) and ADC sampling intervals
+(AQ) for both the 1H head coil and the 19F field probes used to monitor the
+trajectories and other concurrent encoding fields. Field probe excitation and
+acquisition start a few milliseconds before the spiral readout gradient
+waveforms.
+
+[Figure 2](Figures/Figure2.jpg)
 -------------------------------
+
+![](Figures/Figure2.jpg)
 
 Overview of image quality for high-resolution (0.8 mm) single-shot spiral-out
 acquisition. (A) 8 oblique-transverse slices (of 36) depicting the time-series
@@ -1158,8 +1254,10 @@ Single-volume magnitude images for slices corresponding to lower row of (A). (C)
 Mean phase image over one run, without any post-processing, for slices
 corresponding to lower row of (A).
 
-[Figure 3](Figures/Figure3.png)
+[Figure 3](Figures/Figure3.jpg)
 -------------------------------
+
+![](Figures/Figure3.jpg)
 
 Characterization of image time series fluctuations over 1 spiral-out run (95
 volumes, discarding first five). (A) Signal-to-Noise Fluctuation Ratio (SFNR)
@@ -1171,8 +1269,10 @@ Inverse of (A), highlighting regions of high fluctuations relative to their
 respective mean. Vascularized/CSF regions appear prominently, as well as the
 internal capsule, due to its reduced average signal level.
 
-[Figure 4](Figures/Figure4.png)
+[Figure 4](Figures/Figure4.jpg)
 -------------------------------
+
+![](Figures/Figure4.jpg)
 
 Image quality and geometric accuracy of spiral images, reconstructed with the
 expanded signal model. (A) Anatomical Reference: Mean multi-echo (ME) spin-warp
@@ -1188,8 +1288,10 @@ geometric incongruence by through-plane dephasing (white) or incomplete B0
 mapping and correction (yellow) in the spiral-out, which are reduced in the
 out-part and absent in the in-part of the spiral-in/out sequence.
 
-[Figure 5](Figures/Figure5.png) 
---------------------------------
+[Figure 5](Figures/Figure5.jpg)
+-------------------------------
+
+![](Figures/Figure5.jpg)
 
 Quantification of spatial specificity in spiral images via contour distance
 mapping.  
@@ -1200,21 +1302,30 @@ distance to corresponding contour in segmented spiral image. Contour
 discrepancies are prevalent at tissue interfaces with high susceptibility
 gradients (left inset, white arrows), as well as areas with pronounced T2\*
 contrast differences (right inset, yellow arrows). (B) Mean contour distance per
-slices for different subjects (averaged over all contours within each slice).
-Average over subjects and slices: $$1.04 \pm 0.26$$ voxels ($$0.83\  \pm 0.21$$
-mm). Prominent outliers (subject 5,6) arose in inferior slices with considerable
-signal loss due to through-plane dephasing (sphenoid sinus, ear canals). (C)
-Distribution of contour distances per subject, $$41 \pm 7\ \%$$ of gray matter
-contour voxels in all subjects were strictly overlapping, with $$76 \pm 7\ \%$$
-at most 1 voxel apart and only $$11 \pm 5\ \%$$ exceeding a distance of 2 voxels
-(1.6 mm).
+slice for different subjects (averaged over all contours within each slice for
+the whole imaging volume). Average over subjects and slices: $$1.04 \pm 0.26$$
+voxels ($$0.83\  \pm 0.21$$ mm). Prominent outliers (subjects S5, S6) arose in
+inferior slices with considerable signal loss due to through-plane dephasing
+(sphenoid sinus, ear canals). (C) Mean contour distance per slice for different
+subjects, as in (C), but restricted to contours within a mask of early visual
+cortex. Average over subjects and slices: $$0.96 \pm 0.14$$ voxels ($$0.77 \pm
+0.11$$ mm). Fewer outliers exist, mostly due to contrast differences and close
+to the sagittal sinus. (D) Distribution of contour distances per subject within
+the whole imaging volume. $$41 \pm 7\ \%$$ of gray matter contour voxels in all
+subjects were strictly overlapping, with $$76 \pm 7\ \%$$ at most 1 voxel apart
+and only $$11 \pm 5\ \%$$ exceeding a distance of 2 voxels (1.6 mm). (E)
+Distribution of contour distances per subject, as in (D), but restricted to a
+mask of early visual cortex. Near-identical distribution to (D), but fewer
+larger outliers ($$\geq 3$$ voxels) in some subjects (S5, S6).
 
-[Figure 6](Figures/Figure6.png) 
---------------------------------
+[Figure 6](Figures/Figure6.jpg)
+-------------------------------
+
+![](Figures/Figure6.jpg)
 
 Visual Activation Maps of high-resolution (0.8 mm) spiral-out fMRI for a single
 subject (S2). Representative stimuli of both conditions (ULLR and URLL) are
-displayed at the top. (A) Overlay of differential t-contrast maps (p\<0.001
+displayed at the top. (A) Overlay of differential t-contrast maps (p \< 0.001
 uncorrected) on transverse slices of mean spiral image (hot colormap: URLL-ULLR,
 cool colormap: ULLR-URLL). (B) Same contrast maps as in (A), overlaid on mean ME
 image as anatomical reference. (C) Zoomed-in sections of differential t-contrast
@@ -1223,44 +1334,60 @@ maps in different orientations: transverse (top), coronal (middle) and sagittal
 conditions (blue: ULLR, yellow: URLL), showing more widespread activation and
 high spatial specificity, i.e., little spatial overlap (green).
 
-[Figure 7](Figures/Figure7.png)
+[Figure 7](Figures/Figure7.jpg)
 -------------------------------
+
+![](Figures/Figure7.jpg)
 
 Mean spiral images and activation maps over subjects (S2-S7) for high-resolution
 spiral-out fMRI. For each subject, the following 4 sections are displayed, with
 the mean ME image as anatomical underlay: transverse, coronal and sagittal slice
 (for left (L) and right (R) hemisphere), each chosen for the maximum number of
-activated voxels (over both differential statistical t-contrasts, p\<0.001
+activated voxels (over both differential statistical t-contrasts, p \< 0.001
 uncorrected). To assess raw spiral data quality, the corresponding mean
 functional image is displayed side-by-side to the anatomical transverse slice as
 an alternative underlay.
 
-[Figure 8](Figures/Figure8.png) 
---------------------------------
+[Figure 8](Figures/Figure8.jpg)
+-------------------------------
+
+![](Figures/Figure8.jpg)
 
 Spatial specificity of functional activation for high-resolution spiral-out
-fMRI. Percentage of significant voxels over both differential t-contrasts (+/-
-ULLR-URLL, p\<0.05 cluster-FWE corrected, cluster-forming threshold: p\< 0.001)
-located in relevant tissue types. Tissue types were identified by unified
-segmentation of the structural (mean multi-echo) image, with 60 % exceedance
-threshold for individual tissue classes (GM: gray matter, WM: white matter, CSF:
-cerebrospinal fluid) and 30 % each for interfaces (Pial Surface (GM/CSF), WM/GM
-Surface). On average, the majority (75 %) of activation was contained in gray
-matter or adjacent surfaces, with 6 % and 13 % residing in majority white matter
-and CSF voxels, respectively.
+fMRI. Analyses are based on significant voxels over both differential
+t-contrasts (+/- ULLR-URLL, p \< 0.05 cluster-FWE corrected, cluster-forming
+threshold: p \< 0.001). (A) Comparison of activation extent in smoothed (FWHM
+0.8 mm) and unsmoothed data in a single subject (S2). Masks of all significant
+voxels are overlaid for both t-contrasts based on smoothed data (blue/red mask)
+as well as unsmoothed data (cyan/yellow masks). (B) Percentage of significant
+voxels located in relevant tissue types, analyzed for smoothed (top row) and
+unsmoothed (bottom row) data, as well as within whole imaging volume (left) and
+restricted to a mask of early visual cortex (right) . Tissue types were
+identified by unified segmentation of the structural (mean multi-echo) image,
+with 60 % exceedance threshold for individual tissue classes (GM: gray matter,
+WM: white matter, CSF: cerebrospinal fluid) and 30 % each for interfaces (Pial
+surface (GM/CSF), WM/GM surface), with the remaining voxels categorized as
+ambiguous. On average, irrespective of smoothing and ROI, the majority (74-78 %)
+of activation was contained in gray matter or adjacent surfaces, with 6 % and
+13-17 % residing in majority white matter and CSF voxels, respectively. Gray
+matter containment was highest when smoothing the data and restricting the
+analysis to the visual cortex, and lowest in the unsmoothed data considered
+within the whole imaging volume.
 
-[Figure 9](Figures/Figure9.png) 
---------------------------------
+[Figure 9](Figures/Figure9.jpg)
+-------------------------------
+
+![](Figures/Figure9.jpg)
 
 Visual Activation Maps of spiral in/out (1.5mm) fMRI run for a single subject
 (S2, as in Fig. 6). (A-C) Displayed are the differential t-contrast maps
-(p\<0.001 uncorrected) on transverse slices of the respective mean spiral images
-(hot colormap: URLL-ULLR, cool colormap: ULLR-URLL), based on: (A) Spiral Images
-reconstructed from in-part of the trajectory. (B) Spiral images reconstructed
-from the out-part of the trajectory. (C) Signal-weighted combination (eq. (6),
-(Glover and Thomason, 2004)) of images in (A) and (B). (D) Zoomed view of
-activation maps in leftmost slice of (A)-(C), overlaid on anatomical reference
-image (mean ME).
+(p \< 0.001 uncorrected) on transverse slices of the respective mean spiral
+images (hot colormap: URLL-ULLR, cool colormap: ULLR-URLL), based on: (A) Spiral
+Images reconstructed from in-part of the trajectory. (B) Spiral images
+reconstructed from the out-part of the trajectory. (C) Signal-weighted
+combination (eq. (6), (Glover and Thomason, 2004)) of images in (A) and (B). (D)
+Zoomed view of activation maps in leftmost slice of (A)-(C), overlaid on
+anatomical reference image (mean ME).
 
 Tables
 ======
@@ -1272,14 +1399,14 @@ Quantification of temporal stability and functional sensitivity of all spiral
 fMRI sequences. For the signal-to-fluctuation-noise ratio (SFNR, eq. (5)), the
 table contains mean +/- SD in a gray matter ROI over the whole imaging volume.
 For the t-contrast SPMs, peak t-value and number of significant voxels over both
-differential contrasts (+/- ULLR-URLL) are reported (p\<0.05 FWE-corrected for
+differential contrasts (+/- ULLR-URLL) are reported (p \< 0.05 FWE-corrected for
 multiple comparisons at the cluster level with a cluster-forming threshold of
-p\<0.001). The last column shows relative increases to the previous sequence,
+p \< 0.001). The last column shows relative increases to the previous sequence,
 i.e., the one reported in the sub-table directly above. Since resolutions differ
 between spiral-out (0.8 mm) and spiral in/out (1.5 mm), we compare activated
 volume instead of voxel count.
 
-|                                | **Subjects** |             |       |       |       |       |         |      | **Gain vs**       |                       |
+|                                | **Subjects** | **Gain vs** |       |       |       |       |         |      |                   |                       |
 |--------------------------------|--------------|-------------|-------|-------|-------|-------|---------|------|-------------------|-----------------------|
 | *Measure*                      | *S2*         | *S3*        | *S4*  | *S5*  | *S6*  | *S7*  | *Mean*  | *SD* | *previous spiral* | *high-res spiral out* |
 | **high-resolution spiral out** |              |             |       |       |       |       |         |      |                   |                       |
@@ -1310,12 +1437,15 @@ volume instead of voxel count.
 Supplementary Material
 ======================
 
-Figure SM 1
------------
+[Figure SM 1](Figures/SupplementaryMaterial1.mp4)
+-------------------------------------------------------
+
+![](Figures/SupplementaryMaterial1.mp4)
+
 
 Figure collection of high-resolution (0.8 mm) spiral fMRI data. For every
 subject, 8 figures are shown, each depicting all 36 slices of the acquisition
-(top left = most inferior slice, bottom left = most superior slice). All
+(top left = most inferior slice, bottom right = most superior slice). All
 underlay images are based on the functional time series after realignment, and
 the overlaid t-map was computed from the preprocessed data which included
 smoothing as well (FWHM 0.8 mm). Order of the figures (1) First volume of spiral
@@ -1326,16 +1456,18 @@ Bias-field corrected version of (2); (4) Signal-to-Noise Fluctuation Ratio
 Variation (CoV) image of the same run, inverse of (4) (display range 0-0.2); (7)
 Magnitude-mean spiral fMRI image, overlaid with edges of anatomical reference
 (mean multi-echo spin warp); (8) Overlay of differential t-contrast maps
-(p\<0.001 uncorrected) on transverse slices of mean spiral image (hot colormap:
-URLL-ULLR, cool colormap: ULLR-URLL, display range t=3.2-8).
+(p \< 0.001 uncorrected) on transverse slices of mean spiral image (hot
+colormap: URLL-ULLR, cool colormap: ULLR-URLL, display range t=3.2-8).
 
-Figure SM 2
------------
+[Figure SM 2](Figures/SupplementaryMaterial2.mp4)
+-------------------------------------------------------
+
+![](Figures/SupplementaryMaterial2.mp4)
 
 Figure collection of spiral in/out fMRI data (1.5 mm resolution). For every
 subject, 24=3x8 figures are shown, i.e., 8 per set of spiral-in, spiral-out, and
 combined in/out images. Each figure depicts all 36 slices of the acquisition
-(top left = most inferior slice, bottom left = most superior slice). All
+(top left = most inferior slice, bottom right = most superior slice). All
 underlay images are based on the functional time series after realignment, and
 the overlaid t-map was computed from the preprocessed data which included
 smoothing as well (FWHM 0.8 mm). Order of the figures: (1) First volume of
@@ -1346,11 +1478,54 @@ Bias-field corrected version of (2); (4) Signal-to-Noise Fluctuation Ratio
 Variation (CoV) image of the same run, inverse of (4) (display range 0-0.2); (7)
 Magnitude-mean spiral fMRI image, overlaid with edges of anatomical reference
 (mean multi-echo spin warp); (8) Overlay of differential t-contrast maps
-(p\<0.001 uncorrected) on transverse slices of mean spiral image (hot colormap:
-URLL-ULLR, cool colormap: ULLR-URLL, display range t=3.2-8).
+(p \< 0.001 uncorrected) on transverse slices of mean spiral image (hot
+colormap: URLL-ULLR, cool colormap: ULLR-URLL, display range t=3.2-8).
 
-Table SM 3
-----------
+[Figure SM 3](Figures/SupplementaryMaterial3.png)
+-------------------------------------------------------
+
+![](Figures/SupplementaryMaterial3.png)
+
+Mean spiral images and activation maps over subjects (S2-S7) for high-resolution
+spiral-out fMRI, based on unsmoothed data (See Fig. 7 for same visualization
+using smoothed data). For each subject, the following 4 sections are displayed,
+with the mean ME image as anatomical underlay: transverse, coronal and sagittal
+slice (for left (L) and right (R) hemisphere), each chosen for the maximum
+number of activated voxels (over both differential statistical t-contrasts,
+p \< 0.001 uncorrected). To assess raw spiral data quality, the corresponding
+mean functional image is displayed side-by-side to the anatomical transverse
+slice as an alternative underlay.
+
+[Figure SM 4](Figures/SupplementaryMaterial4.mp4)
+-------------------------------------------------------
+
+![](Figures/SupplementaryMaterial4.mp4)
+
+Impact of readout duration and spatial smoothing on activation maps in
+high-resolution spiral-out fMRI data. The animated slideshow toggles between
+t-maps of the differential contrast (+/- ULLR-URLL), overlaid on the structural
+image (mean ME) in a single subject (S2): (1) T-map based on smoothed data (FWHM
+0.8 mm), thresholded at t \> 3.2, (p \< 0.001 uncorrected), as presented
+throughout the other figures, (2) T-map based on unsmoothed data, same
+thresholding (t \> 3.2), and (3) T-map based on unsmoothed data, with more
+liberal thresholding (t \> 2.4, p \< 0.01 uncorrected). (4-6) as (1-3), but with
+spiral-out fMRI k-space data retrospectively cropped to 1 mm resolution before
+image reconstruction.
+
+(1-3) illustrate that moderate spatial smoothing elevates overall CNR (higher
+t-values) and increases the spatial extent of existing activation clusters in
+the unsmoothed data. The activation clusters of the smoothed data resemble those
+in the unsmoothed data at lower thresholds, but without the single-voxel
+false-positives. This suggests that the averaging of thermal noise via smoothing
+delivers an implicit cluster size correction.
+
+(4-6) illustrate that cropping the spiral readout to 1 mm resolution yields
+similar activation maps to using the full 0.8 mm readout, both before and after
+smoothing. This indicates that the assessment of spatial specificity is
+SNR-limited for the short functional runs (5.5 min) investigated here.
+
+Table SM 5
+---------------
 
 Comparison of acquisition efficiency in published 2D spiral fMRI studies.
 Nominal acquisition efficiency, computed as resolved voxels per unit time (i.e.,
@@ -1376,30 +1551,20 @@ efficiency.
 | (Singh et al., 2018)                                                  | 1.2               | 1.2        | 192           | 14             | 160              | 12          | 3                        | 1.0   | 3     | 102               |
 | *This study*                                                          | 0.8               | 0.9        | 230           | 32             | 288              | 36          | 1                        | 3.3   | 3.3   | 902               |
 
-Figure SM 4
------------
+[Figure SM 6](Figures/SupplementaryMaterial6.png)
+-------------------------------------------------------
 
-Impact of readout duration and spatial smoothing on activation maps in
-high-resolution spiral-out fMRI data. The animated slideshow toggles between
-t-maps of the differential contrast (+/- ULLR-URLL), overlaid on the structural
-image (mean ME) in a single subject (S2): (1) T-map based on smoothed data (FWHM
-0.8 mm), thresholded at t\>3, (p\<0.001 uncorrected), as presented throughout
-the other figures, (2) T-map based on unsmoothed data, same thresholding (t\>3),
-and (3) T-map based on unsmoothed data, with more liberal thresholding (t\>2,
-p\<0.05 uncorrected). (4-6) as (1-3), but with spiral-out fMRI k-space data
-retrospectively cropped to 1 mm resolution before image reconstruction.
+![](Figures/SupplementaryMaterial6.png)
 
-(1-3) illustrate that moderate spatial smoothing elevates overall CNR (higher
-t-values) and increases the spatial extent of existing activation clusters in
-the unsmoothed data. The activation clusters of the smoothed data resemble those
-in the unsmoothed data at lower thresholds, but without the single-voxel
-false-positives. This suggests that the averaging of thermal noise via smoothing
-delivers an implicit cluster size correction.
-
-(4-6) illustrate that cropping the spiral readout to 1 mm resolution yields
-similar activation maps to using the full 0.8 mm readout, both before and after
-smoothing. This indicates that the assessment of spatial specificity is
-SNR-limited for the short functional runs investigated here.
+Motion parameters for all subjects during high-resolution (0.8 mm) spiral-out
+fMRI runs. Displayed are (A) the 3 translational and 3 rotational realignment
+parameter traces over volumes obtained by rigid-body registration, as well as
+(B) corresponding framewise displacement (FD) curves (Power et al., 2012). Mean
+FD was well below 0.2 mm for every subject (max. 0.15 mm, mean FD and standard
+deviation over subjects 0.09±0.04 mm), which is often considered a very rigorous
+criterion for censoring of motion-contaminated data (Power et al., 2015).
+Individual FDs of larger than 0.5 mm occurred in only 3 volumes of 2 subjects
+(red dashed line threshold).
 
 References
 ==========
@@ -1412,6 +1577,10 @@ Ahn, C.B., Kim, J.H., Cho, Z.H., 1986. High-Speed Spiral-Scan Echo Planar NMR
 Imaging-I. IEEE Trans. Med. Imaging 5, 2–7.
 https://doi.org/10.1109/TMI.1986.4307732
 
+Amunts, K., Malikovic, A., Mohlberg, H., Schormann, T., Zilles, K., 2000.
+Brodmann’s Areas 17 and 18 Brought into Stereotaxic Space—Where and How
+Variable? NeuroImage 11, 66–84. https://doi.org/10.1006/nimg.1999.0516
+
 Ashburner, J., Friston, K.J., 2005. Unified segmentation. NeuroImage 26,
 839–851. https://doi.org/10.1016/j.neuroimage.2005.02.018
 
@@ -1420,12 +1589,13 @@ K., Francis, S.T., Bowtell, R., 2014. Functional quantitative susceptibility
 mapping (fQSM). NeuroImage 100, 112–124.
 https://doi.org/10.1016/j.neuroimage.2014.06.011
 
-Barmet, C., De Zanche, N., Pruessmann, K.P., 2008. Spatiotemporal magnetic field
-monitoring for MR. Magn. Reson. Med. 60, 187―197.
-
-Barmet, C., Tsao, J., Pruessmann, K.P., 2005. Sensitivity encoding and BO
+Barmet, C., Tsao, J., Pruessmann, K.P., 2005. Sensitivity encoding and B0
 inhomogeneity–A simultaneous reconstruction approach, in: Proceedings of the
-ISMRM. p. 682.
+13th Annual Meeting of ISMRM. p. 682.
+
+Barmet, C., Zanche, N.D., Pruessmann, K.P., 2008. Spatiotemporal magnetic field
+monitoring for MR. Magn. Reson. Med. 60, 187–197.
+https://doi.org/10.1002/mrm.21603
 
 Barth, M., Metzler, A., Klarhöfer, M., Röll, S., Moser, E., Leibfritz, D., 1999.
 Functional MRI of the human motor cortex using single-shot, multiple
@@ -1433,7 +1603,8 @@ gradient-echo spiral imaging. Magn. Reson. Imaging 17, 1239–1243.
 https://doi.org/10.1016/S0730-725X(99)00087-9
 
 Beatty, P.J., Nishimura, D.G., Pauly, J.M., 2005. Rapid gridding reconstruction
-with a minimal oversampling ratio. IEEE Trans. Med. Imaging 24, 799―808.
+with a minimal oversampling ratio. IEEE Trans. Med. Imaging 24, 799–808.
+https://doi.org/10.1109/TMI.2005.848376
 
 Bernstein, M.A., King, K.F., Zhou, X.J. (Eds.), 2004. Chapter 17 - Advanced
 Pulse Sequence Techniques, in: Handbook of MRI Pulse Sequences. Academic Press,
@@ -1451,13 +1622,18 @@ Bianciardi, M., Gelderen, P. van, Duyn, J.H., 2014. Investigation of BOLD fMRI
 resonance frequency shifts and quantitative susceptibility changes at 7 T. Hum.
 Brain Mapp. 35, 2191–2205. https://doi.org/10.1002/hbm.22320
 
+Blazejewska, A.I., Fischl, B., Wald, L.L., Polimeni, J.R., 2019. Intracortical
+smoothing of small-voxel fMRI data can provide increased detection power without
+spatial resolution losses compared to conventional large-voxel fMRI data.
+NeuroImage 189, 601–614. https://doi.org/10.1016/j.neuroimage.2019.01.054
+
 Block, K.T., Frahm, J., 2005. Spiral imaging: A critical appraisal. J. Magn.
 Reson. Imaging 21, 657–668. https://doi.org/10.1002/jmri.20320
 
 Bollmann, S., Kasper, L., Pruessmann, K., Barth, M., Stephan, K.E., 2018.
 Interactive and flexible quality control in fMRI sequence evaluation: the uniQC
-toolbox, in: Proc. Intl. Soc. Mag. Reson. Med. 26. Presented at the ISMRM,
-Paris, France, p. 2842.
+toolbox, in: Proceedings of the 26th Annual Meeting of ISMRM. Presented at the
+ISMRM, Paris, France, p. 2842.
 
 Bollmann, S., Kasper, L., Vannesjo, S.J., Diaconescu, A.O., Dietrich, B.E.,
 Gross, S., Stephan, K.E., Pruessmann, K.P., 2017. Analysis and correction of
@@ -1488,8 +1664,9 @@ gradient system impulse response function. Magn. Reson. Med. 75, 2278–2285.
 https://doi.org/10.1002/mrm.25788
 
 Cavusoglu, M., Kasper, L., Pruessmann, K.P., 2017. Single-Shot Spiral Arterial
-Spin Labeling MRI Enabled by Concurrent Field Monitoring, in: Proc. Intl. Soc.
-Mag. Reson. Med. 25. Presented at the ISMRM, Honolulu, Hawaii, USA, p. 1042.
+Spin Labeling MRI Enabled by Concurrent Field Monitoring, in: Proceedings of the
+25th Annual Meeting of ISMRM. Presented at the ISMRM, Honolulu, Hawaii, USA, p.
+1042.
 
 Chang, Y.V., Vidorreta, M., Wang, Z., Detre, J.A., 2017. 3D-accelerated,
 stack-of-spirals acquisitions and reconstruction of arterial spin labeling MRI.
@@ -1502,6 +1679,20 @@ Revealed by High-Field Functional Magnetic Resonance Imaging. Neuron 32,
 Cohen, M.S., Schmitt, F., 2012. Echo planar imaging before and after fMRI: A
 personal history. NeuroImage, 20 YEARS OF fMRI 62, 652–659.
 https://doi.org/10.1016/j.neuroimage.2012.01.038
+
+D’Ardenne, K., Mcclure, S.M., Nystrom, L.E., Cohen, J.D., 2008. BOLD Responses
+Reflecting Dopaminergic Signals in the Human Ventral Tegmental Area. Science
+319, 1264―1267. http://dx.doi.org/10.1126/science.1150605
+
+de Hollander, G., Keuken, M.C., van der Zwaag, W., Forstmann, B.U., Trampel, R.,
+2017. Comparing functional MRI protocols for small, iron-rich basal ganglia
+nuclei such as the subthalamic nucleus at 7 T and 3 T. Hum. Brain Mapp. 38,
+3226–3248. https://doi.org/10.1002/hbm.23586
+
+De Martino, F., Moerel, M., van de Moortele, P.-F., Ugurbil, K., Goebel, R.,
+Yacoub, E., Formisano, E., 2013. Spatial organization of frequency preference
+and selectivity in the human inferior colliculus. Nat. Commun. 4, 1386.
+https://doi.org/10.1038/ncomms2379
 
 Deng, W., Zahneisen, B., Stenger, V.A., 2016. Rotated stack-of-spirals partial
 acquisition for rapid volumetric parallel MRI. Magn. Reson. Med. 76, 127–135.
@@ -1522,8 +1713,8 @@ https://doi.org/10.1002/mrm.25770
 
 Dietrich, B.E., Reber, J., Brunner, D.O., Wilm, B.J., Pruessmann, K.P., 2016b.
 Analysis and Prediction of Gradient Response Functions under Thermal Load, in:
-Proc. Intl. Soc. Mag. Reson. Med. 24. Presented at the ISMRM, Singapore,
-Singapore, p. 3551.
+Proceedings of the 24th Annual Meeting of ISMRM. Presented at the ISMRM,
+Singapore, Singapore, p. 3551.
 
 Duerst, Y., Wilm, B.J., Wyss, M., Dietrich, B.E., Gross, S., Schmid, T.,
 Brunner, D.O., Pruessmann, K.P., 2016. Utility of real-time field control in
@@ -1533,6 +1724,20 @@ https://doi.org/10.1002/mrm.25838
 Duyn, J.H., Yang, Y., Frank, J.A., van der Veen, J.W., 1998. Simple Correction
 Method fork-Space Trajectory Deviations in MRI. J. Magn. Reson. 132, 150–153.
 https://doi.org/10.1006/jmre.1998.1396
+
+Eickhoff, S.B., Heim, S., Zilles, K., Amunts, K., 2006. Testing anatomically
+specified hypotheses in functional imaging using cytoarchitectonic maps.
+NeuroImage 32, 570–582. https://doi.org/10.1016/j.neuroimage.2006.04.204
+
+Eickhoff, S.B., Paus, T., Caspers, S., Grosbras, M.-H., Evans, A.C., Zilles, K.,
+Amunts, K., 2007. Assignment of functional activations to probabilistic
+cytoarchitectonic areas revisited. NeuroImage 36, 511–521.
+https://doi.org/10.1016/j.neuroimage.2007.03.060
+
+Eickhoff, S.B., Stephan, K.E., Mohlberg, H., Grefkes, C., Fink, G.R., Amunts,
+K., Zilles, K., 2005. A new SPM toolbox for combining probabilistic
+cytoarchitectonic maps and functional imaging data. NeuroImage 25, 1325–1335.
+https://doi.org/10.1016/j.neuroimage.2004.12.034
 
 Engel, M., Kasper, L., Barmet, C., Schmid, T., Vionnet, L., Wilm, B.,
 Pruessmann, K.P., 2018. Single-shot spiral imaging at 7 T. Magn. Reson. Med. 80,
@@ -1571,16 +1776,20 @@ https://doi.org/10.1016/j.neuroimage.2016.06.048
 Frässle, S., Aponte, E.A., Bollmann, S., Brodersen, K.H., Do, C.T., Harrison,
 O.K., Harrison, S.J., Heinzle, J., Iglesias, S., Kasper, L., Lomakina, E.I.,
 Mathys, C., Müller-Schrader, M., Pereira, I., Petzschner, F.H., Raman, S.,
-Schöbi, D., Toussaint, B., Weber, L.A., Yao, Y., Stephan, K.E., 2021. TAPAS: an
-open-source software package for Translational Neuromodeling and Computational
-Psychiatry. bioRxiv 2021.03.12.435091. https://doi.org/10.1101/2021.03.12.435091
+Schöbi, D., Toussaint, B., Weber, L.A., Yao, Y., Stephan, K.E., 2021. TAPAS: An
+Open-Source Software Package for Translational Neuromodeling and Computational
+Psychiatry. Front. Psychiatry 12. https://doi.org/10.3389/fpsyt.2021.680811
 
 Friston, K.J., 2007. Chapter 2 - Statistical parametric mapping, in: Friston,
 K.J., Ashburner, J., Kiebel, S., Nichols, T., Penny, W. (Eds.), Statistical
 Parametric Mapping. Academic Press, London, pp. 10–31.
 
-Glover, G.H., 2012. Spiral imaging in fMRI. NeuroImage, 20 YEARS OF fMRI20 YEARS
-OF fMRI 62, 706–712. https://doi.org/10.1016/j.neuroimage.2011.10.039
+Friston, K.J., Williams, S., Howard, R., Frackowiak, R.S.J., Turner, R., 1996.
+Movement-Related effects in fMRI time-series. Magn. Reson. Med. 35, 346–355.
+https://doi.org/10.1002/mrm.1910350312
+
+Glover, G.H., 2012. Spiral imaging in fMRI. NeuroImage, 20 Years of fMRI 62,
+706–712. https://doi.org/10.1016/j.neuroimage.2011.10.039
 
 Glover, G.H., 1999. Simple analytic spiral K-space algorithm. Magn. Reson. Med.
 42, 412–415.
@@ -1590,9 +1799,10 @@ Glover, G.H., Law, C.S., 2001. Spiral-in/out BOLD fMRI for increased SNR and
 reduced susceptibility artifacts. Magn. Reson. Med. 46, 515–522.
 https://doi.org/10.1002/mrm.1222
 
-Glover, G.H., Li, T.Q., Ress, D., 2000. Image-based method for retrospective
+Glover, G.H., Li, T.-Q., Ress, D., 2000. Image-based method for retrospective
 correction of physiological motion effects in fMRI: RETROICOR. Magn. Reson. Med.
-44, 162–7. https://doi.org/10893535
+44, 162–167.
+https://doi.org/10.1002/1522-2594(200007)44:1\<162::AID-MRM23\>3.0.CO;2-E
 
 Glover, G.H., Thomason, M.E., 2004. Improved combination of spiral-in/out images
 for BOLD fMRI. Magn. Reson. Med. 51, 863–868. https://doi.org/10.1002/mrm.20016
@@ -1676,6 +1886,12 @@ Rapid anatomical brain imaging using spiral acquisition and an expanded signal
 model. NeuroImage, Neuroimaging with Ultra-high Field MRI: Present and Future
 168, 88–100. https://doi.org/10.1016/j.neuroimage.2017.07.062
 
+Kasper, L., Engel, M., Heinzle, J., Mueller-Schrader, M., Graedel, N.N., Reber,
+J., Schmid, T., Barmet, C., Wilm, B.J., Stephan, K.E., Pruessmann, K.P., 2021.
+Data Collection for the Article “Advances in Spiral fMRI - A High-resolution
+Study with Single-shot Acquisition”: Single Subject Dataset.
+https://doi.org/10.3929/ethz-b-000487412
+
 Kasper, L., Haeberlin, M., Dietrich, B.E., Gross, S., Barmet, C., Wilm, B.J.,
 Vannesjo, S.J., Brunner, D.O., Ruff, C.C., Stephan, K.E., Pruessmann, K.P.,
 2014. Matched-filter acquisition for BOLD fMRI. NeuroImage 100, 145–160.
@@ -1695,11 +1911,12 @@ Potthast, A., Kreischer, L., Eberler, M., Hebrank, F., Thein, H., Heberlein, K.,
 Hoecht, P., Witzel, T., Tisdall, D., Xu, J., Yacoub, E., Adriany, G., Auerbach,
 E., Moeller, S., Feinberg, D., Lehne, D., Wald, L.L., Rosen, B., Ugurbil, K.,
 Essen, D. van, Wedeen, V., Schmitt, F., 2012. Concept and realization of high
-strength gradients for the Human Connectome Project, in: Proc. Intl. Soc. Mag.
-Reson. Med. 20. Presented at the ISMRM, Melbourne, Australia, p. 696.
+strength gradients for the Human Connectome Project, in: Proceedings of the 20th
+Annual Meeting of ISMRM. Presented at the ISMRM, Melbourne, Australia, p. 696.
 
-Knopp, T., Grosser, M., 2021. MRIReco.jl: An MRI Reconstruction Framework
-written in Julia. ArXiv210112624 Phys.
+Knopp, T., Grosser, M., 2021. MRIReco.jl: An MRI reconstruction framework
+written in Julia. Magn. Reson. Med. 86, 1633–1646.
+https://doi.org/10.1002/mrm.28792
 
 Kok, P., Bains, L.J., van Mourik, T., Norris, D.G., de Lange, F.P., 2016.
 Selective Activation of the Deep Layers of the Human Primary Visual Cortex by
@@ -1709,13 +1926,19 @@ https://doi.org/10.1016/j.cub.2015.12.038
 Koopmans, P.J., Barth, M., Norris, D.G., 2010. Layer-specific BOLD activation in
 human V1. Hum. Brain Mapp. 31, 1297–1304. https://doi.org/10.1002/hbm.20936
 
+Kujovic, M., Zilles, K., Malikovic, A., Schleicher, A., Mohlberg, H., Rottschy,
+C., Eickhoff, S.B., Amunts, K., 2013. Cytoarchitectonic mapping of the human
+dorsal extrastriate cortex. Brain Struct. Funct. 218, 157–172.
+https://doi.org/10.1007/s00429-012-0390-9
+
 Kundu, P., Inati, S.J., Evans, J.W., Luh, W.-M., Bandettini, P.A., 2012.
 Differentiating BOLD and non-BOLD signals in fMRI time series using multi-echo
 EPI. NeuroImage 60, 1759–1770. https://doi.org/10.1016/j.neuroimage.2011.12.028
 
 Kurban, D., Liberman, G., Kashyap, S., Ivanov, D., Poser, B.A., 2019. Dual-echo
 simultaneous multi-slice spiral acquisition for simultaneous CBF and BOLD fMRI
-at 7T, in: Proc. Intl. Soc. Mag. Reson. Med. 27. Montreal, Canada, p. 367.
+at 7T, in: Proceedings of the 27th Annual Meeting of ISMRM. Montreal, Canada, p.
+367.
 
 Larkman, D.J., 2007. The g-Factor and Coil Design, in: Schoenberg, S.O.,
 Dietrich, O., Reiser, M.F. (Eds.), Parallel Imaging in Clinical MR Applications,
@@ -1745,7 +1968,7 @@ Lewis, L.D., Setsompop, K., Rosen, B.R., Polimeni, J.R., 2016. Fast fMRI can
 detect oscillatory neural activity in humans. Proc. Natl. Acad. Sci. 113,
 E6679–E6685. https://doi.org/10.1073/pnas.1608117113
 
-Likes, R.S., 1981. Moving Gradient Zeugmatography. 4.397.343.
+Likes, R.S., 1981. Moving gradient zeugmatography. US 4307343.
 
 Lu, H., Golay, X., Pekar, J.J., Zijl, P.C.M. van, 2003. Functional magnetic
 resonance imaging based on changes in vascular space occupancy. Magn. Reson.
@@ -1768,6 +1991,18 @@ Karakuzu, A., Loecher, M., Patzig, F., Tian, Y., Wang, K., Gallichan, D.,
 Uecker, M., Knoll, F., 2021. CG-SENSE revisited: Results from the first ISMRM
 reproducibility challenge. Magn. Reson. Med. 85, 1821–1839.
 https://doi.org/10.1002/mrm.28569
+
+Malikovic, A., Amunts, K., Schleicher, A., Mohlberg, H., Eickhoff, S.B., Wilms,
+M., Palomero-Gallagher, N., Armstrong, E., Zilles, K., 2007. Cytoarchitectonic
+Analysis of the Human Extrastriate Cortex in the Region of V5/MT+: A
+Probabilistic, Stereotaxic Map of Area hOc5. Cereb. Cortex 17, 562–574.
+https://doi.org/10.1093/cercor/bhj181
+
+Malikovic, A., Amunts, K., Schleicher, A., Mohlberg, H., Kujovic, M.,
+Palomero-Gallagher, N., Eickhoff, S.B., Zilles, K., Zilles, K., 2016.
+Cytoarchitecture of the human lateral occipital cortex: mapping of two
+extrastriate areas hOc4la and hOc4lp. Brain Struct. Funct. 221, 1877–1897.
+https://doi.org/10.1007/s00429-015-1009-8
 
 Man, L.-C., Pauly, J.M., Macovski, A., 1997. Multifrequency interpolation for
 fast off-resonance correction. Magn. Reson. Med. 37, 785–792.
@@ -1799,8 +2034,8 @@ https://doi.org/10.1002/jmri.1880050112
 
 Nussbaum, J., Rösler, M.B., Dietrich, B.E., Pruessmann, K.P., 2019. Nonlinearity
 and thermal effects in gradient chains: a cascade analysis based on current and
-field sensing, in: Proc. Intl. Soc. Mag. Reson. Med. 27. Montreal, Canada, p.
-213.
+field sensing, in: Proceedings of the 27th Annual Meeting of ISMRM. Montreal,
+Canada, p. 213.
 
 Patzig, F., Kasper, L., Ulrich, T., Engel, M., Vannesjo, S.J., Weiger, M.,
 Brunner, D.O., Wilm, B.J., Pruessmann, K.P., 2019. ISMRM 2019 RRSG Challenge:
@@ -1809,8 +2044,8 @@ Reproducible Research Study Group Challenge.
 https://dx.doi.org/10.24433/CO.5840424.v1
 
 Patzig, F., Wilm, B.J., Gross, S., Brunner, D.O., Pruessmann, K.P., 2020.
-Off-Resonance Self-Correction for Single-Shot Imaging. Presented at the ISMRM
-2020, p. 3040.
+Off-Resonance Self-Correction for Single-Shot Imaging, in: Proceedings of the
+28th Annual Meeting of ISMRM. p. 3040.
 
 Peters, A.M., Brookes, M.J., Hoogenraad, F.G., Gowland, P.A., Francis, S.T.,
 Morris, P.G., Bowtell, R., 2007. T2\* measurements in human brain at 1.5, 3 and
@@ -1827,6 +2062,11 @@ Poser, B.A., Koopmans, P.J., Witzel, T., Wald, L.L., Barth, M., 2010. Three
 dimensional echo-planar imaging at 7 Tesla. NeuroImage 51, 261–266.
 https://doi.org/10.1016/j.neuroimage.2010.01.108
 
+Power, J.D., Barnes, K.A., Snyder, A.Z., Schlaggar, B.L., Petersen, S.E., 2012.
+Spurious but systematic correlations in functional connectivity MRI networks
+arise from subject motion. NeuroImage 59, 2142–2154.
+https://doi.org/10.1016/j.neuroimage.2011.10.018
+
 Power, J.D., Lynch, C.J., Silver, B.M., Dubin, M.J., Martin, A., Jones, R.M.,
 2019. Distinctions among real and apparent respiratory motions in human fMRI
 data. NeuroImage 201, 116041. https://doi.org/10.1016/j.neuroimage.2019.116041
@@ -1835,6 +2075,10 @@ Power, J.D., Plitt, M., Gotts, S.J., Kundu, P., Voon, V., Bandettini, P.A.,
 Martin, A., 2018. Ridding fMRI data of motion-related influences: Removal of
 signals with distinct spatial and physical bases in multiecho data. Proc. Natl.
 Acad. Sci. 201720985. https://doi.org/10.1073/pnas.1720985115
+
+Power, J.D., Schlaggar, B.L., Petersen, S.E., 2015. Recent progress and
+outstanding issues in motion correction in resting state fMRI. NeuroImage 105,
+536–551. https://doi.org/10.1016/j.neuroimage.2014.10.044
 
 Preston, A.R., Bornstein, A.M., Hutchinson, J.B., Gaare, M.E., Glover, G.H.,
 Wagner, A.D., 2010. High-resolution fMRI of Content-sensitive Subsequent Memory
@@ -1877,6 +2121,11 @@ Robison, R.K., Li, Z., Wang, D., Ooi, M.B., Pipe, J.G., 2019. Correction of B0
 eddy current effects in spiral MRI. Magn. Reson. Med. 0.
 https://doi.org/10.1002/mrm.27583
 
+Rottschy, C., Eickhoff, S.B., Schleicher, A., Mohlberg, H., Kujovic, M., Zilles,
+K., Amunts, K., 2007. Ventral visual cortex in humans: Cytoarchitectonic mapping
+of two extrastriate areas. Hum. Brain Mapp. 28, 1045–1059.
+https://doi.org/10.1002/hbm.20348
+
 Savjani, R.R., Katyal, S., Halfen, E., Kim, J.H., Ress, D., 2018. Polar-angle
 representation of saccadic eye movements in human superior colliculus.
 NeuroImage 171, 199–208. https://doi.org/10.1016/j.neuroimage.2017.12.080
@@ -1901,6 +2150,11 @@ acquisition variants for functional imaging of human superior colliculus at 3T
 field strength. Magn. Reson. Med. 79, 1931–1940.
 https://doi.org/10.1002/mrm.26845
 
+Sitek, K.R., Gulban, O.F., Calabrese, E., Johnson, G.A., Lage-Castellanos, A.,
+Moerel, M., Ghosh, S.S., De Martino, F., 2019. Mapping the human subcortical
+auditory system using histology, postmortem MRI and in vivo MRI at 7T. eLife 8,
+e48932. https://doi.org/10.7554/eLife.48932
+
 Smith, S.M., Beckmann, C.F., Andersson, J., Auerbach, E.J., Bijsterbosch, J.,
 Douaud, G., Duff, E., Feinberg, D.A., Griffanti, L., Harms, M.P., Kelly, M.,
 Laumann, T., Miller, K.L., Moeller, S., Petersen, S., Power, J.,
@@ -1918,8 +2172,9 @@ determining B0 field inhomogeneities using sensitivity coding. Magn. Reson. Med.
 62, 1319–1325. https://doi.org/10.1002/mrm.22083
 
 Stich, M., Pfaff, C., Wech, T., Slawig, A., Ruyters, G., Dewdney, A., Ringler,
-R., Köstler, H., 2019. Temperature-dependent gradient system response. Magn.
-Reson. Med. in press. https://doi.org/10.1002/mrm.28013
+R., Köstler, H., 2020. The temperature dependence of gradient system response
+characteristics. Magn. Reson. Med. 83, 1519–1527.
+https://doi.org/10.1002/mrm.28013
 
 Stikov, N., Trzasko, J.D., Bernstein, M.A., 2019. Reproducibility and the future
 of MRI research. Magn. Reson. Med. 82, 1981–1983.
@@ -1959,6 +2214,10 @@ https://doi.org/10.1002/mrm.24263
 
 Wandell, B.A., Dumoulin, S.O., Brewer, A.A., 2007. Visual Field Maps in Human
 Cortex. Neuron 56, 366–383. https://doi.org/10.1016/j.neuron.2007.10.012
+
+Wang, Y.C., Bianciardi, M., Chanes, L., Satpute, A.B., 2020. Ultra High Field
+fMRI of Human Superior Colliculi Activity during Affective Visual Processing.
+Sci. Rep. 10, 1331. https://doi.org/10.1038/s41598-020-57653-z
 
 Warnking, J., Dojat, M., Guérin-Dugué, A., Delon-Martin, C., Olympieff, S.,
 Richard, N., Chéhikian, A., Segebarth, C., 2002. fMRI Retinotopic Mapping—Step
